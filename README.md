@@ -8,7 +8,6 @@ A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 - Project showcase with filterable cards
 - Skills and expertise section
 - Contact form for inquiries
-- Light/dark mode toggle
 - Fast performance and accessibility features
 
 ## Tech Stack
@@ -16,14 +15,14 @@ A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 - **Frontend Framework**: Svelte
 - **Styling**: Tailwind CSS
 - **Build Tool**: Vite
-- **Deployment**: Vercel/Netlify
+- **Deployment**: Cloudflare Pages
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js (v16 or higher)
-- npm or yarn
+- pnpm or yarn
 
 ### Installation
 
