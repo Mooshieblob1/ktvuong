@@ -31,7 +31,14 @@
 
 <header>
 	<div class="container">
-		<h1>Kent Vuong</h1>
+		<div class="flex flex-col items-center">
+			<img
+				src="/pfp.webp"
+				alt="Kent Vuong"
+				class="mb-4 h-32 w-32 rounded-full border-2 border-gray-200 object-cover shadow-md"
+			/>
+			<h1>Kent Vuong</h1>
+		</div>
 		<h2>Full-Stack Software Developer</h2>
 		<div class="social-links">
 			<a href="https://github.com/Mooshieblob1" target="_blank" rel="noopener noreferrer">
@@ -77,26 +84,6 @@
 				<span>Contact</span>
 			</a>
 		</div>
-
-		<style>
-			.social-links {
-				display: flex;
-				gap: 1.5rem;
-				margin-top: 1rem;
-				justify-content: center;
-			}
-			.social-links a {
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
-				color: inherit;
-				text-decoration: none;
-				transition: opacity 0.2s;
-			}
-			.social-links a:hover {
-				opacity: 0.8;
-			}
-		</style>
 	</div>
 </header>
 
