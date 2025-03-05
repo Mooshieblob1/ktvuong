@@ -44,7 +44,7 @@ yarn
 3. Start the development server
 
 ```bash
-npm run dev
+pnpm run dev
 # or
 yarn dev
 ```
@@ -113,7 +113,7 @@ This project is deployed using Cloudflare Pages.
 
 1. Push your code to GitHub
 2. Connect your GitHub repository to Cloudflare Pages
-3. Set the build command to `npm run build` or `yarn build`
+3. Set the build command to `pnpm run build` or `yarn build`
 4. Set the build output directory to `dist`
 5. Deploy
 
