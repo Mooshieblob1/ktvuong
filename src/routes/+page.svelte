@@ -5,14 +5,16 @@
 	const projects = [
 		{
 			title: 'Blob Site',
-			description: 'A showcase of AI images',
+			description:
+				'An elegant gallery platform showcasing curated AI-generated artwork with advanced filtering capabilities',
 			image: 'site1img/thumb1.webp',
 			tags: ['Vue.js', 'Nuxt.js', 'TailwindCSS'],
 			link: 'https://mooshieblob.com'
 		},
 		{
 			title: 'ComfyTut',
-			description: 'A tutorial site for generating AI images with ComfyUI',
+			description:
+				'Comprehensive educational resource for mastering AI image generation through ComfyUI workflows and techniques',
 			image: 'site2img/thumb.webp',
 			tags: ['SvelteJS', 'Node.js'],
 			link: 'https://comfytut.mooshieblob.com'
