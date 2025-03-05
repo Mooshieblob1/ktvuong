@@ -29,8 +29,8 @@ A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/portfolio.git
-cd portfolio
+git clone https://github.com/Mooshieblob1/ktvuong
+cd ktvuong
 ```
 
 2. Install dependencies
