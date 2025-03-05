@@ -14,7 +14,7 @@
 			title: 'ComfyTut',
 			description: 'A tutorial site for generating AI images with ComfyUI',
 			image: 'site2img/thumb.webp',
-			tags: ['SvelteJS', 'Vite', 'Node.js'],
+			tags: ['SvelteJS', 'Node.js'],
 			link: 'https://comfytut.mooshieblob.com'
 		}
 	];
