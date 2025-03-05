@@ -106,13 +106,28 @@
 		<div class="about-content">
 			<div class="about-text">
 				<p>
-					Hello! I'm Kent, a full-stack software developer passionate about creating efficient,
-					user-friendly applications. With expertise in modern web technologies, I build solutions
-					that solve real-world problems.
+					Hello! I'm Kent, a versatile full-stack software developer who transforms complex
+					challenges into elegant digital solutions. I architect and engineer applications that
+					combine technical excellence with intuitive user experiences.
 				</p>
+
+				<br />
+
 				<p>
-					My background includes experience with JavaScript/TypeScript, Svelte, React, Node.js, and
-					various backend technologies.
+					My technical toolkit includes JavaScript/TypeScript, Svelte, React, and Node.js,
+					complemented by my expertise in RESTful API development and system integration. I
+					specialize in building responsive, performance-optimized applications that deliver real
+					business value.
+				</p>
+
+				<br />
+
+				<p>
+					When I'm not crafting code, I'm constantly exploring emerging technologies and refining my
+					craft. My approach combines analytical precision with creative problem-solving—skills I've
+					honed through both formal education and hands-on development experience. I believe great
+					software is invisible to users while powerfully solving their problems. This philosophy
+					guides every line of code I write.
 				</p>
 			</div>
 			<div class="skills">
