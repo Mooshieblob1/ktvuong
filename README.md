@@ -1,38 +1,133 @@
-# sv
+# Personal Portfolio
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Responsive design that works on mobile, tablet, and desktop
+- Project showcase with filterable cards
+- Skills and expertise section
+- Contact form for inquiries
+- Light/dark mode toggle
+- Fast performance and accessibility features
+
+## Tech Stack
+
+- **Frontend Framework**: Svelte
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Deployment**: Vercel/Netlify
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+git clone https://github.com/yourusername/portfolio.git
+cd portfolio
 ```
 
-## Developing
+2. Install dependencies
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```bash
+npm install
+# or
+yarn
+```
+
+3. Start the development server
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# or
+yarn dev
 ```
 
-## Building
+4. Open your browser and navigate to `http://localhost:5173`
 
-To create a production version of your app:
+## Project Structure
 
-```bash
-npm run build
+```
+portfolio/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── data/            # Project and skills data
+│   ├── lib/             # Utility functions
+│   ├── routes/          # Page routes
+│   ├── app.css          # Global styles
+│   ├── app.html         # HTML template
+│   └── main.js          # Entry point
+├── .gitignore
+├── package.json
+├── README.md
+├── svelte.config.js
+├── tailwind.config.js
+└── vite.config.js
 ```
 
-You can preview the production build with `npm run preview`.
+## Customization
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### Adding Projects
+
+To add a new project, edit the `src/data/projects.js` file:
+
+```javascript
+export const projects = [
+	{
+		title: 'Project Name',
+		description: 'Description of the project',
+		image: '/path/to/image.jpg',
+		tags: ['Tag1', 'Tag2', 'Tag3'],
+		link: 'https://project-link.com'
+	}
+	// Add more projects here
+];
+```
+
+### Updating Skills
+
+Edit the `src/data/skills.js` file to update your skills:
+
+```javascript
+export const skills = [
+	{
+		category: 'Frontend',
+		items: ['Svelte', 'React', 'Vue.js', 'Tailwind CSS', 'JavaScript']
+	}
+	// Add more skill categories
+];
+```
+
+## Deployment
+
+This project is deployed using Cloudflare Pages.
+
+### Cloudflare Pages Deployment
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Cloudflare Pages
+3. Set the build command to `npm run build` or `yarn build`
+4. Set the build output directory to `dist`
+5. Deploy
+
+### Alternative Deployment Options
+
+The project can also be deployed on other platforms like Vercel or Netlify using similar steps.
+
+## License
+
+MIT
+
+## Contact
+
+Kent Vuong - [kent@ktvuong.com](mailto:kent@ktvuong.com)
+
+Project Link: [https://github.com/Mooshieblob1/portfolio](https://github.com/Mooshieblob1/portfolio)
