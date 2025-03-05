@@ -36,7 +36,7 @@ cd ktvuong
 2. Install dependencies
 
 ```bash
-npm install
+pnpm install
 # or
 yarn
 ```
