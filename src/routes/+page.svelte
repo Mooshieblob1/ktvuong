@@ -31,13 +31,13 @@
 	<title>Kent Vuong | Full-Stack Software Developer</title>
 </svelte:head>
 
-<header>
+<header class="text-amber-50">
 	<div class="container">
 		<div class="flex flex-col items-center">
 			<img
 				src="/pfp.webp"
 				alt="Kent Vuong"
-				class="mb-4 h-32 w-32 rounded-full border-2 border-gray-200 object-cover shadow-md"
+				class="mb-4 h-32 w-32 rounded-full border-2 border-amber-50 object-cover shadow-md"
 			/>
 			<h1>Kent Vuong</h1>
 		</div>
@@ -89,7 +89,7 @@
 	</div>
 </header>
 
-<main>
+<main class="bg-amber-50">
 	<section id="about" class="section container">
 		<h2>About Me</h2>
 		<div class="about-content">
@@ -143,7 +143,7 @@
 		<div class="projects-grid grid grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each projects as project}
 				<div
-					class="project-card mx-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md"
+					class="project-card mx-auto w-full max-w-sm overflow-hidden rounded-lg bg-amber-50 shadow-md"
 				>
 					<img src={project.image} alt={project.title} class="h-auto w-full object-cover" />
 					<h3 class="mt-4">{project.title}</h3>
@@ -168,7 +168,7 @@
 	</section>
 </main>
 
-<footer>
+<footer class="bg-amber-50">
 	<div class="container">
 		<p>© {new Date().getFullYear()} Kent Vuong. All rights reserved.</p>
 	</div>
