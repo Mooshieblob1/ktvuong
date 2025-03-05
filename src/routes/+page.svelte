@@ -6,7 +6,7 @@
 		{
 			title: 'Blob Site',
 			description: 'A showcase of AI images',
-			image: 'site1img/thumb1.png',
+			image: 'site1img/thumb1.webp',
 			tags: ['Vue.js', 'Nuxt.js', 'TailwindCSS'],
 			link: 'https://mooshieblob.com'
 		},
