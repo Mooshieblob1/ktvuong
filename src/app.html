@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+<head>
+	<meta charset="utf-8" />
+	<title>Kent Vuong</title> <!-- Add a meaningful title for better SEO and accessibility -->
+	<link rel="icon" href="/favicon.svg" /> <!-- Assuming favicon is in the public folder or correctly resolved -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="A brief description of your site for SEO purposes" /> <!-- Add description for SEO -->
+	%sveltekit.head% <!-- This will be replaced dynamically by SvelteKit -->
+</head>
+<body data-sveltekit-preload-data="hover">
+<div>%sveltekit.body%</div> <!-- Avoid unnecessary styles like `display: contents` -->
+</body>
 </html>
