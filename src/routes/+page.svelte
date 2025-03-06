@@ -107,7 +107,7 @@
 					</li>
 					<li>
 						<a
-							href="#"
+							href="mailto:contact@ktvuong.com"
 							data-cfemail="717f746e5a716e6c6f75747d34797577"
 							aria-label="Email Kent Vuong"
 							class="text-gray-300 hover:text-amber-400 transition"
@@ -128,24 +128,24 @@
 	<section id="about" class="container mx-auto"> <!-- Added top margin -->
 		<h2 class="text-2xl font-bold mb-6">About Me</h2>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-			<div>
-				<p class="mb-6">
-					Hello! I'm Kent, a versatile full-stack software developer who transforms complex challenges into
-					elegant digital solutions.
+			<div class="container mx-auto">
+				<p class="mb-6 text-lg leading-relaxed">
+					Hello! I'm Kent, a versatile full-stack developer specializing in reactive frontend architecture and server-side rendering frameworks. I transform complex technical challenges into performant, maintainable digital solutions with a focus on component-based design.
 				</p>
-				<p class="mb-6">
-					My approach combines analytical precision with creative problem-solving. I specialize in building
-					user-focused applications using JavaScript/TypeScript, Svelte, React, and Node.js.
+				<p class="mb-6 text-lg leading-relaxed">
+					My approach combines analytical algorithm optimization with pragmatic architecture decisions. I develop user-focused applications leveraging the reactive paradigm through Svelte/SvelteKit, component composition with React, and build isomorphic applications with Nuxt.js. My technical stack includes TypeScript for type safety, Tailwind for utility-first styling, and integration of LLM-powered features through modern AI frameworks.
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold text-lg mb-4">Technical Skills</h3>
-				<ul class="skills flex flex-wrap gap-2">
+				<h3 class="font-semibold text-xl mb-6">Technical Skills</h3>
+				<ul class="skills flex flex-wrap gap-3 font-semibold">
 					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">JavaScript</li>
 					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">TypeScript</li>
 					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">Svelte</li>
 					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">React</li>
 					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">Node.js</li>
+					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">Nuxt.js</li>
+					<li class="bg-amber-200 text-sm px-3 py-2 rounded-md">Tailwindcss</li>
 				</ul>
 			</div>
 		</div>
@@ -179,7 +179,7 @@
 		</p>
 		<!-- This is an additional email reference that should be obfuscated as well -->
 		<a
-			href="#"
+			href="mailto:contact@ktvuong.com"
 			data-cfemail="717f746e5a716e6c6f75747d34797577"
 			class="contact-button"
 			on:click|preventDefault={handleContactClick}
