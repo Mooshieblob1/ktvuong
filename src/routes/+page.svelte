@@ -66,19 +66,19 @@
 </svelte:head>
 
 <header class="bg-gray-900 text-white">
-	<div class="container mx-auto px-6 py-12"> <!-- Adjusted padding -->
-		<div class="flex flex-col items-center md:flex-row md:justify-between">
-			<div class="text-center md:text-left">
+	<div class="container mx-auto px-12 py-12"> <!-- Adjusted padding -->
+		<div class="flex flex-col md:justify-between">
+			<div class="text-left">
 				<img
 					src="/pfp.webp"
 					alt="Kent Vuong"
-					class="mb-4 h-32 w-32 rounded-full border-4 border-amber-400 object-cover shadow-lg"
+					class="mb-4 h-64 w-64 rounded-full border-4 border-amber-400 object-cover shadow-lg"
 				/>
 				<h1 class="text-3xl font-bold">Kent Vuong</h1>
-				<p class="text-xl mt-2 font-medium">Full-Stack Software Developer</p>
+				<p class="text-xl mt-2 mb-4 font-medium">Full-Stack Software Developer</p>
 			</div>
 			<nav aria-label="Social links" class="mt-6 md:mt-0">
-				<ul class="flex gap-6 justify-center md:justify-start">
+				<ul class="flex gap-6 justify-start">
 					<li>
 						<a
 							href="https://github.com/Mooshieblob1"
@@ -124,9 +124,9 @@
 	</div>
 </header>
 
-<main class="bg-gray-100 text-gray-900">
-	<section id="about" class="container mx-auto px-6 py-12 mt-12"> <!-- Added top margin -->
-		<h2 class="text-2xl font-bold text-center mb-6">About Me</h2>
+<main class="bg-amber-50 text-gray-900">
+	<section id="about" class="container mx-auto"> <!-- Added top margin -->
+		<h2 class="text-2xl font-bold mb-6">About Me</h2>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
 			<div>
 				<p class="mb-6">
@@ -151,12 +151,12 @@
 		</div>
 	</section>
 
-	<section id="projects" class="section container mx-auto px-4 py-12 text-center">
-		<h2 class="text-center">Projects</h2>
+	<section id="projects" class="section container mx-auto px-12 py-12">
+		<h2 class="mb-8">Projects</h2>
 		<div class="projects-grid grid grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each projects as project, index (index)}
 				<div
-					class="project-card mx-auto w-full max-w-sm overflow-hidden rounded-lg bg-amber-50 shadow-md"
+					class="project-card mx-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md"
 				>
 					<img src={project.image} alt={project.title} class="h-auto w-full object-cover" />
 					<h3 class="mt-4">{project.title}</h3>
@@ -171,7 +171,7 @@
 			{/each}
 		</div>
 	</section>
-	<section id="contact" class="section container">
+	<section id="contact" class="section container mx-auto px-12 py-12">
 		<h2>Get In Touch</h2>
 		<p>
 			I'm always open to new opportunities and collaborations. Feel free to reach out if you want to
@@ -189,7 +189,7 @@
 	</section>
 </main>
 
-<footer class="bg-amber-50">
+<footer class="section container mx-auto px-12 py-12 text-center">
 	<div class="container">
 		<p>© {new Date().getFullYear()} Kent Vuong. All rights reserved.</p>
 	</div>
