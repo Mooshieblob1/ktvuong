@@ -1,11 +1,11 @@
 // This file should be placed in your static assets folder
-// It will be loaded asynchronously with a random query string to make it harder to track
+// It will be loaded asynchronously to make it harder to track
 
 // Self-executing function to avoid polluting global namespace
 (function() {
 	console.log("Email protection script loaded");
 
-	// Helper function to process emails
+	// Process emails function (only adds click handlers, doesn't modify DOM href)
 	function processEmails() {
 		console.log("Processing emails");
 
@@ -29,24 +29,18 @@
 				const decoded = decodeCloudflareEmail(encodedData);
 				console.log("Successfully decoded to:", decoded);
 
-				// If this is a link element, update its href
-				if (element.tagName.toLowerCase() === 'a') {
-					console.log("Updating link element");
-					element.setAttribute('href', 'mailto:' + decoded);
+				// Store the decoded email but don't modify the href attribute
+				// This keeps the email address out of the DOM
+				element.setAttribute('data-decoded', 'true');
 
-					// Add click handler as backup
-					element.addEventListener('click', function(e) {
-						console.log("Email link clicked");
-						e.preventDefault();
-						const mailtoUrl = 'mailto:' + decoded;
-						console.log("Opening email with URL:", mailtoUrl);
-						window.location.href = mailtoUrl;
-					});
-				} else {
-					// For non-link elements, just update the text
-					console.log("Updating non-link element text");
-					element.textContent = decoded;
-				}
+				// Only add click handler to handle the email action when clicked
+				element.addEventListener('click', function(e) {
+					console.log("Email link clicked");
+					e.preventDefault();
+					const mailtoUrl = 'mailto:' + decoded;
+					console.log("Opening email with URL:", mailtoUrl);
+					window.location.href = mailtoUrl;
+				});
 			} catch (err) {
 				console.error('Failed to decode email address', err);
 			}
@@ -55,36 +49,35 @@
 
 	// Decoding function inspired by Cloudflare's approach
 	function decodeCloudflareEmail(encodedString) {
-		if (!encodedString || typeof encodedString !== "string") {
-			console.error("Invalid input string");
-			return "";
-		}
+		// Convert hex to bytes array
+		let encoded = encodedString;
+		console.log("Decoding string:", encoded);
 
-		let encoded = encodedString.toLowerCase();
-
-		if (encoded.startsWith("0x")) {
+		// Handle both with and without the standard Cloudflare format
+		if (encoded.indexOf('0x') === 0) {
 			encoded = encoded.substr(2);
 		}
 
-		if (encoded.length % 2 !== 0) {
-			console.error("Encoded string length is not even, invalid input");
-			return "";
-		}
-
+		// Convert hex to bytes
 		let r = "";
-		const encoded_length = encoded.length;
+		let i = 0;
+		let encoded_length = encoded.length;
 
-		for (let i = 0; i < encoded_length; i += 2) {
-			const hex = encoded.substr(i, 2);
-			const num = parseInt(hex, 16);
+		// Use a custom decoding approach rather than a direct Base64 decode
+		for (i = 0; i < encoded_length; i += 2) {
+			try {
+				const hex = encoded.substr(i, 2);
+				const num = parseInt(hex, 16);
+				if (isNaN(num)) {
+					console.error(`Invalid hex value at position ${i}: ${hex}`);
+					continue;
+				}
 
-			if (isNaN(num)) {
-				console.error(`Invalid hex value at position ${i}: ${hex}`);
-				continue;
+				const char_code = num ^ 0x1A; // XOR with a key
+				r += String.fromCharCode(char_code);
+			} catch (err) {
+				console.error(`Error processing hex at position ${i}:`, err);
 			}
-
-			const char_code = num ^ 0x1A; // XOR with a key
-			r += String.fromCharCode(char_code);
 		}
 
 		return r;
