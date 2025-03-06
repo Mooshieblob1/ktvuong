@@ -5,57 +5,52 @@ A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 ## Features
 
 - Responsive design that works on mobile, tablet, and desktop
-- Project showcase with filterable cards
-- Skills and expertise section
-- Contact form for inquiries
+- Clean, modern UI with smooth animations
+- Project showcase with detailed cards
+- Technical skills visualization
+- Email obfuscation to prevent scraping by bots
 - Fast performance and accessibility features
+- Dark mode support
+- SEO optimized
 
 ## Tech Stack
 
-- **Frontend Framework**: Svelte
+- **Frontend Framework**: SvelteKit
 - **Styling**: Tailwind CSS
-- **Build Tool**: Vite
+- **Email Protection**: Custom obfuscation system
 - **Deployment**: Cloudflare Pages
+- **Analytics**: Cloudflare Web Analytics
 
-## Getting Started
+## Key Implementation Details
 
-### Prerequisites
+### Email Obfuscation
 
-- Node.js (v16 or higher)
-- pnpm or yarn
+The site implements a custom email obfuscation system to protect against email harvesting bots:
+- Uses XOR cipher to encode email address in the HTML
+- Client-side JavaScript decodes the email only when needed
+- No plain text email addresses in source code or DOM
+- Works with both header icon and contact button
 
-### Installation
+### Project Showcase
 
-1. Clone the repository
+The portfolio includes a showcase of projects with:
+- Visual thumbnails
+- Project descriptions
+- Technology tags
+- Direct links to live sites
 
-```bash
-git clone https://github.com/Mooshieblob1/ktvuong
-cd ktvuong
-```
+### Responsive Design
 
-2. Install dependencies
-
-```bash
-pnpm install
-# or
-yarn
-```
-
-3. Start the development server
-
-```bash
-pnpm run dev
-# or
-yarn dev
-```
-
-4. Open your browser and navigate to `http://localhost:5173`
+- Mobile-first approach
+- Optimized layouts for various screen sizes
+- Maintains clean aesthetics across devices
 
 ## Project Structure
 
 ```
 portfolio/
 ├── public/              # Static assets
+│   └── emailProtection.js  # Email protection script
 ├── src/
 │   ├── components/      # Reusable UI components
 │   ├── data/            # Project and skills data
@@ -76,50 +71,32 @@ portfolio/
 
 ### Adding Projects
 
-To add a new project, edit the `src/data/projects.js` file:
+To add a new project, edit the projects array:
 
 ```javascript
-export const projects = [
-	{
-		title: 'Project Name',
-		description: 'Description of the project',
-		image: '/path/to/image.jpg',
-		tags: ['Tag1', 'Tag2', 'Tag3'],
-		link: 'https://project-link.com'
-	}
-	// Add more projects here
+const projects = [
+    {
+       title: 'Project Name',
+       description: 'Description of the project',
+       image: '/path/to/image.jpg',
+       tags: ['Tag1', 'Tag2', 'Tag3'],
+       link: 'https://project-link.com'
+    }
+    // Add more projects here
 ];
 ```
 
 ### Updating Skills
 
-Edit the `src/data/skills.js` file to update your skills:
+The skills section can be customized by editing the skills list:
 
 ```javascript
-export const skills = [
-	{
-		category: 'Frontend',
-		items: ['Svelte', 'React', 'Vue.js', 'Tailwind CSS', 'JavaScript']
-	}
-	// Add more skill categories
-];
+<ul class="skills flex flex-wrap gap-2">
+    <li class="bg-amber-200 text-sm px-3 py-2 rounded-md">JavaScript</li>
+    <li class="bg-amber-200 text-sm px-3 py-2 rounded-md">TypeScript</li>
+    <!-- Add more skills here -->
+</ul>
 ```
-
-## Deployment
-
-This project is deployed using Cloudflare Pages.
-
-### Cloudflare Pages Deployment
-
-1. Push your code to GitHub
-2. Connect your GitHub repository to Cloudflare Pages
-3. Set the build command to `pnpm run build` or `yarn build`
-4. Set the build output directory to `dist`
-5. Deploy
-
-### Alternative Deployment Options
-
-The project can also be deployed on other platforms like Vercel or Netlify using similar steps.
 
 ## License
 
@@ -127,6 +104,6 @@ MIT
 
 ## Contact
 
-Kent Vuong - [kent@ktvuong.com](mailto:kent@ktvuong.com)
+Kent Vuong - Contact information available on the website
 
-Project Link: [https://github.com/Mooshieblob1/portfolio](https://github.com/Mooshieblob1/portfolio)
+Project Link: [https://github.com/Mooshieblob1/ktvuong](https://github.com/Mooshieblob1/ktvuong)
