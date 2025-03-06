@@ -94,7 +94,7 @@ section h2 {
 }
 
 .contact-button:hover {
-	@apply bg-gray-400 text-[#1d1902];
+	@apply bg-amber-400 text-[#1d1902];
 }
 
 footer {
