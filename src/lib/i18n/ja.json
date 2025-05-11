@@ -1,0 +1,23 @@
+{
+	"tagline": "フルスタックソフトウェア開発者",
+	"about_heading": "自己紹介",
+	"about_intro": "こんにちは！私は尊健翔です。フロントエンドのリアクティブアーキテクチャとサーバーサイドレンダリングフレームワークを専門とする多才なフルスタック開発者です。",
+	"about_stack": "SvelteKit、React、Nuxt.jsを使用してユーザーフォーカスなアプリケーションを開発し、TypeScript、TailwindCSS、AI統合を活用しています。",
+	"skills_heading": "技術スキル",
+	"projects_heading": "プロジェクト",
+	"project_blob_title": "ブロブサイト",
+	"project_blob_desc": "高度なフィルタ機能を備えた、キュレーションされたAI生成アートワークを展示する洗練されたギャラリープラットフォーム。",
+	"project_comfytut_title": "ComfyTut",
+	"project_comfytut_desc": "ComfyUIワークフローとテクニックを通じてAI画像生成をマスターするための包括的な教育リソース。",
+	"project_teamblob_title": "チーム・ブロブ",
+	"project_teamblob_desc": "リーグ・オブ・レジェンドのためのモックeスポーツチームサイト。SvelteKitとTailwindCSSで構築され、動的なロスター、試合スケジュール、ニュース、個性的なブランディングを特徴としています。",
+	"contact_heading": "お問い合わせ",
+	"contact_text": "新しい機会やコラボレーションには常にオープンです。ご興味がありましたら、お気軽にご連絡ください！",
+	"contact_button": "お問い合わせはこちら",
+	"footer_rights": "全著作権所有。",
+	"full_name": "尊健翔",
+	"page_title": "尊健翔 | フルスタックソフトウェア開発者",
+	"footer_name": "尊健翔",
+	"view_project": "プロジェクトを見る",
+	"resume_button": "履歴書"
+}

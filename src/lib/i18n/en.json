@@ -1,0 +1,23 @@
+{
+	"tagline": "Full-Stack Software Developer",
+	"about_heading": "About Me",
+	"about_intro": "Hello! I'm Kent, a versatile full-stack developer specializing in reactive frontend architecture and server-side rendering frameworks.",
+	"about_stack": "I develop user-focused applications using SvelteKit, React, and Nuxt.js with TypeScript, TailwindCSS, and AI integrations.",
+	"skills_heading": "Technical Skills",
+	"projects_heading": "Projects",
+	"project_blob_title": "Blob Site",
+	"project_blob_desc": "An elegant gallery platform showcasing curated AI-generated artwork with advanced filtering capabilities.",
+	"project_comfytut_title": "ComfyTut",
+	"project_comfytut_desc": "Comprehensive educational resource for mastering AI image generation through ComfyUI workflows and techniques.",
+	"project_teamblob_title": "Team Blob",
+	"project_teamblob_desc": "A mock esports team site for League of Legends built with SvelteKit and TailwindCSS. It features a dynamic roster, match schedule, news, and personality-driven branding.",
+	"contact_heading": "Get In Touch",
+	"contact_text": "I'm always open to new opportunities and collaborations. Feel free to reach out if you want to connect!",
+	"contact_button": "Contact Me",
+	"footer_rights": "All rights reserved.",
+	"full_name": "Kent Vuong",
+	"page_title": "Kent Vuong | Full-Stack Software Developer",
+	"footer_name": "Kent Vuong",
+	"view_project": "View Project",
+	"resume_button": "Résumé"
+}
