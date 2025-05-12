@@ -25,7 +25,7 @@
 				'A mock esports team site for League of Legends built with SvelteKit and TailwindCSS. It features a dynamic roster, match schedule, news, and personality-driven branding.',
 			image: 'site3img/blob-thumb.jpg',
 			tags: ['SvelteKit', 'TailwindCSS', 'Design'],
-			link: 'https://team-blob.vercel.app'
+			link: 'https://team-blob.mooshieblob.com/'
 		}
 	];
 
