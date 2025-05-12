@@ -26,6 +26,14 @@
 			image: 'site3img/blob-thumb.jpg',
 			tags: ['SvelteKit', 'TailwindCSS', 'Design'],
 			link: 'https://team-blob.mooshieblob.com/'
+		},
+		{
+			title: 'ComfyUI NAI Diffusion Support',
+			description:
+				'Active contributor to the ComfyUI_NAIDGenerator open-source project, including support for NAI Diffusion 4.5 Curated Preview.',
+			image: 'https://opengraph.githubassets.com/1/bedovyy/ComfyUI_NAIDGenerator', // Optional image pulled from GitHub's Open Graph
+			tags: ['Python', 'ComfyUI', 'Open Source'],
+			link: 'https://github.com/bedovyy/ComfyUI_NAIDGenerator/pull/27' // Use actual PR link or repo
 		}
 	];
 
