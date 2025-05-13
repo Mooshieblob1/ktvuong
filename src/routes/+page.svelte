@@ -34,6 +34,14 @@
 			image: 'https://opengraph.githubassets.com/1/bedovyy/ComfyUI_NAIDGenerator', // Optional image pulled from GitHub's Open Graph
 			tags: ['Python', 'ComfyUI', 'Open Source'],
 			link: 'https://github.com/bedovyy/ComfyUI_NAIDGenerator/pull/27' // Use actual PR link or repo
+		},
+		{
+			title: 'GPU Garden Website',
+			description:
+				'Front-end contributor to the GPU Garden site, a community AI project for TouhouAI. Built with SvelteKit and Tailwind CSS.',
+			image: 'https://opengraph.githubassets.com/1/mchaker/gpugarden-site', // GitHub Open Graph image
+			tags: ['SvelteKit', 'Tailwind', 'Open Source'],
+			link: 'https://gpu.garden'
 		}
 	];
 
