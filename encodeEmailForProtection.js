@@ -7,7 +7,7 @@
 const emailToEncode = 'kent@ktvuong.com';
 
 // XOR key used in the decoder (must match the one in emailProtection.js)
-const XOR_KEY = 0x1A;
+const XOR_KEY = 0x1a;
 
 /**
  * Encodes an email address using a Cloudflare-like encoding approach
@@ -35,11 +35,11 @@ console.log('Encoded email (use this in data-cfemail attribute):', encodedEmail)
 // Test decoding to confirm it works
 function decodeEmail(encoded) {
 	if (encoded.length % 2 !== 0) {
-		throw new Error("Encoded string must have an even length.");
+		throw new Error('Encoded string must have an even length.');
 	}
 
-	if (encoded === "") {
-		return "";
+	if (encoded === '') {
+		return '';
 	}
 
 	const chars = [];
@@ -53,7 +53,7 @@ function decodeEmail(encoded) {
 
 		chars.push(String.fromCharCode(charCode ^ XOR_KEY));
 	}
-	return chars.join("");
+	return chars.join('');
 }
 
 console.log('Decoded to verify:', decodeEmail(encodedEmail));
