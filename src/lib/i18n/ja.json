@@ -19,5 +19,6 @@
 	"page_title": "尊健翔 | フルスタックソフトウェア開発者",
 	"footer_name": "尊健翔",
 	"view_project": "プロジェクトを見る",
-	"resume_button": "履歴書"
+    "resume_button": "履歴書",
+    "github_heading": "最新のGitHubアクティビティ"
 }

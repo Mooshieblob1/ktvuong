@@ -19,5 +19,6 @@
 	"page_title": "Kent Vuong | Full-Stack Software Developer",
 	"footer_name": "Kent Vuong",
 	"view_project": "View Project",
-	"resume_button": "Résumé"
+    "resume_button": "Résumé",
+    "github_heading": "Recent GitHub Activity"
 }

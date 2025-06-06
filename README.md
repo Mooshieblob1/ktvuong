@@ -12,6 +12,7 @@ A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 - Fast performance and accessibility features
 - Dark mode support
 - SEO optimized
+- GitHub activity feed
 
 ## Tech Stack
 
@@ -56,6 +57,7 @@ portfolio/
 │   ├── data/            # Project and skills data
 │   ├── lib/             # Utility functions
 │   ├── routes/          # Page routes
+│   │   └── api/github   # GitHub activity endpoint
 │   ├── app.css          # Global styles
 │   ├── app.html         # HTML template
 │   └── main.js          # Entry point
