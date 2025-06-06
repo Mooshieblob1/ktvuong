@@ -181,7 +181,7 @@
 					<li class="rounded-md bg-amber-200 px-3 py-2 text-sm">React</li>
 					<li class="rounded-md bg-amber-200 px-3 py-2 text-sm">Node.js</li>
 					<li class="rounded-md bg-amber-200 px-3 py-2 text-sm">Nuxt.js</li>
-					<li class="rounded-md bg-amber-200 px-3 py-2 text-sm">TailwindCSS</li>
+                                       <li class="rounded-md bg-amber-200 px-3 py-2 text-sm">TailwindCSS</li>
 				</ul>
 			</div>
 		</div>
