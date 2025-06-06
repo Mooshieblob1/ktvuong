@@ -49,7 +49,7 @@ The portfolio includes a showcase of projects with:
 
 ```
 portfolio/
-├── public/              # Static assets
+├── static/              # Static assets
 │   └── emailProtection.js  # Email protection script
 ├── src/
 │   ├── components/      # Reusable UI components
@@ -63,9 +63,10 @@ portfolio/
 ├── package.json
 ├── README.md
 ├── svelte.config.js
-├── tailwind.config.js
 └── vite.config.js
 ```
+
+Note: This project does not include a `tailwind.config.js`; the default Tailwind CSS configuration is used.
 
 ## Customization
 
