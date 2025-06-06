@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { t } from '$lib/i18n/i18n'; // i18n import
 
-	const projects = [
+        const projects = [
 		{
 			title: 'Blob Site',
 			description:
@@ -45,15 +45,17 @@
 		}
 	];
 
-	function handleEmailClick() {
-		console.log('Email icon clicked');
-	}
-	function handleContactClick() {
-		console.log('Contact Me button clicked');
-	}
+        let githubRepos: { name: string; html_url: string; description: string }[] = [];
 
-	onMount(() => {
-		document.body.classList.add('loaded');
+        function handleEmailClick() {
+                console.log('Email icon clicked');
+        }
+        function handleContactClick() {
+                console.log('Contact Me button clicked');
+        }
+
+        onMount(async () => {
+                document.body.classList.add('loaded');
 
 		if (!document.querySelector('[src^="/emailProtection.js"]')) {
 			const script = document.createElement('script');
@@ -69,7 +71,16 @@
 			document.body.appendChild(script);
 		}
 
-		return () => {
+                try {
+                        const res = await fetch('/api/github');
+                        if (res.ok) {
+                                githubRepos = await res.json();
+                        }
+                } catch (e) {
+                        console.error('Failed to load GitHub data', e);
+                }
+
+                return () => {
 			const script = document.querySelector(`[src^="/emailProtection.js"]`);
 			if (script?.parentNode) {
 				script.parentNode.removeChild(script);
@@ -226,10 +237,31 @@
 				</div>
 			{/each}
 		</div>
-	</section>
+        </section>
 
-	<section id="contact" class="section container mx-auto px-12 py-12">
-		<h2>{$t('contact_heading')}</h2>
+        <section id="github" class="section container mx-auto px-12 py-12">
+                <h2 class="mb-8">{$t('github_heading')}</h2>
+                <ul>
+                        {#each githubRepos as repo}
+                                <li class="mb-4">
+                                        <a
+                                                href={repo.html_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="text-amber-600 hover:underline"
+                                        >
+                                                {repo.name}
+                                        </a>
+                                        {#if repo.description}
+                                                <p class="text-sm text-gray-700">{repo.description}</p>
+                                        {/if}
+                                </li>
+                        {/each}
+                </ul>
+        </section>
+
+        <section id="contact" class="section container mx-auto px-12 py-12">
+                <h2>{$t('contact_heading')}</h2>
 		<p>{$t('contact_text')}</p>
 		<a
 			href="mailto:contact@ktvuong.com"
