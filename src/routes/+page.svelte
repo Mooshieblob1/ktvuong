@@ -48,10 +48,8 @@
         let githubRepos: { name: string; html_url: string; description: string }[] = [];
 
         function handleEmailClick() {
-                console.log('Email icon clicked');
         }
         function handleContactClick() {
-                console.log('Contact Me button clicked');
         }
 
         onMount(async () => {
