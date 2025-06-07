@@ -42,8 +42,9 @@
 			"esbuild"
 		]
 	},
-	"dependencies": {
-		"@sveltejs/adapter-auto": "^6.0.0",
-		"sveltekit-i18n": "^2.4.2"
-	}
+        "dependencies": {
+                "@sveltejs/adapter-auto": "^6.0.0",
+                "sveltekit-i18n": "^2.4.2"
+        },
+        "license": "MIT"
 }
