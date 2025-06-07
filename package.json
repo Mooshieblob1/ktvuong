@@ -1,9 +1,12 @@
 {
 	"name": "ktvuong",
 	"private": true,
-	"version": "0.0.1",
-	"type": "module",
-	"scripts": {
+        "version": "0.0.1",
+        "type": "module",
+        "engines": {
+                "node": "^18"
+        },
+        "scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
