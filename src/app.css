@@ -2,14 +2,14 @@
 @plugin '@tailwindcss/typography';
 
 .gradient-text {
-	background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+	background: linear-gradient(90deg, #f59e0b, #fbbf24);
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
 }
 
 :global(body) {
-	@apply m-0 bg-black font-sans leading-[1.6] text-gray-200;
+	@apply bg-amber-50 font-sans text-amber-900 antialiased;
 	font-family:
 		'Inter',
 		-apple-system,
@@ -128,6 +128,29 @@ footer {
 
 .nav-link:hover::after {
 	width: 100%;
+}
+
+.blob {
+	position: absolute;
+	width: 300px;
+	height: 300px;
+	background: linear-gradient(120deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+	border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+	filter: blur(40px);
+	z-index: -1;
+	animation: morph 8s ease-in-out infinite;
+}
+
+@keyframes morph {
+	0% {
+		border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+	}
+	50% {
+		border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+	}
+	100% {
+		border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+	}
 }
 
 .skill-pill {

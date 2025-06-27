@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import Header from '$lib/components/Header.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	// Sample portfolio data
 	const projects = [
@@ -44,301 +45,184 @@
 			link: 'https://gpu.garden/'
 		}
 	];
-
-	onMount(() => {
-		// Mobile menu toggle
-		document.getElementById('menu-toggle')?.addEventListener('click', function () {
-			const menu = document.getElementById('mobile-menu');
-			menu?.classList.toggle('hidden');
-		});
-
-		// Smooth scrolling for anchor links
-		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-			anchor.addEventListener('click', function (e) {
-				e.preventDefault();
-
-				const targetId = this.getAttribute('href');
-				if (targetId === '#') return;
-
-				const targetElement = document.querySelector(targetId);
-				if (targetElement) {
-					// Close mobile menu if open
-					const mobileMenu = document.getElementById('mobile-menu');
-					if (!mobileMenu?.classList.contains('hidden')) {
-						mobileMenu?.classList.add('hidden');
-					}
-
-					// Scroll to target
-					window.scrollTo({
-						top: targetElement.offsetTop - 80,
-						behavior: 'smooth'
-					});
-				}
-			});
-		});
-
-		// Add shadow to navbar on scroll
-		window.addEventListener('scroll', function () {
-			const nav = document.querySelector('nav');
-			if (window.scrollY > 10) {
-				nav?.classList.add('shadow-lg');
-			} else {
-				nav?.classList.remove('shadow-lg');
-			}
-		});
-	});
 </script>
 
 <svelte:head>
 	<title>Kent Vuong | Full-Stack Software Developer</title>
 	<link
 		rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 	/>
 </svelte:head>
 
-<!-- Navigation -->
-<nav class="sticky top-0 z-50 bg-gray-800 shadow-sm">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex h-16 justify-between">
-			<div class="flex items-center">
-				<a href="#" class="flex items-center">
-					<img src="/favicon.svg" alt="Logo" class="h-8 w-auto" />
-				</a>
-			</div>
-			<div class="hidden items-center space-x-8 md:flex">
-				<a href="#about" class="nav-link px-3 py-2 text-gray-300 hover:text-white">About</a>
-				<a href="#skills" class="nav-link px-3 py-2 text-gray-300 hover:text-white">Skills</a>
-				<a href="#projects" class="nav-link px-3 py-2 text-gray-300 hover:text-white">Projects</a>
-				<a href="#contact" class="nav-link px-3 py-2 text-gray-300 hover:text-white">Contact</a>
-				<a
-					href="https://ktvuong.com/resume.pdf"
-					target="_blank"
-					class="rounded-md bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-700"
-					>Résumé</a
-				>
-			</div>
-			<div class="flex items-center md:hidden">
-				<button id="menu-toggle" class="text-gray-400 hover:text-white focus:outline-none">
-					<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h16"
-						></path>
-					</svg>
-				</button>
-			</div>
-		</div>
-	</div>
-	<!-- Mobile menu -->
-	<div id="mobile-menu" class="hidden border-t border-gray-700 bg-gray-800 md:hidden">
-		<div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-			<a
-				href="#about"
-				class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-				>About</a
-			>
-			<a
-				href="#skills"
-				class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-				>Skills</a
-			>
-			<a
-				href="#projects"
-				class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-				>Projects</a
-			>
-			<a
-				href="#contact"
-				class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-				>Contact</a
-			>
-			<a
-				href="https://ktvuong.com/resume.pdf"
-				target="_blank"
-				class="block rounded-md px-3 py-2 text-base font-medium text-indigo-400 hover:bg-gray-700 hover:text-indigo-300"
-				>Résumé</a
-			>
-		</div>
-	</div>
-</nav>
+<Header />
+
+<!-- Header spacer to prevent overlap -->
+<div class="h-16"></div>
 
 <!-- Hero Section -->
-<header class="bg-gray-900 py-20 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex flex-col items-center justify-between md:flex-row">
-			<div class="mb-10 md:mb-0 md:w-1/2">
-				<h1 class="mb-4 text-5xl font-bold text-white md:text-6xl">Kent Vuong</h1>
-				<h2 class="gradient-text mb-6 text-2xl font-semibold md:text-3xl">
-					Full-Stack Software Developer
-				</h2>
-				<p class="mb-8 text-lg text-gray-400">
-					Building user-focused applications with modern web technologies and AI integrations.
-				</p>
-				<div class="flex space-x-4">
-					<a
-						href="https://github.com/Mooshieblob1"
-						target="_blank"
-						class="social-icon text-2xl text-gray-400 hover:text-indigo-500"
-					>
-						<i class="fab fa-github"></i>
-					</a>
-					<a
-						href="https://www.linkedin.com/in/kentvuong88/"
-						target="_blank"
-						class="social-icon text-2xl text-gray-400 hover:text-blue-500"
-					>
-						<i class="fab fa-linkedin"></i>
-					</a>
-					<a
-						href="mailto:contact@ktvuong.com"
-						class="social-icon text-2xl text-gray-400 hover:text-red-500"
-					>
-						<i class="fas fa-envelope"></i>
-					</a>
-				</div>
+<section class="relative mx-auto max-w-6xl overflow-hidden px-4 pt-16 pb-20 sm:px-6 lg:px-8">
+	<div class="blob top-0 right-0"></div>
+	<div class="blob bottom-0 left-0"></div>
+
+	<div class="flex flex-col items-center md:flex-row">
+		<div class="mb-10 md:mb-0 md:w-1/2">
+			<h1 class="mb-4 text-4xl font-bold md:text-5xl">
+				<span class="gradient-text">Full-Stack</span> Software Developer
+			</h1>
+			<p class="mb-6 text-xl text-gray-600">
+				Building user-focused applications with modern web technologies and AI integrations.
+			</p>
+			<div class="flex items-center">
+				<div class="mr-2 h-3 w-3 animate-pulse rounded-full bg-green-500"></div>
+				<span class="font-medium text-green-600">Available for work</span>
 			</div>
-			<div class="flex justify-center md:w-1/2">
-				<div class="relative">
-					<img
-						src="https://ktvuong.com/pfp.webp"
-						alt="Kent Vuong"
-						class="h-64 w-64 rounded-full border-4 border-gray-700 object-cover shadow-lg"
-					/>
-					<div class="absolute -right-4 -bottom-4 rounded-full bg-gray-800 px-4 py-2 shadow-md">
-						<span class="gradient-text font-medium">Available for work</span>
-					</div>
+		</div>
+		<div class="flex justify-center md:w-1/2">
+			<div class="relative">
+				<img
+					src="https://ktvuong.com/pfp.webp"
+					alt="Kent Vuong"
+					class="h-64 w-64 rounded-full border-4 border-white object-cover shadow-xl"
+				/>
+				<div class="absolute -right-2 -bottom-2 rounded-full bg-yellow-100 p-2 shadow-md">
+					<i class="fas fa-code text-xl text-yellow-600"></i>
 				</div>
 			</div>
 		</div>
 	</div>
-</header>
+</section>
 
 <!-- About Section -->
-<section id="about" class="bg-gray-800 py-20 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<h2 class="gradient-text mb-12 text-center text-3xl font-bold">About Me</h2>
-		<div class="mx-auto max-w-3xl text-center">
-			<p class="mb-8 text-lg text-gray-400">
-				Hello! I'm Kent, a versatile full-stack developer specializing in reactive frontend
-				architecture and server-side rendering frameworks.
-			</p>
-			<p class="text-lg text-gray-400">
-				I develop user-focused applications using SvelteKit, React, and Nuxt.js with TypeScript,
-				TailwindCSS, and AI integrations.
-			</p>
-		</div>
+<section
+	id="about"
+	class="mx-auto max-w-6xl rounded-xl bg-amber-50/80 px-4 py-20 shadow-sm backdrop-blur-sm sm:px-6 lg:px-8"
+>
+	<div class="mb-12 text-center">
+		<h2 class="mb-2 text-3xl font-bold">About Me</h2>
+		<div class="mx-auto h-1 w-20 bg-gradient-to-r from-yellow-500 to-yellow-400"></div>
+	</div>
+	<div class="mx-auto max-w-3xl text-center">
+		<p class="mb-6 text-lg text-gray-700">
+			Hello! I'm Kent, a versatile full-stack developer specializing in reactive frontend
+			architecture and server-side rendering frameworks.
+		</p>
+		<p class="text-lg text-gray-700">
+			I develop user-focused applications using SvelteKit, React, and Nuxt.js with TypeScript,
+			TailwindCSS, and AI integrations.
+		</p>
 	</div>
 </section>
 
 <!-- Skills Section -->
-<section id="skills" class="bg-gray-900 py-20 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<h2 class="gradient-text mb-12 text-center text-3xl font-bold">Technical Skills</h2>
-		<div class="mx-auto flex max-w-3xl flex-wrap justify-center gap-3">
-			<span class="skill-pill rounded-full bg-indigo-900 px-4 py-2 font-medium text-indigo-300"
-				>JavaScript</span
-			>
-			<span class="skill-pill rounded-full bg-purple-900 px-4 py-2 font-medium text-purple-300"
-				>TypeScript</span
-			>
-			<span class="skill-pill rounded-full bg-red-900 px-4 py-2 font-medium text-red-300"
-				>Svelte</span
-			>
-			<span class="skill-pill rounded-full bg-blue-900 px-4 py-2 font-medium text-blue-300"
-				>React</span
-			>
-			<span class="skill-pill rounded-full bg-green-900 px-4 py-2 font-medium text-green-300"
-				>Node.js</span
-			>
-			<span class="skill-pill rounded-full bg-emerald-900 px-4 py-2 font-medium text-emerald-300"
-				>Nuxt.js</span
-			>
-			<span class="skill-pill rounded-full bg-cyan-900 px-4 py-2 font-medium text-cyan-300"
-				>TailwindCSS</span
-			>
-		</div>
+<section id="skills" class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+	<div class="mb-12 text-center">
+		<h2 class="mb-2 text-3xl font-bold">Technical Skills</h2>
+		<div class="mx-auto h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+	</div>
+	<div class="mx-auto flex max-w-3xl flex-wrap justify-center gap-3">
+		<span class="skill-pill rounded-full bg-yellow-50 px-4 py-2 font-medium text-yellow-800"
+			>JavaScript</span
+		>
+		<span class="skill-pill rounded-full bg-yellow-50 px-4 py-2 font-medium text-yellow-800"
+			>TypeScript</span
+		>
+		<span class="skill-pill rounded-full bg-amber-50 px-4 py-2 font-medium text-amber-800"
+			>Svelte</span
+		>
+		<span class="skill-pill rounded-full bg-yellow-50 px-4 py-2 font-medium text-yellow-800"
+			>React</span
+		>
+		<span class="skill-pill rounded-full bg-amber-50 px-4 py-2 font-medium text-amber-800"
+			>Node.js</span
+		>
+		<span class="skill-pill rounded-full bg-amber-50 px-4 py-2 font-medium text-amber-800"
+			>Nuxt.js</span
+		>
+		<span class="skill-pill rounded-full bg-amber-50 px-4 py-2 font-medium text-amber-800"
+			>TailwindCSS</span
+		>
+		<span class="skill-pill rounded-full bg-yellow-50 px-4 py-2 font-medium text-yellow-800"
+			>Python</span
+		>
+		<span class="skill-pill rounded-full bg-amber-100 px-4 py-2 font-medium text-amber-900"
+			>ComfyUI</span
+		>
 	</div>
 </section>
 
 <!-- Projects Section -->
-<section id="projects" class="bg-gray-800 py-20 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<h2 class="gradient-text mb-12 text-center text-3xl font-bold">Projects</h2>
-		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each projects as project}
-				<div
-					class="project-card overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-md transition-all duration-300"
-				>
-					<div class="h-48 overflow-hidden">
-						<img src={project.image} alt={project.title} class="h-full w-full object-cover" />
-					</div>
-					<div class="p-6">
-						<h3 class="mb-2 text-xl font-bold text-white">{project.title}</h3>
-						<p class="mb-4 text-gray-400">{project.description}</p>
-						<div class="mb-4 flex flex-wrap gap-2">
-							{#each project.tags as tag}
-								<span class="rounded-full bg-gray-700 px-3 py-1 text-sm font-medium text-gray-300"
-									>{tag}</span
-								>
-							{/each}
-						</div>
-						<a
-							href={project.link}
-							target="_blank"
-							class="font-medium text-indigo-400 hover:text-indigo-300">View Project &rarr;</a
-						>
-					</div>
+<section id="projects" class="mx-auto max-w-6xl bg-amber-100/50 px-4 py-20 sm:px-6 lg:px-8">
+	<div class="mb-12 text-center">
+		<h2 class="mb-2 text-3xl font-bold">Featured Projects</h2>
+		<div class="mx-auto h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+	</div>
+
+	<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+		{#each projects as project}
+			<div
+				class="project-card overflow-hidden rounded-xl bg-white shadow-md transition duration-300"
+			>
+				<div class="h-48 overflow-hidden">
+					<img src={project.image} alt={project.title} class="h-full w-full object-cover" />
 				</div>
-			{/each}
-		</div>
+				<div class="p-6">
+					<h3 class="mb-2 text-xl font-bold">{project.title}</h3>
+					<p class="mb-4 text-gray-600">{project.description}</p>
+					<div class="mb-4 flex flex-wrap gap-2">
+						{#each project.tags as tag}
+							{#if tag === 'Vue.js' || tag === 'Nuxt.js'}
+								<span class="rounded bg-amber-100 px-2 py-1 text-xs text-amber-800">{tag}</span>
+							{:else if tag === 'TailwindCSS'}
+								<span class="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-800">{tag}</span>
+							{:else if tag === 'SvelteJS' || tag === 'SvelteKit'}
+								<span class="rounded bg-purple-100 px-2 py-1 text-xs text-purple-800">{tag}</span>
+							{:else if tag === 'Node.js'}
+								<span class="rounded bg-green-100 px-2 py-1 text-xs text-green-800">{tag}</span>
+							{:else if tag === 'Design'}
+								<span class="rounded bg-pink-100 px-2 py-1 text-xs text-pink-800">{tag}</span>
+							{:else if tag === 'Tailwind'}
+								<span class="rounded bg-teal-100 px-2 py-1 text-xs text-teal-800">{tag}</span>
+							{:else if tag === 'Python'}
+								<span class="rounded bg-indigo-100 px-2 py-1 text-xs text-indigo-800">{tag}</span>
+							{:else if tag === 'ComfyUI'}
+								<span class="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-800">{tag}</span>
+							{:else}
+								<span class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-800">{tag}</span>
+							{/if}
+						{/each}
+					</div>
+					<a
+						href={project.link}
+						target="_blank"
+						class="flex items-center font-medium text-yellow-600 transition hover:text-yellow-800"
+					>
+						View Project <i class="fas fa-arrow-right ml-2"></i>
+					</a>
+				</div>
+			</div>
+		{/each}
 	</div>
 </section>
 
 <!-- Contact Section -->
-<section id="contact" class="bg-gray-900 py-20 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<h2 class="gradient-text mb-12 text-center text-3xl font-bold">Get In Touch</h2>
-		<div class="mx-auto max-w-3xl text-center">
-			<p class="mb-8 text-lg text-gray-400">
-				I'm always open to new opportunities and collaborations. Feel free to reach out if you want
-				to chat!
-			</p>
-			<a
-				href="mailto:contact@ktvuong.com"
-				class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm transition-colors hover:bg-indigo-700"
-			>
-				Email Me
-			</a>
-		</div>
+<section id="contact" class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+	<div class="mb-12 text-center">
+		<h2 class="mb-2 text-3xl font-bold">Get In Touch</h2>
+		<div class="mx-auto h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+	</div>
+	<div class="mx-auto max-w-2xl text-center">
+		<p class="mb-8 text-lg text-gray-700">
+			I'm always open to new opportunities and collaborations. Feel free to reach out if you want to
+			chat!
+		</p>
+		<a
+			href="mailto:contact@ktvuong.com"
+			class="inline-block transform rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 px-6 py-3 font-medium text-white shadow-md transition duration-300 hover:scale-105 hover:shadow-lg"
+		>
+			<i class="fas fa-envelope mr-2"></i> Email Me
+		</a>
 	</div>
 </section>
 
-<!-- Footer -->
-<footer class="bg-gray-900 py-8 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex flex-col items-center justify-between md:flex-row">
-			<p class="text-gray-400">&copy; 2025 Kent Vuong. All rights reserved.</p>
-			<div class="mt-4 flex space-x-4 md:mt-0">
-				<a
-					href="https://github.com/Mooshieblob1"
-					target="_blank"
-					class="text-gray-400 hover:text-white"
-				>
-					<i class="fab fa-github"></i>
-					<span class="sr-only">GitHub</span>
-				</a>
-				<a
-					href="https://www.linkedin.com/in/kentvuong88/"
-					target="_blank"
-					class="text-gray-400 hover:text-white"
-				>
-					<i class="fab fa-linkedin"></i>
-					<span class="sr-only">LinkedIn</span>
-				</a>
-			</div>
-		</div>
-	</div>
-</footer>
+<Footer />
