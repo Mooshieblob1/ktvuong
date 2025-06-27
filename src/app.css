@@ -141,6 +141,46 @@ footer {
 		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+header {
+	@apply bg-gray-900 py-20 text-white;
+}
+
+header .container {
+	@apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+header .flex {
+	@apply flex flex-col items-center justify-between md:flex-row;
+}
+
+header .mb-10 {
+	@apply mb-10 md:mb-0 md:w-1/2;
+}
+
+header h2 {
+	@apply gradient-text mb-6 text-2xl font-semibold md:text-3xl;
+}
+
+header p {
+	@apply mb-8 text-lg text-gray-400;
+}
+
+header .social-icon {
+	@apply text-2xl text-gray-400 hover:text-indigo-500;
+}
+
+header .social-icon:hover {
+	@apply text-indigo-400;
+}
+
+header img {
+	@apply h-64 w-64 rounded-full object-cover shadow-lg;
+}
+
+header .border-indigo-600 {
+	@apply absolute inset-0 rounded-full border-4 border-indigo-600;
+}
+
 @media (max-width: 768px) {
 	.about-content {
 		@apply grid-cols-1;

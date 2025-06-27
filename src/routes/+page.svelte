@@ -166,6 +166,7 @@
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex flex-col items-center justify-between md:flex-row">
 			<div class="mb-10 md:mb-0 md:w-1/2">
+				<h1 class="mb-4 text-5xl font-bold text-white md:text-6xl">Kent Vuong</h1>
 				<h2 class="gradient-text mb-6 text-2xl font-semibold md:text-3xl">
 					Full-Stack Software Developer
 				</h2>
