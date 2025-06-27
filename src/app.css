@@ -1,26 +1,30 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+.gradient-text {
+	background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
 :global(body) {
-	@apply m-0 font-sans leading-[1.6] text-[#1d1902] bg-black;
-	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-	sans-serif;
-}
-
-header {
-	@apply bg-[#1d1902] py-12 text-center;
-}
-
-header h1 {
-	@apply text-[3.5rem] m-0 tracking-[-0.03em];
-}
-
-header h2 {
-	@apply text-[1.5rem] font-normal opacity-90 mt-4 mb-8;
+	@apply m-0 bg-black font-sans leading-[1.6] text-gray-200;
+	font-family:
+		'Inter',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		'Open Sans',
+		sans-serif;
 }
 
 .social-links {
-	@apply flex gap-6 mt-4 justify-start;
+	@apply mt-4 flex justify-start gap-6;
 }
 
 .social-links a {
@@ -28,15 +32,15 @@ header h2 {
 }
 
 .social-links a:hover {
-	@apply opacity-100 underline;
+	@apply underline opacity-100;
 }
 
 section {
-	@apply py-12 px-12 border-b border-gray-500;
+	@apply border-b border-gray-500 px-12 py-12;
 }
 
 section h2 {
-	@apply text-[2rem] relative;
+	@apply relative text-[2rem];
 }
 
 .about-content {
@@ -49,24 +53,30 @@ section h2 {
 }
 
 .skill-tags span {
-	@apply bg-gray-300 py-[0.25rem] px-[0.75rem] rounded-full text-sm;
+	@apply rounded-full bg-gray-300 px-[0.75rem] py-[0.25rem] text-sm;
 }
 
 .projects-grid {
 	@apply grid gap-8;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Use explicit CSS for `grid-template-columns`. */
+	grid-template-columns: repeat(
+		auto-fill,
+		minmax(300px, 1fr)
+	); /* Use explicit CSS for `grid-template-columns`. */
 }
 
 .project-card {
-	@apply rounded-lg overflow-hidden shadow-md transition-shadow duration-200;
+	@apply overflow-hidden rounded-lg shadow-md transition-shadow duration-200;
 }
 
 .project-card:hover {
-	@apply translate-y-[-5px] shadow-lg;
+	transform: translateY(-5px);
+	box-shadow:
+		0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .project-card img {
-	@apply w-full h-[200px] object-cover;
+	@apply h-[200px] w-full object-cover;
 }
 
 .project-card h3 {
@@ -78,19 +88,19 @@ section h2 {
 }
 
 .project-tags {
-	@apply px-4 my-4 flex flex-wrap gap-2;
+	@apply my-4 flex flex-wrap gap-2 px-4;
 }
 
 .tag {
-	@apply bg-gray-200 py-[0.15rem] px-2 rounded text-xs text-gray-700;
+	@apply rounded bg-gray-200 px-2 py-[0.15rem] text-xs text-gray-700;
 }
 
 .project-link {
-	@apply inline-block m-4 mb-4 text-blue-500 no-underline font-medium;
+	@apply m-4 mb-4 inline-block font-medium text-blue-500 no-underline;
 }
 
 .contact-button {
-	@apply inline-block bg-[#1d1902] text-white py-3 px-8 rounded font-medium no-underline mt-4 transition-colors duration-200;
+	@apply mt-4 inline-block rounded bg-[#1d1902] px-8 py-3 font-medium text-white no-underline transition-colors duration-200;
 }
 
 .contact-button:hover {
@@ -99,6 +109,36 @@ section h2 {
 
 footer {
 	@apply py-8 text-center;
+}
+
+.nav-link {
+	position: relative;
+}
+
+.nav-link::after {
+	content: '';
+	position: absolute;
+	width: 0;
+	height: 2px;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+	transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+	width: 100%;
+}
+
+.skill-pill {
+	transition: all 0.3s ease;
+}
+
+.skill-pill:hover {
+	transform: scale(1.05);
+	box-shadow:
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 @media (max-width: 768px) {
