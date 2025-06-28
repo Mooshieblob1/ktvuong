@@ -30,6 +30,7 @@
 					href="https://github.com/mooshieblob1"
 					target="_blank"
 					class="hover:text-accent text-slate-400 transition-colors"
+					aria-label="Visit GitHub profile"
 				>
 					<i class="fab fa-github fa-lg"></i>
 				</a>
@@ -37,6 +38,7 @@
 					href="https://linkedin.com/in/kentvuong"
 					target="_blank"
 					class="hover:text-accent text-slate-400 transition-colors"
+					aria-label="Visit LinkedIn profile"
 				>
 					<i class="fab fa-linkedin-in fa-lg"></i>
 				</a>

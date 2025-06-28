@@ -51,7 +51,7 @@
 			<a href="#contact" class="hover:text-accent transition-colors">Contact</a>
 		</div>
 		<div class="md:hidden">
-			<button id="menu-toggle" on:click={toggleMenu} class="text-accent">
+			<button id="menu-toggle" on:click={toggleMenu} class="text-accent" aria-label="Toggle mobile menu">
 				<i class="fas fa-bars text-2xl"></i>
 			</button>
 		</div>
