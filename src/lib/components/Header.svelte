@@ -1,76 +1,105 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-    onMount(() => {
-        // Mobile menu toggle
-        document.getElementById('menu-toggle')?.addEventListener('click', function () {
-            const menu = document.getElementById('mobile-menu');
-            menu?.classList.toggle('hidden');
-        });
+	onMount(() => {
+		// Mobile menu toggle
+		document.getElementById('mobile-menu-button')?.addEventListener('click', function () {
+			const menu = document.getElementById('mobile-menu');
+			menu?.classList.toggle('hidden');
+		});
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+		// Close mobile menu when clicking on a link
+		document.querySelectorAll('#mobile-menu a').forEach((link) => {
+			link.addEventListener('click', function () {
+				document.getElementById('mobile-menu')?.classList.add('hidden');
+			});
+		});
 
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
+		// Smooth scrolling for anchor links
+		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+			anchor.addEventListener('click', function (e) {
+				e.preventDefault();
 
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const mobileMenu = document.getElementById('mobile-menu');
-                    if (!mobileMenu?.classList.contains('hidden')) {
-                        mobileMenu?.classList.add('hidden');
-                    }
+				const targetId = this.getAttribute('href');
+				if (targetId === '#') return;
 
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+				const targetElement = document.querySelector(targetId);
 
-        // Add shadow to navbar on scroll
-        window.addEventListener('scroll', function () {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 10) {
-                nav?.classList.add('shadow-md');
-            } else {
-                nav?.classList.remove('shadow-md');
-            }
-        });
-    });
+				if (targetElement) {
+					window.scrollTo({
+						top: targetElement.offsetTop - 80,
+						behavior: 'smooth'
+					});
+				}
+			});
+		});
+	});
 </script>
 
 <!-- Navigation -->
-<nav class="fixed z-50 w-full bg-white/80 shadow-sm backdrop-blur-sm">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="flex h-16 items-center justify-between">
-            <div class="flex items-center">
-                <a href="#" class="flex items-center">
-                    <img src="/favicon.svg" alt="Logo" class="h-8 w-8" />
-                    <span class="gradient-text ml-2 text-xl font-semibold">Kent Vuong</span>
-                </a>
-            </div>
-            <div class="hidden space-x-8 md:flex">
-                <a href="#about" class="text-gray-600 transition hover:text-yellow-600">About</a>
-                <a href="#skills" class="text-gray-600 transition hover:text-yellow-600">Skills</a>
-                <a href="#projects" class="text-gray-600 transition hover:text-yellow-600">Projects</a>
-                <a href="#contact" class="text-gray-600 transition hover:text-yellow-600">Contact</a>
-            </div>
-            <div class="md:hidden">
-                <button id="menu-toggle" class="text-gray-600 hover:text-yellow-600">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden bg-white/95 px-4 pb-4 backdrop-blur-sm md:hidden">
-        <a href="#about" class="block py-2 text-gray-600 transition hover:text-yellow-600">About</a>
-        <a href="#skills" class="block py-2 text-gray-600 transition hover:text-yellow-600">Skills</a>
-        <a href="#projects" class="block py-2 text-gray-600 transition hover:text-yellow-600">Projects</a>
-        <a href="#contact" class="block py-2 text-gray-600 transition hover:text-yellow-600">Contact</a>
-    </div>
+<nav
+	class="fixed z-50 w-full border-b border-[#FFCC00]/30 bg-[#FFF5DB]/90 shadow-sm backdrop-blur-sm"
+>
+	<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+		<div class="flex h-16 items-center justify-between">
+			<div class="flex flex-shrink-0 items-center">
+				<span class="gradient-text text-xl font-bold">KV</span>
+			</div>
+			<div class="hidden md:block">
+				<div class="ml-10 flex items-center space-x-4">
+					<a
+						href="#about"
+						class="rounded-md px-3 py-2 text-sm font-medium text-[#5A4A2A] hover:text-[#8A6D00]"
+						>About</a
+					>
+					<a
+						href="#projects"
+						class="rounded-md px-3 py-2 text-sm font-medium text-[#5A4A2A] hover:text-[#8A6D00]"
+						>Projects</a
+					>
+					<a
+						href="#contact"
+						class="rounded-md px-3 py-2 text-sm font-medium text-[#5A4A2A] hover:text-[#8A6D00]"
+						>Contact</a
+					>
+					<span
+						class="inline-flex items-center rounded-full bg-[#FFCC00]/20 px-3 py-1 text-xs font-medium text-[#8A6D00]"
+					>
+						Available for work
+					</span>
+				</div>
+			</div>
+			<div class="-mr-2 flex md:hidden">
+				<button
+					type="button"
+					id="mobile-menu-button"
+					class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
+				>
+					<span class="sr-only">Open main menu</span>
+					<i class="fas fa-bars"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Mobile menu -->
+	<div id="mobile-menu" class="mx-4 mb-4 hidden rounded-lg bg-white shadow-lg md:hidden">
+		<div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+			<a
+				href="#about"
+				class="block rounded-md px-3 py-2 text-base font-medium text-[#5A4A2A] hover:bg-[#FFF5DB]/50 hover:text-[#8A6D00]"
+				>About</a
+			>
+			<a
+				href="#projects"
+				class="block rounded-md px-3 py-2 text-base font-medium text-[#5A4A2A] hover:bg-[#FFF5DB]/50 hover:text-[#8A6D00]"
+				>Projects</a
+			>
+			<a
+				href="#contact"
+				class="block rounded-md px-3 py-2 text-base font-medium text-[#5A4A2A] hover:bg-[#FFF5DB]/50 hover:text-[#8A6D00]"
+				>Contact</a
+			>
+		</div>
+	</div>
 </nav>
