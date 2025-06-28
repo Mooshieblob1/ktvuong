@@ -139,7 +139,7 @@
 					</div>
 				</div>
 				<div class="flex justify-center md:w-1/2">
-					<div class="relative">
+					<div class="animate-bob relative">
 						<div
 							class="h-64 w-64 overflow-hidden rounded-full border-4 border-white shadow-xl md:h-80 md:w-80"
 						>
