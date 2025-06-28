@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kent Vuong | Full-Stack & DevOps Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e293b',
+                        accent: '#0ea5e9',
+                        background: '#0f172a'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            scroll-behavior: smooth;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        .project-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6 0%, #0ea5e9 100%);
+            z-index: 10;
+        }
+        .skill-badge {
+            transition: all 0.2s ease;
+        }
+        .skill-badge:hover {
+            transform: scale(1.05);
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #0ea5e9);
+            border-radius: 2px;
+        }
+        .terminal {
+            border-radius: 8px;
+            background-color: #0f172a;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        .terminal-header {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+        }
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0;
+            transition: all 0.2s ease;
+        }
+        .terminal-dot:hover {
+            font-size: 8px;
+            width: 16px;
+            height: 16px;
+        }
+        .dot-red:hover::before { content: '×'; }
+        .dot-yellow:hover::before { content: '−'; }
+        .dot-green:hover::before { content: '+'; }
+        .dot-red { background-color: #ef4444; }
+        .dot-yellow { background-color: #f59e0b; }
+        .dot-green { background-color: #10b981; }
+        .terminal-content {
+            margin-top: 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .command {
+            color: #0ea5e9;
+        }
+        .path {
+            color: #10b981;
+        }
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background-color: #f8fafc;
+            animation: blink 1s infinite;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="gradient-bg text-slate-100 font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-opacity-90 backdrop-blur-sm bg-background py-4 border-b border-slate-800">
+        <div class="container mx-auto px-4 md:px-8 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                    <span class="text-lg font-bold font-mono">KV</span>
+                </div>
+                <span class="text-xl font-bold">Kent Vuong</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-accent transition-colors">About</a>
+                <a href="#projects" class="hover:text-accent transition-colors">Projects</a>
+                <a href="#skills" class="hover:text-accent transition-colors">Skills</a>
+                <a href="#contact" class="hover:text-accent transition-colors">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-accent">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-secondary py-4">
+            <div class="container mx-auto px-4 flex flex-col space-y-4">
+                <a href="#about" class="hover:text-accent transition-colors">About</a>
+                <a href="#projects" class="hover:text-accent transition-colors">Projects</a>
+                <a href="#skills" class="hover:text-accent transition-colors">Skills</a>
+                <a href="#contact" class="hover:text-accent transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">
+                        <span class="text-accent">Building</span> Digital Solutions<br>
+                        From <span class="text-primary">Concept</span> to <span class="text-green-500">Deployment</span>
+                    </h1>
+                    <p class="text-lg text-slate-300 mb-8 max-w-lg">
+                        Hi, I'm Kent Vuong. Full-Stack and DevOps Engineer passionate about creating efficient, scalable solutions that bridge the gap between development and operations.
+                    </p>
+                    <div class="flex space-x-4">
+                        <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})" class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            View My Work
+                        </button>
+                        <button onclick="document.querySelector('.email-obfuscated').click()" class="px-6 py-3 border-2 border-accent text-accent rounded-lg font-medium hover:bg-accent hover:bg-opacity-10 transition-colors">
+                            Contact Me
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="terminal w-full max-w-md">
+                        <div class="terminal-header">
+                            <button class="terminal-dot dot-red" aria-label="Close"></button>
+                            <button class="terminal-dot dot-yellow" aria-label="Minimize"></button>
+                            <button class="terminal-dot dot-green" aria-label="Maximize"></button>
+                        </div>
+                        <div class="terminal-content">
+                            <div class="mb-3">
+                                <span class="text-green-400">$</span> <span class="command">whoami</span><br>
+                                <span class="path">> Kent Vuong</span><br>
+                                <span class="path">> Full-Stack & DevOps Engineer</span>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-green-400">$</span> <span class="command">cat skills.txt</span><br>
+                                <span class="path">> Cloud Architecture | Containerization | CI/CD Pipelines</span><br>
+                                <span class="path">> Full-Stack Development | Infrastructure as Code</span>
+                            </div>
+                            <div>
+                                <span class="text-green-400">$</span> <span class="command">connect --social</span>
+                                <span class="cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-900 bg-opacity-50">
+        <div class="container mx-auto px-4 md:px-8">
+            <h2 class="section-title text-3xl font-bold mb-12">Featured Projects</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card bg-secondary">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">mooshieblob.com</h3>
+                            <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded">Nuxt.js</span>
+                        </div>
+                        <p class="text-slate-300 mb-4">
+                            My fun alias profile showcasing my AI projects and online persona, featuring interactive demos and creative experiments.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Nuxt.js</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Tailwind</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Cloudflare</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">AI Integration</span>
+                        </div>
+                        <a href="https://mooshieblob.com" target="_blank" class="text-accent hover:text-blue-400 transition-colors flex items-center">
+                            <i class="fas fa-external-link-alt mr-2"></i> Visit Website
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card bg-secondary">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">ktvuong.com</h3>
+                            <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded">Portfolio</span>
+                        </div>
+                        <p class="text-slate-300 mb-4">
+                            My personal portfolio website highlighting my technical skills, professional journey, and project accomplishments.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">HTML/CSS</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">JavaScript</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">TailwindCSS</span>
+                        </div>
+                        <a href="#" class="text-accent hover:text-blue-400 transition-colors flex items-center">
+                            <i class="fas fa-link mr-2"></i> You're here now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card bg-secondary">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">team-blob.mooshieblob.com</h3>
+                            <span class="bg-pink-500 text-white text-xs px-2 py-1 rounded">SvelteKit</span>
+                        </div>
+                        <p class="text-slate-300 mb-4">
+                            A fictional esports team website with interactive elements, player profiles, and match history - all built for fun.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">SvelteKit</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Tailwind</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Cloudflare</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Interactive UI</span>
+                        </div>
+                        <a href="https://team-blob.mooshieblob.com" target="_blank" class="text-accent hover:text-blue-400 transition-colors flex items-center">
+                            <i class="fas fa-external-link-alt mr-2"></i> Visit Website
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Project 4 -->
+                <div class="project-card bg-secondary">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">gpu.garden</h3>
+                            <span class="bg-indigo-500 text-white text-xs px-2 py-1 rounded">AI Tools</span>
+                        </div>
+                        <p class="text-slate-300 mb-4">
+                            A frontend for a free shared GPU server for TouhouAI members, featuring image generation tools and notion-like notebooks.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">SvelteKit</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Tailwind</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">GPU Sharing</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">AI Tools</span>
+                        </div>
+                        <a href="https://gpu.garden" target="_blank" class="text-accent hover:text-blue-400 transition-colors flex items-center">
+                            <i class="fas fa-external-link-alt mr-2"></i> Visit Website
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Project 5 -->
+                <div class="project-card bg-secondary">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">ComfyUI_NAIDGenerator</h3>
+                            <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">Python</span>
+                        </div>
+                        <p class="text-slate-300 mb-4">
+                            A custom ComfyUI node that enables NovelAI API key integration, expanding generation options for users.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">ComfyUI</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">NovelAI</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">Python</span>
+                            <span class="skill-badge bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">API Integration</span>
+                        </div>
+                        <a href="https://github.com/bedovyy/ComfyUI_NAIDGenerator" target="_blank" class="text-accent hover:text-blue-400 transition-colors flex items-center">
+                            <i class="fab fa-github mr-2"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20">
+        <div class="container mx-auto px-4 md:px-8">
+            <h2 class="section-title text-3xl font-bold mb-12">Technical Expertise</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-6 text-accent">Development Stack</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>JavaScript/TypeScript</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-blue-500 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>React & Vue.js</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-blue-500 h-2.5 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Node.js & Express</span>
+                                <span>70%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-blue-500 h-2.5 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Python</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-blue-500 h-2.5 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-6 text-accent">DevOps & Infrastructure</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Docker & Kubernetes</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>AWS & Cloud Architecture</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>CI/CD Pipelines</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Infrastructure as Code</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16">
+                <h3 class="text-xl font-bold mb-6 text-center text-accent">Tools & Technologies</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-blue-500 hover:scale-105 transition-all duration-200">Nuxt.js</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-purple-600 hover:scale-105 transition-all duration-200">SvelteKit</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-blue-400 hover:scale-105 transition-all duration-200">TailwindCSS</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-yellow-400 hover:scale-105 transition-all duration-200">Python</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-green-500 hover:scale-105 transition-all duration-200">Cloudflare</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-pink-500 hover:scale-105 transition-all duration-200">AI Tools</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-blue-600 hover:scale-105 transition-all duration-200">ComfyUI</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-red-500 hover:scale-105 transition-all duration-200">NovelAI</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-orange-500 hover:scale-105 transition-all duration-200">Git</span>
+                    <span class="skill-badge bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-green-400 hover:scale-105 transition-all duration-200">API Integration</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-slate-900 bg-opacity-50">
+        <div class="container mx-auto px-4 md:px-8">
+            <h2 class="section-title text-3xl font-bold mb-12">Get In Touch</h2>
+            
+            <div class="flex flex-col md:flex-row gap-12">
+                <div class="md:w-1/2">
+                    <p class="text-lg text-slate-300 mb-8">
+                        Interested in working together or have questions about my projects? Feel free to reach out through any of the channels below. I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="mt-1 text-accent">
+                                <i class="fas fa-envelope fa-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Email</h3>
+                                <button onclick="window.location.href='mailto:contact@ktvuong.com'" class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                    Email Me
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="mt-1 text-accent">
+                                <i class="fab fa-github fa-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">GitHub</h3>
+                                <a href="https://github.com/mooshieblob1" target="_blank" class="text-slate-300 hover:text-accent">github.com/mooshieblob1</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="mt-1 text-accent">
+                                <i class="fab fa-linkedin fa-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">LinkedIn</h3>
+                                <a href="https://linkedin.com/in/kentvuong" target="_blank" class="text-slate-300 hover:text-accent">linkedin.com/in/kentvuong</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-slate-300 mb-2">Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-slate-300 mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-slate-300 mb-2">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-slate-800">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center">
+                        <span class="text-sm font-bold font-mono">KV</span>
+                    </div>
+                    <span class="text-lg font-bold">Kent Vuong</span>
+                </div>
+                
+                <div class="text-slate-400 md:text-center">
+                    &copy; <script>document.write(new Date().getFullYear())</script> Kent Vuong. All rights reserved.
+                </div>
+                
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="https://github.com/mooshieblob1" target="_blank" class="text-slate-400 hover:text-accent transition-colors">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/kentvuong" target="_blank" class="text-slate-400 hover:text-accent transition-colors">
+                        <i class="fab fa-linkedin-in fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(item => {
+            item.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Form submission handler
+        const contactForm = document.querySelector('form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message! I\'ll get back to you soon.');
+                contactForm.reset();
+            });
+        }
+    </script>
+</body>
+</html>

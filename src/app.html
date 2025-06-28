@@ -1,30 +1,37 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<title>Kent Vuong</title>
-		<!-- Add a meaningful title for better SEO and accessibility -->
-		<link rel="icon" href="/favicon.svg" />
-		<!-- Assuming favicon is in the public folder or correctly resolved -->
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta
-			name="description"
-			content="Kent | Full-stack developer specializing in Svelte, SvelteKit, React, and Nuxt.js. Creating performant web applications with TypeScript, Tailwind CSS, and AI integration. Transforming complex challenges into elegant digital solutions."
-		/>
-		<!-- Add description for SEO -->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Kent Vuong | Full-Stack & DevOps Engineer</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 		/>
-		<meta name="view-transition" content="same-origin" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							background: '#0f172a'
+						},
+						fontFamily: {
+							mono: ['JetBrains Mono', 'monospace']
+						}
+					}
+				}
+			};
+		</script>
 		%sveltekit.head%
-		<!-- This will be replaced dynamically by SvelteKit -->
 	</head>
-	<body
-		data-sveltekit-preload-data="hover"
-		class="bg-amber-50 font-sans text-amber-900 antialiased"
-	>
-		<div>%sveltekit.body%</div>
-		<!-- Avoid unnecessary styles like `display: contents` -->
+	<body class="gradient-bg font-sans text-slate-100" data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+		<script src="/emailProtection.js"></script>
 	</body>
 </html>
