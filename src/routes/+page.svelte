@@ -1,6 +1,8 @@
 <script lang="ts">
 	let mobileMenuOpen = false;
 	let currentProjectIndex = 0;
+	let touchStartX = 0;
+	let touchEndX = 0;
 
 	const projects = [
 		{
@@ -81,6 +83,31 @@
 		mobileMenuOpen = false;
 	}
 
+	// Touch handling for project swiping on mobile
+	function handleTouchStart(event: TouchEvent) {
+		touchStartX = event.changedTouches[0].screenX;
+	}
+
+	function handleTouchEnd(event: TouchEvent) {
+		touchEndX = event.changedTouches[0].screenX;
+		handleSwipeGesture();
+	}
+
+	function handleSwipeGesture() {
+		const swipeThreshold = 50;
+		const swipeDistance = touchStartX - touchEndX;
+
+		if (Math.abs(swipeDistance) > swipeThreshold) {
+			if (swipeDistance > 0) {
+				// Swipe left - next project
+				nextProject();
+			} else {
+				// Swipe right - previous project
+				prevProject();
+			}
+		}
+	}
+
 	// Contact form handling
 	let contactForm = {
 		name: '',
@@ -139,13 +166,19 @@
 					<div class="mb-3">
 						<span class="command">$ whoami</span><br />
 						<span class="path">> Kent Vuong</span><br />
-						<span class="path">> Full-Stack & DevOps Engineer</span>
+						<span class="path hidden sm:block">> Full-Stack & DevOps Engineer</span>
+						<span class="path sm:hidden">> Full-Stack Dev</span>
 					</div>
 					<div class="mb-3">
 						<span class="command">$ cat skills.txt</span><br />
-						<span class="path">> Cloud Architecture | Containerization | CI/CD Pipelines</span><br
-						/>
-						<span class="path">> Full-Stack Development | Infrastructure as Code</span>
+						<span class="path hidden sm:block"
+							>> Cloud Architecture | Containerization | CI/CD Pipelines</span
+						>
+						<span class="path sm:hidden">> Cloud | Containers | CI/CD</span><br />
+						<span class="path hidden sm:block"
+							>> Full-Stack Development | Infrastructure as Code</span
+						>
+						<span class="path sm:hidden">> Full-Stack | DevOps</span>
 					</div>
 					<div>
 						<span class="command">$ connect --social</span>
@@ -163,9 +196,57 @@
 		<h2 class="section-title">Featured Projects</h2>
 		<p class="section-subtitle">Some of my recent work</p>
 
+		<!-- Mobile Navigation Buttons -->
+		<div class="mobile-project-nav mb-4 md:hidden">
+			<button
+				class="mobile-nav-btn mobile-nav-prev"
+				on:click={prevProject}
+				aria-label="Previous project"
+			>
+				<svg
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						d="M15 18L9 12L15 6"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+				Previous
+			</button>
+			<button
+				class="mobile-nav-btn mobile-nav-next"
+				on:click={nextProject}
+				aria-label="Next project"
+			>
+				Next
+				<svg
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						d="M9 18L15 12L9 6"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			</button>
+		</div>
+
 		<div class="project-showcase">
 			<button
-				class="project-nav project-nav-prev"
+				class="project-nav project-nav-prev hidden md:flex"
 				on:click={prevProject}
 				aria-label="Previous project"
 			>
@@ -186,12 +267,13 @@
 				</svg>
 			</button>
 
-			<div class="project-card">
+			<div class="project-card" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>
 				{#if projects[currentProjectIndex].image}
 					<div class="project-image">
 						<img
 							src={projects[currentProjectIndex].image}
 							alt={projects[currentProjectIndex].title}
+							loading="lazy"
 						/>
 					</div>
 				{/if}
@@ -249,14 +331,18 @@
 										stroke-linejoin="round"
 									/>
 								</svg>
-								Live Demo
+								Visit
 							</a>
 						{/if}
 					</div>
 				</div>
 			</div>
 
-			<button class="project-nav project-nav-next" on:click={nextProject} aria-label="Next project">
+			<button
+				class="project-nav project-nav-next hidden md:flex"
+				on:click={nextProject}
+				aria-label="Next project"
+			>
 				<svg
 					width="24"
 					height="24"
