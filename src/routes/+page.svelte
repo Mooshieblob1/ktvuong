@@ -166,19 +166,12 @@
 					<div class="mb-3">
 						<span class="command">$ whoami</span><br />
 						<span class="path">> Kent Vuong</span><br />
-						<span class="path hidden sm:block">> Full-Stack & DevOps Engineer</span>
-						<span class="path sm:hidden">> Full-Stack Dev</span>
+						<span class="path">> Full-Stack Dev</span>
 					</div>
 					<div class="mb-3">
 						<span class="command">$ cat skills.txt</span><br />
-						<span class="path hidden sm:block"
-							>> Cloud Architecture | Containerization | CI/CD Pipelines</span
-						>
-						<span class="path sm:hidden">> Cloud | Containers | CI/CD</span><br />
-						<span class="path hidden sm:block"
-							>> Full-Stack Development | Infrastructure as Code</span
-						>
-						<span class="path sm:hidden">> Full-Stack | DevOps</span>
+						<span class="path">> Cloud | Containers | CI/CD</span><br />
+						<span class="path">> Full-Stack | DevOps</span>
 					</div>
 					<div>
 						<span class="command">$ connect --social</span>
