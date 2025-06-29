@@ -134,7 +134,7 @@
 </svelte:head>
 
 <!-- Hero Section -->
-<section id="home" class="hero">
+<section id="about" class="hero">
 	<div class="hero-content">
 		<div class="hero-text fade-in">
 			<h1 class="hero-title">
