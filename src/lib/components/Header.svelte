@@ -44,7 +44,7 @@
 			</div>
 			<span class="text-xl font-bold">Kent Vuong</span>
 		</div>
-		<div class="hidden space-x-8 md:flex">
+		<div class="hidden space-x-8 font-bold md:flex">
 			<a href="#about" class="hover:text-accent transition-colors">About</a>
 			<a href="#projects" class="hover:text-accent transition-colors">Projects</a>
 			<a href="#skills" class="hover:text-accent transition-colors">Skills</a>

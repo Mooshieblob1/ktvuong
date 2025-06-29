@@ -286,6 +286,7 @@
 							class="btn btn-outline"
 						>
 							<svg
+								class="h-5 w-5"
 								width="20"
 								height="20"
 								viewBox="0 0 24 24"
@@ -507,6 +508,7 @@
 				</div>
 				<div class="contact-item">
 					<svg
+						class="h-6 w-6"
 						width="24"
 						height="24"
 						viewBox="0 0 24 24"
