@@ -3,35 +3,21 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Kent Vuong | Full-Stack & DevOps Engineer</title>
+		<title>Kent Vuong - Full-Stack & DevOps Engineer</title>
 		<script src="https://cdn.tailwindcss.com"></script>
-		<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 		/>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 			rel="stylesheet"
 		/>
-		<script>
-			tailwind.config = {
-				theme: {
-					extend: {
-						colors: {
-							background: '#0f172a'
-						},
-						fontFamily: {
-							mono: ['JetBrains Mono', 'monospace']
-						}
-					}
-				}
-			};
-		</script>
 		%sveltekit.head%
 	</head>
-	<body class="gradient-bg font-sans text-slate-100" data-sveltekit-preload-data="hover">
+	<body class="bg-gray-50 text-gray-800" data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<script src="/emailProtection.js"></script>
+		<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 	</body>
 </html>

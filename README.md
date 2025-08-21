@@ -26,6 +26,7 @@ A modern, responsive portfolio website built with Svelte and Tailwind CSS.
 ### Email Obfuscation
 
 The site implements a custom email obfuscation system to protect against email harvesting bots:
+
 - Uses XOR cipher to encode email address in the HTML
 - Client-side JavaScript decodes the email only when needed
 - No plain text email addresses in source code or DOM
@@ -34,6 +35,7 @@ The site implements a custom email obfuscation system to protect against email h
 ### Project Showcase
 
 The portfolio includes a showcase of projects with:
+
 - Visual thumbnails
 - Project descriptions
 - Technology tags
@@ -75,14 +77,14 @@ To add a new project, edit the projects array:
 
 ```javascript
 const projects = [
-    {
-       title: 'Project Name',
-       description: 'Description of the project',
-       image: '/path/to/image.jpg',
-       tags: ['Tag1', 'Tag2', 'Tag3'],
-       link: 'https://project-link.com'
-    }
-    // Add more projects here
+	{
+		title: 'Project Name',
+		description: 'Description of the project',
+		image: '/path/to/image.jpg',
+		tags: ['Tag1', 'Tag2', 'Tag3'],
+		link: 'https://project-link.com'
+	}
+	// Add more projects here
 ];
 ```
 

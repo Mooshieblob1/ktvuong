@@ -1,181 +1,185 @@
 <script lang="ts">
-	let mobileMenuOpen = false;
-	let currentProjectIndex = 0;
-	let touchStartX = 0;
-	let touchEndX = 0;
+	import { onMount } from 'svelte';
 
-	const projects = [
-		{
-			id: 1,
-			title: 'mooshieblob.com',
-			description:
-				'My fun alias profile showcasing my AI projects and online persona, featuring interactive demos and creative experiments.',
-			tech: ['Nuxt.js', 'Tailwind', 'Cloudflare', 'AI Integration'],
-			github: 'https://github.com/Mooshieblob1/mooshieblob1.github.io',
-			demo: 'https://mooshieblob.com',
-			image: '/site1img/thumb1.webp'
-		},
-		{
-			id: 2,
-			title: 'ktvuong.com',
-			description:
-				"This is the site you're on right now! My personal portfolio website highlighting my technical skills, professional journey, and project accomplishments.",
-			tech: ['HTML/CSS', 'JavaScript', 'TailwindCSS'],
-			github: 'https://github.com/Mooshieblob1/ktvuong',
-			demo: null,
-			image: null
-		},
-		{
-			id: 3,
-			title: 'team-blob.mooshieblob.com',
-			description:
-				'A fictional esports team website with interactive elements, player profiles, and match history - all built for fun.',
-			tech: ['SvelteKit', 'Tailwind', 'Cloudflare', 'Interactive UI'],
-			github: 'https://github.com/Mooshieblob1/team-blob',
-			demo: 'https://team-blob.mooshieblob.com',
-			image: '/site3img/thumb.png'
-		},
-		{
-			id: 4,
-			title: 'gpu.garden',
-			description:
-				'A frontend for a free shared GPU server for TouhouAI members, featuring image generation tools and notion-like notebooks.',
-			tech: ['SvelteKit', 'Tailwind', 'GPU Sharing', 'AI Tools'],
-			github: 'https://github.com/mchaker/gpugarden-site',
-			demo: 'https://gpu.garden',
-			image: '/site4img/thumb.png'
-		},
-		{
-			id: 5,
-			title: 'ComfyUI_NAIDGenerator',
-			description:
-				'A custom ComfyUI node that enables NovelAI API key integration, expanding generation options for users.',
-			tech: ['ComfyUI', 'NovelAI', 'Python', 'API Integration'],
-			github: 'https://github.com/Mooshieblob1/ComfyUI_NAIDGenerator',
-			demo: null,
-			image: '/site5img/thumb.png'
-		}
-	];
-
-	const skills = [
-		{ name: 'JavaScript/TypeScript', level: 95 },
-		{ name: 'React/Vue/Svelte', level: 90 },
-		{ name: 'Node.js/Express', level: 88 },
-		{ name: 'AWS/Azure/GCP', level: 85 },
-		{ name: 'Docker/Kubernetes', level: 82 },
-		{ name: 'Python/Go', level: 78 }
-	];
-
-	function toggleMobileMenu() {
-		mobileMenuOpen = !mobileMenuOpen;
-	}
-
-	function nextProject() {
-		currentProjectIndex = (currentProjectIndex + 1) % projects.length;
-	}
-
-	function prevProject() {
-		currentProjectIndex = currentProjectIndex === 0 ? projects.length - 1 : currentProjectIndex - 1;
-	}
-
-	function scrollToSection(sectionId: string) {
-		document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-		mobileMenuOpen = false;
-	}
-
-	// Touch handling for project swiping on mobile
-	function handleTouchStart(event: TouchEvent) {
-		touchStartX = event.changedTouches[0].screenX;
-	}
-
-	function handleTouchEnd(event: TouchEvent) {
-		touchEndX = event.changedTouches[0].screenX;
-		handleSwipeGesture();
-	}
-
-	function handleSwipeGesture() {
-		const swipeThreshold = 50;
-		const swipeDistance = touchStartX - touchEndX;
-
-		if (Math.abs(swipeDistance) > swipeThreshold) {
-			if (swipeDistance > 0) {
-				// Swipe left - next project
-				nextProject();
-			} else {
-				// Swipe right - previous project
-				prevProject();
-			}
-		}
-	}
-
-	// Contact form handling
-	let contactForm = {
-		name: '',
-		email: '',
-		message: ''
-	};
-
-	function handleSubmit(event: Event) {
+	function handleFormSubmit(event: SubmitEvent) {
 		event.preventDefault();
-		// Handle form submission here
-		console.log('Form submitted:', contactForm);
-		// Reset form
-		contactForm = { name: '', email: '', message: '' };
-		alert('Message sent successfully!');
+		const form = event.target as HTMLFormElement;
+		alert('Thank you for your message!');
+		form.reset();
 	}
+
+	onMount(() => {
+		// Smooth scrolling for anchor links
+		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+			anchor.addEventListener('click', function (this: HTMLAnchorElement, e: Event) {
+				e.preventDefault();
+				const href = this.getAttribute('href');
+				if (href) {
+					const target = document.querySelector(href);
+					if (target) {
+						target.scrollIntoView({
+							behavior: 'smooth'
+						});
+					}
+				}
+			});
+		});
+
+		// Initialize particles.js
+		window.particlesJS('particles-js', {
+			particles: {
+				number: { value: 80, density: { enable: true, value_area: 800 } },
+				color: { value: '#3b82f6' },
+				shape: { type: 'circle', stroke: { width: 0, color: '#000000' }, polygon: { nb_sides: 5 } },
+				opacity: {
+					value: 0.3,
+					random: false,
+					anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false }
+				},
+				size: {
+					value: 3,
+					random: true,
+					anim: { enable: false, speed: 40, size_min: 0.1, sync: false }
+				},
+				line_linked: { enable: true, distance: 150, color: '#3b82f6', opacity: 0.2, width: 1 },
+				move: {
+					enable: true,
+					speed: 2,
+					direction: 'none',
+					random: false,
+					straight: false,
+					out_mode: 'out',
+					bounce: false,
+					attract: { enable: false, rotateX: 600, rotateY: 1200 }
+				}
+			},
+			interactivity: {
+				detect_on: 'canvas',
+				events: {
+					onhover: { enable: true, mode: 'grab' },
+					onclick: { enable: true, mode: 'push' },
+					resize: true
+				},
+				modes: {
+					grab: { distance: 140, line_linked: { opacity: 1 } },
+					bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
+					repulse: { distance: 200, duration: 0.4 },
+					push: { particles_nb: 4 },
+					remove: { particles_nb: 2 }
+				}
+			},
+			retina_detect: true
+		});
+	});
 </script>
 
 <svelte:head>
-	<title>Kent Vuong - Full-Stack & DevOps Engineer</title>
-	<meta
-		name="description"
-		content="Kent Vuong - Full-Stack Developer and DevOps Engineer specializing in modern web technologies and cloud infrastructure."
-	/>
+	<style>
+		:global(body) {
+			font-family: 'Inter', sans-serif;
+			scroll-behavior: smooth;
+		}
+
+		.gradient-text {
+			background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+		}
+
+		.terminal-line::before {
+			content: '$';
+			color: #8b5cf6;
+			margin-right: 10px;
+			font-weight: bold;
+		}
+
+		.project-card:hover {
+			transform: translateY(-5px);
+			box-shadow:
+				0 20px 25px -5px rgba(0, 0, 0, 0.1),
+				0 10px 10px -5px rgba(0, 0, 0, 0.04);
+		}
+
+		.skill-icon {
+			transition: all 0.3s ease;
+		}
+
+		.skill-card:hover .skill-icon {
+			transform: scale(1.1);
+		}
+
+		#particles-js {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: 0;
+		}
+	</style>
 </svelte:head>
 
-<!-- Hero Section -->
-<section id="about" class="hero">
-	<div class="hero-content">
-		<div class="hero-text fade-in">
-			<h1 class="hero-title">
-				Hi, I'm <span class="highlight">Kent Vuong</span>
-			</h1>
-			<p class="hero-subtitle">Full-Stack & DevOps Engineer</p>
-			<p class="hero-description">
-				I build scalable web applications and robust cloud infrastructure. Passionate about clean
-				code, automation, and delivering exceptional user experiences.
-			</p>
-			<div class="hero-buttons">
-				<button class="btn btn-primary" on:click={() => scrollToSection('projects')}>
-					View My Work
-				</button>
-				<button class="btn btn-secondary" on:click={() => scrollToSection('contact')}>
-					Get In Touch
-				</button>
-			</div>
-		</div>
+<!-- Particles Background -->
+<div id="particles-js" class="fixed"></div>
 
-		<div class="hero-terminal fade-in-delay">
-			<div class="terminal w-full max-w-md">
-				<div class="terminal-header">
-					<button class="terminal-dot dot-red" aria-label="Close"></button>
-					<button class="terminal-dot dot-yellow" aria-label="Minimize"></button>
-					<button class="terminal-dot dot-green" aria-label="Maximize"></button>
+<!-- Hero Section -->
+<section id="about" class="relative flex min-h-screen items-center justify-center pt-16">
+	<div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+		<div class="flex flex-col items-center md:flex-row">
+			<div class="mb-10 md:mb-0 md:w-1/2">
+				<h1 class="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">
+					<span class="gradient-text">Hi, I'm Kent Vuong</span>
+				</h1>
+				<h2 class="mb-6 text-2xl font-semibold text-gray-700 md:text-3xl">
+					Full-Stack & DevOps Engineer
+				</h2>
+				<p class="mb-8 max-w-lg text-lg text-gray-600">
+					I build scalable web applications and robust cloud infrastructure. Passionate about clean
+					code, automation, and delivering exceptional user experiences.
+				</p>
+
+				<div class="max-w-md rounded-lg bg-gray-800 p-6 font-mono text-gray-100">
+					<div class="mb-4 flex items-center">
+						<div class="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
+						<div class="mr-2 h-3 w-3 rounded-full bg-yellow-500"></div>
+						<div class="h-3 w-3 rounded-full bg-green-500"></div>
+					</div>
+					<div class="terminal-line mb-2">whoami</div>
+					<div class="mb-2 ml-6">&gt; Kent Vuong</div>
+					<div class="mb-4 ml-6">&gt; Full-Stack Dev</div>
+
+					<div class="terminal-line mb-2">cat skills.txt</div>
+					<div class="mb-2 ml-6">&gt; Cloud | Containers | CI/CD</div>
+					<div class="mb-4 ml-6">&gt; Full-Stack | DevOps</div>
+
+					<div class="terminal-line mb-2">connect --social</div>
+					<div class="ml-6 flex space-x-4">
+						<a href="#" aria-label="GitHub profile" class="text-blue-400 hover:text-blue-300"
+							><i class="fab fa-github"></i></a
+						>
+						<a href="#" aria-label="LinkedIn profile" class="text-blue-400 hover:text-blue-300"
+							><i class="fab fa-linkedin"></i></a
+						>
+						<a href="#" aria-label="Twitter profile" class="text-blue-400 hover:text-blue-300"
+							><i class="fab fa-twitter"></i></a
+						>
+					</div>
 				</div>
-				<div class="terminal-content">
-					<div class="mb-3">
-						<span class="command">$ whoami</span><br />
-						<span class="path">> Kent Vuong</span><br />
-						<span class="path">> Full-Stack Dev</span>
+			</div>
+			<div class="flex justify-center md:w-1/2">
+				<div class="relative">
+					<div
+						class="flex h-64 w-64 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-purple-500 shadow-xl md:h-80 md:w-80"
+					>
+						<div
+							class="flex h-60 w-60 items-center justify-center rounded-full bg-white md:h-72 md:w-72"
+						>
+							<span class="gradient-text text-6xl font-bold md:text-8xl">KV</span>
+						</div>
 					</div>
-					<div class="mb-3">
-						<span class="command">$ cat skills.txt</span><br />
-						<span class="path">> Cloud | Containers | CI/CD</span><br />
-						<span class="path">> Full-Stack | DevOps</span>
-					</div>
-					<div>
-						<span class="command">$ connect --social</span>
-						<span class="cursor"></span>
+					<div class="absolute -right-5 -bottom-5 rounded-full bg-white px-4 py-2 shadow-md">
+						<span class="gradient-text font-semibold">Available for work</span>
 					</div>
 				</div>
 			</div>
@@ -184,235 +188,178 @@
 </section>
 
 <!-- Projects Section -->
-<section id="projects" class="projects">
-	<div class="container" style="max-width: 1600px;">
-		<h2 class="section-title">Featured Projects</h2>
-		<p class="section-subtitle">Some of my recent work</p>
-
-		<!-- Mobile Navigation Buttons -->
-		<div class="mobile-project-nav mb-4 md:hidden">
-			<button
-				class="mobile-nav-btn mobile-nav-prev"
-				on:click={prevProject}
-				aria-label="Previous project"
-			>
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M15 18L9 12L15 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-				Previous
-			</button>
-			<button
-				class="mobile-nav-btn mobile-nav-next"
-				on:click={nextProject}
-				aria-label="Next project"
-			>
-				Next
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M9 18L15 12L9 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-			</button>
+<section id="projects" class="relative bg-white py-20">
+	<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold md:text-4xl">Featured Projects</h2>
+			<p class="mx-auto max-w-2xl text-xl text-gray-600">Some of my recent work</p>
 		</div>
 
-		<div class="project-showcase">
-			<button
-				class="project-nav project-nav-prev hidden md:flex"
-				on:click={prevProject}
-				aria-label="Previous project"
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+			<div
+				class="project-card overflow-hidden rounded-xl bg-white shadow-lg transition duration-300"
 			>
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
+				<div
+					class="flex h-48 items-center justify-center bg-gradient-to-r from-purple-400 to-blue-500"
 				>
-					<path
-						d="M15 18L9 12L15 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
+					<img
+						src="https://ktvuong.com/site1img/thumb1.webp"
+						alt="mooshieblob.com"
+						class="h-full w-full object-cover"
 					/>
-				</svg>
-			</button>
-
-			<div class="project-card" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>
-				{#if projects[currentProjectIndex].image}
-					<div class="project-image">
-						<img
-							src={projects[currentProjectIndex].image}
-							alt={projects[currentProjectIndex].title}
-							loading="lazy"
-						/>
-					</div>
-				{/if}
-				<div class="project-info">
-					<h3 class="project-title">{projects[currentProjectIndex].title}</h3>
-					<p class="project-description">{projects[currentProjectIndex].description}</p>
-					<div class="project-tech">
-						{#each projects[currentProjectIndex].tech as tech}
-							<span class="tech-tag">{tech}</span>
-						{/each}
-					</div>
-					<div class="project-links">
-						<a
-							href={projects[currentProjectIndex].github}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-outline"
+				</div>
+				<div class="p-6">
+					<h3 class="mb-2 text-2xl font-bold">mooshieblob.com</h3>
+					<p class="mb-4 text-gray-600">
+						My fun alias profile showcasing my AI projects and online persona, featuring interactive
+						demos and creative experiments.
+					</p>
+					<div class="mb-4 flex flex-wrap gap-2">
+						<span class="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">Nuxt.js</span>
+						<span class="rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-800"
+							>Tailwind</span
 						>
-							<svg
-								class="h-5 w-5"
-								width="20"
-								height="20"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M9 19C4 20.5 4 16.5 2 16M22 16V18.13C22 19.48 21.36 20.44 20.09 20.93L18 21.5C16.5 22 15.5 21 15.5 19.5V16.5C15.5 15.5 16 14.5 16.5 14C12.5 13.5 8.5 12 8.5 5.5C8.5 4 9 2.5 10 1.5C9.5 0 10 -1.5 12 -1C14 -0.5 15.5 0.5 16.5 1.5C18 1 19.5 1 21 1.5C22 0.5 23.5 -0.5 25.5 -1C27.5 -1.5 28 0 27.5 1.5C28.5 2.5 29 4 29 5.5C29 12 25 13.5 21 14C21.5 14.5 22 15.5 22 16.5V19.5"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-							Code
+						<span class="rounded-full bg-green-100 px-3 py-1 text-sm text-green-800"
+							>Cloudflare</span
+						>
+						<span class="rounded-full bg-yellow-100 px-3 py-1 text-sm text-yellow-800"
+							>AI Integration</span
+						>
+					</div>
+					<div class="flex space-x-4">
+						<a
+							href="https://github.com/Mooshieblob1/mooshieblob1.github.io"
+							class="flex items-center text-blue-600 transition hover:text-blue-800"
+						>
+							<i class="fab fa-github mr-2"></i> Code
 						</a>
-						{#if projects[currentProjectIndex].demo}
-							<a
-								href={projects[currentProjectIndex].demo}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="btn btn-primary"
-							>
-								<svg
-									width="20"
-									height="20"
-									viewBox="0 0 24 24"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M18 13V6C18 5.44772 17.5523 5 17 5H5C4.44772 5 4 5.44772 4 6V18C4 18.5523 4.44772 19 5 19H12M18 13L22 17M18 13V17M18 13H14"
-										stroke="currentColor"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
-								Visit
-							</a>
-						{/if}
+						<a
+							href="https://mooshieblob.com/"
+							class="flex items-center text-purple-600 transition hover:text-purple-800"
+						>
+							<i class="fas fa-external-link-alt mr-2"></i> Visit
+						</a>
 					</div>
 				</div>
 			</div>
 
-			<button
-				class="project-nav project-nav-next hidden md:flex"
-				on:click={nextProject}
-				aria-label="Next project"
+			<div
+				class="project-card overflow-hidden rounded-xl bg-white shadow-lg transition duration-300"
 			>
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
+				<div
+					class="flex h-48 items-center justify-center bg-gradient-to-r from-green-400 to-teal-500"
 				>
-					<path
-						d="M9 18L15 12L9 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-			</button>
-		</div>
-
-		<div class="project-indicators">
-			{#each projects as project, index}
-				<button
-					class="indicator {index === currentProjectIndex ? 'active' : ''}"
-					on:click={() => (currentProjectIndex = index)}
-					aria-label="Go to project {index + 1}"
-				></button>
-			{/each}
+					<div class="p-4 text-center text-white">
+						<i class="fas fa-project-diagram mb-4 text-6xl"></i>
+						<p>More projects coming soon</p>
+					</div>
+				</div>
+				<div class="p-6">
+					<h3 class="mb-2 text-2xl font-bold">Your Project Here</h3>
+					<p class="mb-4 text-gray-600">
+						Interested in collaborating? Let's build something amazing together!
+					</p>
+					<div class="mb-4 flex flex-wrap gap-2">
+						<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800">Your Tech</span>
+						<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800">Stack Here</span>
+					</div>
+					<a
+						href="#contact"
+						class="inline-flex items-center text-indigo-600 transition hover:text-indigo-800"
+					>
+						<i class="fas fa-envelope mr-2"></i> Contact me
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
 
 <!-- Skills Section -->
-<section id="skills" class="skills">
-	<div class="container">
-		<h2 class="section-title">Skills & Expertise</h2>
-		<p class="section-subtitle">Technologies I work with</p>
-
-		<div class="skills-grid">
-			{#each skills as skill}
-				<div class="skill-item">
-					<div class="skill-header">
-						<span class="skill-name">{skill.name}</span>
-						<span class="skill-percentage">{skill.level}%</span>
-					</div>
-					<div class="skill-bar">
-						<div class="skill-progress" style="width: {skill.level}%"></div>
-					</div>
-				</div>
-			{/each}
+<section id="skills" class="relative bg-gray-50 py-20">
+	<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold md:text-4xl">Skills & Expertise</h2>
+			<p class="mx-auto max-w-2xl text-xl text-gray-600">Technologies I work with</p>
 		</div>
 
-		<div class="skills-categories">
-			<div class="skill-category">
-				<h3>Frontend</h3>
-				<ul>
-					<li>React, Vue.js, Svelte</li>
-					<li>Next.js, Nuxt.js</li>
-					<li>TypeScript, JavaScript</li>
-					<li>Tailwind CSS, SCSS</li>
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+			<div
+				class="skill-card rounded-xl bg-white p-6 shadow-md transition duration-300 hover:shadow-xl"
+			>
+				<div class="mb-4 flex items-center">
+					<div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+						<i class="fas fa-laptop-code skill-icon text-xl text-blue-600"></i>
+					</div>
+					<h3 class="text-xl font-bold">Frontend</h3>
+				</div>
+				<ul class="space-y-2">
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>React, Vue.js, Svelte</span
+						>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>Next.js, Nuxt.js</span>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span
+							>TypeScript, JavaScript</span
+						>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>Tailwind CSS, SCSS</span>
+					</li>
 				</ul>
 			</div>
-			<div class="skill-category">
-				<h3>Backend</h3>
-				<ul>
-					<li>Node.js, Express</li>
-					<li>Python, Django</li>
-					<li>PostgreSQL, MongoDB</li>
-					<li>REST APIs, GraphQL</li>
+
+			<div
+				class="skill-card rounded-xl bg-white p-6 shadow-md transition duration-300 hover:shadow-xl"
+			>
+				<div class="mb-4 flex items-center">
+					<div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
+						<i class="fas fa-server skill-icon text-xl text-purple-600"></i>
+					</div>
+					<h3 class="text-xl font-bold">Backend</h3>
+				</div>
+				<ul class="space-y-2">
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>Node.js, Express</span>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>Python, Django</span>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>PostgreSQL, MongoDB</span>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>REST APIs, GraphQL</span>
+					</li>
 				</ul>
 			</div>
-			<div class="skill-category">
-				<h3>DevOps & Cloud</h3>
-				<ul>
-					<li>AWS, Azure, GCP</li>
-					<li>Docker, Kubernetes</li>
-					<li>CI/CD, GitHub Actions</li>
-					<li>Terraform, Ansible</li>
+
+			<div
+				class="skill-card rounded-xl bg-white p-6 shadow-md transition duration-300 hover:shadow-xl"
+			>
+				<div class="mb-4 flex items-center">
+					<div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+						<i class="fas fa-cloud skill-icon text-xl text-green-600"></i>
+					</div>
+					<h3 class="text-xl font-bold">DevOps & Cloud</h3>
+				</div>
+				<ul class="space-y-2">
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>AWS, Azure, GCP</span>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>Docker, Kubernetes</span>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>CI/CD, GitHub Actions</span
+						>
+					</li>
+					<li class="flex items-center">
+						<i class="fas fa-check-circle mr-2 text-green-500"></i><span>Terraform, Ansible</span>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -420,155 +367,103 @@
 </section>
 
 <!-- Contact Section -->
-<section id="contact" class="contact">
-	<div class="container">
-		<h2 class="section-title">Get In Touch</h2>
-		<p class="section-subtitle">Let's work together on your next project</p>
+<section id="contact" class="relative bg-white py-20">
+	<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold md:text-4xl">Get In Touch</h2>
+			<p class="mx-auto max-w-2xl text-xl text-gray-600">
+				Let's work together on your next project
+			</p>
+		</div>
 
-		<div class="contact-content">
-			<div class="contact-info">
-				<h3>Contact Information</h3>
-				<div class="contact-item">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<polyline
-							points="22,6 12,13 2,6"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<button
-						class="email-obfuscated"
-						data-cfemail="6a0f1e05040f1e09052a0f120b071a060f44090507"
-						style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;"
-					>
-						Email Me
-					</button>
-				</div>
-				<div class="contact-item">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.03 7.03 1 12 1S21 5.03 21 10Z"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<circle
-							cx="12"
-							cy="10"
-							r="3"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<span>Perth, WA</span>
-				</div>
-				<div class="contact-item">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M9 19C4 20.5 4 16.5 2 16M22 16V18.13C22 19.48 21.36 20.44 20.09 20.93L18 21.5C16.5 22 15.5 21 15.5 19.5V16.5C15.5 15.5 16 14.5 16.5 14C12.5 13.5 8.5 12 8.5 5.5C8.5 4 9 2.5 10 1.5C9.5 0 10 -1.5 12 -1C14 -0.5 15.5 0.5 16.5 1.5C18 1 19.5 1 21 1.5C22 0.5 23.5 -0.5 25.5 -1C27.5 -1.5 28 0 27.5 1.5C28.5 2.5 29 4 29 5.5C29 12 25 13.5 21 14C21.5 14.5 22 15.5 22 16.5V19.5"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<a href="https://github.com/mooshieblob1" target="_blank" rel="noopener noreferrer"
-						>GitHub</a
-					>
-				</div>
-				<div class="contact-item">
-					<svg
-						class="h-6 w-6"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M16 8C16 10.2091 14.2091 12 12 12C9.79086 12 8 10.2091 8 8C8 5.79086 9.79086 4 12 4C14.2091 4 16 5.79086 16 8Z"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M12 14C16.4183 14 20 17.5817 20 22H4C4 17.5817 7.58172 14 12 14Z"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<a href="https://linkedin.com/in/kentvuong" target="_blank" rel="noopener noreferrer"
-						>LinkedIn</a
-					>
+		<div class="grid grid-cols-1 gap-12 md:grid-cols-2">
+			<div>
+				<div class="rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-8 text-white">
+					<h3 class="mb-4 text-2xl font-bold">Contact Information</h3>
+					<div class="space-y-4">
+						<div class="flex items-start">
+							<i class="fas fa-envelope mt-1 mr-4 text-xl"></i>
+							<div>
+								<h4 class="font-semibold">Email</h4>
+								<p>contact@ktvuong.com</p>
+							</div>
+						</div>
+						<div class="flex items-start">
+							<i class="fas fa-globe mt-1 mr-4 text-xl"></i>
+							<div>
+								<h4 class="font-semibold">Website</h4>
+								<p>ktvuong.com</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="mt-8">
+						<h3 class="mb-4 text-2xl font-bold">Follow Me</h3>
+						<div class="flex space-x-4">
+							<a
+								href="#"
+								aria-label="GitHub profile"
+								class="bg-opacity-20 hover:bg-opacity-30 flex h-10 w-10 items-center justify-center rounded-full bg-white transition"
+								><i class="fab fa-github"></i></a
+							>
+							<a
+								href="#"
+								aria-label="LinkedIn profile"
+								class="bg-opacity-20 hover:bg-opacity-30 flex h-10 w-10 items-center justify-center rounded-full bg-white transition"
+								><i class="fab fa-linkedin-in"></i></a
+							>
+							<a
+								href="#"
+								aria-label="Twitter profile"
+								class="bg-opacity-20 hover:bg-opacity-30 flex h-10 w-10 items-center justify-center rounded-full bg-white transition"
+								><i class="fab fa-twitter"></i></a
+							>
+							<a
+								href="#"
+								aria-label="Dev.to profile"
+								class="bg-opacity-20 hover:bg-opacity-30 flex h-10 w-10 items-center justify-center rounded-full bg-white transition"
+								><i class="fab fa-dev"></i></a
+							>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<form class="contact-form" on:submit={handleSubmit}>
-				<div class="form-group">
-					<label for="name">Name</label>
-					<input
-						type="text"
-						id="name"
-						bind:value={contactForm.name}
-						required
-						placeholder="Your name"
-					/>
-				</div>
-				<div class="form-group">
-					<label for="email">Email</label>
-					<input
-						type="email"
-						id="email"
-						bind:value={contactForm.email}
-						required
-						placeholder="Your email"
-					/>
-				</div>
-				<div class="form-group">
-					<label for="message">Message</label>
-					<textarea
-						id="message"
-						bind:value={contactForm.message}
-						required
-						placeholder="Your message"
-						rows="5"
-					></textarea>
-				</div>
-				<button type="submit" class="btn btn-primary btn-full"> Send Message </button>
-			</form>
+			<div>
+				<form on:submit|preventDefault={handleFormSubmit} class="space-y-6">
+					<div>
+						<label for="name" class="mb-1 block text-sm font-medium text-gray-700">Name</label>
+						<input
+							type="text"
+							id="name"
+							class="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+						/>
+					</div>
+					<div>
+						<label for="email" class="mb-1 block text-sm font-medium text-gray-700">Email</label>
+						<input
+							type="email"
+							id="email"
+							class="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+						/>
+					</div>
+					<div>
+						<label for="message" class="mb-1 block text-sm font-medium text-gray-700">Message</label
+						>
+						<textarea
+							id="message"
+							rows="5"
+							class="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+						></textarea>
+					</div>
+					<button
+						type="submit"
+						class="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:from-blue-600 hover:to-purple-700"
+					>
+						Send Message
+					</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </section>
