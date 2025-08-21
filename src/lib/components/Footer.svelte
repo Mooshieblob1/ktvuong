@@ -1,41 +1,48 @@
 <script lang="ts">
-	const year = new Date().getFullYear();
+	import { onMount } from 'svelte';
+	let year = new Date().getFullYear();
+
+	onMount(() => {
+		const yearEl = document.getElementById('year');
+		if (yearEl) {
+			yearEl.textContent = new Date().getFullYear().toString();
+		}
+	});
 </script>
 
 <!-- Footer -->
-<footer class="bg-gray-900 py-8 text-white">
-	<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+<footer class="border-t border-slate-800 py-8">
+	<div class="container mx-auto px-4 md:px-8">
 		<div class="flex flex-col items-center justify-between md:flex-row">
-			<div class="mb-4 md:mb-0">
-				<span class="gradient-text text-xl font-bold">Kent Vuong</span>
-				<p class="mt-1 text-gray-400">Full-Stack & DevOps Engineer</p>
+			<div class="mb-4 flex items-center space-x-2 md:mb-0">
+				<div class="bg-accent flex h-6 w-6 items-center justify-center rounded-full">
+					<span class="font-mono text-sm font-bold">KV</span>
+				</div>
+				<span class="text-lg font-bold">Kent Vuong</span>
 			</div>
-			<div class="flex space-x-6">
+
+			<div class="text-slate-400 md:text-center">
+				&copy; {new Date().getFullYear()} Kent Vuong. All rights reserved.
+			</div>
+
+			<div class="mt-4 flex space-x-4 md:mt-0">
 				<a
 					href="https://github.com/mooshieblob1"
 					target="_blank"
-					rel="noopener noreferrer"
-					class="text-gray-400 transition hover:text-white"
-					aria-label="GitHub profile"
+					class="hover:text-accent text-slate-400 transition-colors"
+					aria-label="Visit GitHub profile"
 				>
-					<i class="fab fa-github"></i>
+					<i class="fab fa-github fa-lg"></i>
 				</a>
 				<a
 					href="https://linkedin.com/in/kentvuong"
 					target="_blank"
-					rel="noopener noreferrer"
-					class="text-gray-400 transition hover:text-white"
-					aria-label="LinkedIn profile"
+					class="hover:text-accent text-slate-400 transition-colors"
+					aria-label="Visit LinkedIn profile"
 				>
-					<i class="fab fa-linkedin-in"></i>
-				</a>
-				<a href="#" class="text-gray-400 transition hover:text-white" aria-label="Twitter profile">
-					<i class="fab fa-twitter"></i>
+					<i class="fab fa-linkedin-in fa-lg"></i>
 				</a>
 			</div>
-		</div>
-		<div class="mt-8 border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-			<p>&copy; {year} Kent Vuong. All rights reserved.</p>
 		</div>
 	</div>
 </footer>
