@@ -71,6 +71,7 @@
 		{ name: 'React/Vue/Svelte', level: 90 },
 		{ name: 'Node.js/Express', level: 88 },
 		{ name: 'AWS/Azure/GCP', level: 85 },
+		{ name: 'Rust/Tauri', level: 80 },
 		{ name: 'Docker/Kubernetes', level: 82 },
 		{ name: 'Python/Go', level: 78 }
 	];
@@ -394,8 +395,18 @@
 				<ul>
 					<li>Node.js, Express</li>
 					<li>Python, Django</li>
+					<li>Rust</li>
 					<li>PostgreSQL, MongoDB</li>
-					<li>REST APIs, GraphQL</li>
+					<li>REST APIs, GraphQL, WebSocket</li>
+				</ul>
+			</div>
+			<div class="skill-category">
+				<h3>Desktop & Systems</h3>
+				<ul>
+					<li>Tauri</li>
+					<li>Rust</li>
+					<li>Cross-platform Builds</li>
+					<li>IPC & Native APIs</li>
 				</ul>
 			</div>
 			<div class="skill-category">
