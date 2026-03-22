@@ -39,9 +39,7 @@
 >
 	<div class="container mx-auto flex items-center justify-between px-4 md:px-8">
 		<div class="flex items-center space-x-2">
-			<div class="bg-accent flex h-8 w-8 items-center justify-center rounded-full">
-				<span class="font-mono text-lg font-bold">KV</span>
-			</div>
+			<img src="/favicon.svg" alt="KV logo" class="h-8 w-8 rounded-lg" />
 			<span class="text-xl font-bold">Kent Vuong</span>
 		</div>
 		<div class="hidden space-x-8 font-bold md:flex">

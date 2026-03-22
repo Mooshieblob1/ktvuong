@@ -131,7 +131,7 @@
 	<div class="hero-content">
 		<div class="hero-text fade-in">
 			<h1 class="hero-title">
-				Hi, I'm <span class="highlight">Kent Vuong</span>
+				Hi, I'm <span style="white-space: nowrap;"><span class="text-gradient-cyan">Kent</span> <span class="text-gradient-blue">Vuong</span></span>
 			</h1>
 			<p class="hero-subtitle">Full-Stack & DevOps Engineer</p>
 			<p class="hero-description">
