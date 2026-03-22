@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	let isMenuOpen = false;
 
 	function toggleMenu() {
@@ -11,26 +9,19 @@
 		isMenuOpen = false;
 	}
 
-	onMount(() => {
-		// Smooth scrolling for anchor links
-		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-			anchor.addEventListener('click', function (e) {
-				e.preventDefault();
-
-				const targetId = this.getAttribute('href');
-				if (targetId === '#') return;
-
-				const targetElement = document.querySelector(targetId);
-
-				if (targetElement) {
-					window.scrollTo({
-						top: targetElement.offsetTop - 80,
-						behavior: 'smooth'
-					});
-				}
-			});
-		});
-	});
+	function scrollTo(e: Event, targetId: string) {
+		e.preventDefault();
+		closeMenu();
+		const el = document.querySelector(targetId);
+		if (el) {
+			const lenis = (window as any).__lenis;
+			if (lenis) {
+				lenis.scrollTo(el, { offset: -80 });
+			} else {
+				window.scrollTo({ top: (el as HTMLElement).offsetTop - 80, behavior: 'smooth' });
+			}
+		}
+	}
 </script>
 
 <!-- Navigation -->
@@ -43,10 +34,10 @@
 			<span class="text-xl font-bold">Kent Vuong</span>
 		</div>
 		<div class="hidden space-x-8 font-bold md:flex">
-			<a href="#about" class="hover:text-accent transition-colors">About</a>
-			<a href="#projects" class="hover:text-accent transition-colors">Projects</a>
-			<a href="#skills" class="hover:text-accent transition-colors">Skills</a>
-			<a href="#contact" class="hover:text-accent transition-colors">Contact</a>
+			<a href="#about" on:click={(e) => scrollTo(e, '#about')} class="hover:text-accent transition-colors">About</a>
+			<a href="#projects" on:click={(e) => scrollTo(e, '#projects')} class="hover:text-accent transition-colors">Projects</a>
+			<a href="#skills" on:click={(e) => scrollTo(e, '#skills')} class="hover:text-accent transition-colors">Skills</a>
+			<a href="#contact" on:click={(e) => scrollTo(e, '#contact')} class="hover:text-accent transition-colors">Contact</a>
 		</div>
 		<div class="md:hidden">
 			<button
@@ -63,15 +54,10 @@
 	{#if isMenuOpen}
 		<div id="mobile-menu" class="bg-secondary py-4 md:hidden">
 			<div class="container mx-auto flex flex-col space-y-4 px-4">
-				<a href="#about" on:click={closeMenu} class="hover:text-accent transition-colors">About</a>
-				<a href="#projects" on:click={closeMenu} class="hover:text-accent transition-colors"
-					>Projects</a
-				>
-				<a href="#skills" on:click={closeMenu} class="hover:text-accent transition-colors">Skills</a
-				>
-				<a href="#contact" on:click={closeMenu} class="hover:text-accent transition-colors"
-					>Contact</a
-				>
+				<a href="#about" on:click={(e) => scrollTo(e, '#about')} class="hover:text-accent transition-colors">About</a>
+				<a href="#projects" on:click={(e) => scrollTo(e, '#projects')} class="hover:text-accent transition-colors">Projects</a>
+				<a href="#skills" on:click={(e) => scrollTo(e, '#skills')} class="hover:text-accent transition-colors">Skills</a>
+				<a href="#contact" on:click={(e) => scrollTo(e, '#contact')} class="hover:text-accent transition-colors">Contact</a>
 			</div>
 		</div>
 	{/if}

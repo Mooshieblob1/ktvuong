@@ -19,7 +19,11 @@
       "mcp__claude_ai_Cloudflare_Developer_Platform__accounts_list",
       "mcp__claude_ai_Cloudflare_Developer_Platform__set_active_account",
       "mcp__claude_ai_Cloudflare_Developer_Platform__workers_list",
-      "Bash(pnpm -v)"
+      "Bash(pnpm -v)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(pnpm add:*)"
     ]
   }
 }

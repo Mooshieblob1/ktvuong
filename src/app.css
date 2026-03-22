@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html {
 	scroll-behavior: smooth;
+}
+
+html.lenis-active {
+	scroll-behavior: auto;
 }
 
 .gradient-bg {
