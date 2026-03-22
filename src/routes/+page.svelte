@@ -53,6 +53,16 @@
 			github: 'https://github.com/Mooshieblob1/ComfyUI_NAIDGenerator',
 			demo: null,
 			image: '/site5img/thumb.png'
+		},
+		{
+			id: 6,
+			title: 'MooshieUI',
+			description:
+				'A modern, beginner-friendly desktop frontend for ComfyUI built with Tauri. Features text-to-image, image-to-image, inpainting, built-in upscaling, ControlNet support, and a one-click installer.',
+			tech: ['Svelte', 'Tauri', 'Rust', 'TypeScript', 'Tailwind'],
+			github: 'https://github.com/Mooshieblob1/MooshieUI',
+			demo: null,
+			image: '/site6img/thumb.png'
 		}
 	];
 

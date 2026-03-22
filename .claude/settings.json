@@ -8,7 +8,10 @@
       "Bash(pnpm svelte-kit:*)",
       "Bash(pnpm svelte-check:*)",
       "Bash(pnpm exec:*)",
-      "Bash(pnpm install:*)"
+      "Bash(pnpm install:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/Mooshieblob1/MooshieUI/main/qq20fhm.png\" -o /home/blob/Repos/ktvuong/static/site6img/thumb.png)"
     ]
   }
 }
