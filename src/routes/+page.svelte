@@ -2,7 +2,6 @@
 	let mobileMenuOpen = false;
 	let currentProjectIndex = 0;
 	let touchStartX = 0;
-	let touchEndX = 0;
 
 	const projects = [
 		{
@@ -83,32 +82,17 @@
 		mobileMenuOpen = false;
 	}
 
-	// Touch handling for project swiping on mobile
 	function handleTouchStart(event: TouchEvent) {
 		touchStartX = event.changedTouches[0].screenX;
 	}
 
 	function handleTouchEnd(event: TouchEvent) {
-		touchEndX = event.changedTouches[0].screenX;
-		handleSwipeGesture();
-	}
-
-	function handleSwipeGesture() {
-		const swipeThreshold = 50;
-		const swipeDistance = touchStartX - touchEndX;
-
-		if (Math.abs(swipeDistance) > swipeThreshold) {
-			if (swipeDistance > 0) {
-				// Swipe left - next project
-				nextProject();
-			} else {
-				// Swipe right - previous project
-				prevProject();
-			}
+		const swipeDistance = touchStartX - event.changedTouches[0].screenX;
+		if (Math.abs(swipeDistance) > 50) {
+			swipeDistance > 0 ? nextProject() : prevProject();
 		}
 	}
 
-	// Contact form handling
 	let contactForm = {
 		name: '',
 		email: '',
@@ -117,9 +101,7 @@
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
-		// Handle form submission here
 		console.log('Form submitted:', contactForm);
-		// Reset form
 		contactForm = { name: '', email: '', message: '' };
 		alert('Message sent successfully!');
 	}
@@ -452,9 +434,8 @@
 						/>
 					</svg>
 					<button
-						class="email-obfuscated"
+						class="email-obfuscated btn-unstyled"
 						data-cfemail="6a0f1e05040f1e09052a0f120b071a060f44090507"
-						style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;"
 					>
 						Email Me
 					</button>

@@ -1,13 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	let year = new Date().getFullYear();
-
-	onMount(() => {
-		const yearEl = document.getElementById('year');
-		if (yearEl) {
-			yearEl.textContent = new Date().getFullYear().toString();
-		}
-	});
+	const year = new Date().getFullYear();
 </script>
 
 <!-- Footer -->
@@ -22,7 +14,7 @@
 			</div>
 
 			<div class="text-slate-400 md:text-center">
-				&copy; {new Date().getFullYear()} Kent Vuong. All rights reserved.
+				&copy; {year} Kent Vuong. All rights reserved.
 			</div>
 
 			<div class="mt-4 flex space-x-4 md:mt-0">

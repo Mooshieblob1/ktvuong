@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cut -d'{' -f1)",
+      "Read(//@media/**)",
+      "Bash(npx svelte-check:*)",
+      "Bash(npx svelte-kit:*)",
+      "Bash(pnpm svelte-kit:*)",
+      "Bash(pnpm svelte-check:*)",
+      "Bash(pnpm exec:*)",
+      "Bash(pnpm install:*)"
+    ]
+  }
+}
