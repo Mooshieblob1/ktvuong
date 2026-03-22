@@ -532,7 +532,7 @@
 							stroke-linejoin="round"
 						/>
 					</svg>
-					<a href="https://linkedin.com/in/kentvuong" target="_blank" rel="noopener noreferrer"
+					<a href="https://www.linkedin.com/in/kentvuong88/" target="_blank" rel="noopener noreferrer"
 						>LinkedIn</a
 					>
 				</div>

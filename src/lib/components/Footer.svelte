@@ -27,7 +27,7 @@
 					<i class="fab fa-github fa-lg"></i>
 				</a>
 				<a
-					href="https://linkedin.com/in/kentvuong"
+					href="https://www.linkedin.com/in/kentvuong88/"
 					target="_blank"
 					class="hover:text-accent text-slate-400 transition-colors"
 					aria-label="Visit LinkedIn profile"
