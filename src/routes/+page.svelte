@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+
 	let mobileMenuOpen = false;
 	let currentProjectIndex = 0;
 	let touchStartX = 0;
@@ -104,18 +106,8 @@
 		}
 	}
 
-	let contactForm = {
-		name: '',
-		email: '',
-		message: ''
-	};
-
-	function handleSubmit(event: Event) {
-		event.preventDefault();
-		console.log('Form submitted:', contactForm);
-		contactForm = { name: '', email: '', message: '' };
-		alert('Message sent successfully!');
-	}
+	let formSuccess = false;
+	let formError = '';
 </script>
 
 <svelte:head>
@@ -538,13 +530,40 @@
 				</div>
 			</div>
 
-			<form class="contact-form" on:submit={handleSubmit}>
+			<form
+				class="contact-form"
+				method="POST"
+				action="?/contact"
+				use:enhance={() => {
+					formSuccess = false;
+					formError = '';
+					return async ({ result }) => {
+						if (result.type === 'success') {
+							formSuccess = true;
+						} else if (result.type === 'failure') {
+							formError = result.data?.error ?? 'Something went wrong.';
+						} else {
+							formError = 'Something went wrong.';
+						}
+					};
+				}}
+			>
+				{#if formSuccess}
+					<div class="mb-4 rounded-lg bg-green-900/50 p-4 text-green-300">
+						Message sent! I'll get back to you soon.
+					</div>
+				{/if}
+				{#if formError}
+					<div class="mb-4 rounded-lg bg-red-900/50 p-4 text-red-300">
+						{formError}
+					</div>
+				{/if}
 				<div class="form-group">
 					<label for="name">Name</label>
 					<input
 						type="text"
 						id="name"
-						bind:value={contactForm.name}
+						name="name"
 						required
 						placeholder="Your name"
 					/>
@@ -554,7 +573,7 @@
 					<input
 						type="email"
 						id="email"
-						bind:value={contactForm.email}
+						name="email"
 						required
 						placeholder="Your email"
 					/>
@@ -563,7 +582,7 @@
 					<label for="message">Message</label>
 					<textarea
 						id="message"
-						bind:value={contactForm.message}
+						name="message"
 						required
 						placeholder="Your message"
 						rows="5"
