@@ -1,102 +1,58 @@
-# Personal Portfolio
+<p align="center">
+  <img src="static/favicon.svg" width="80" height="80" alt="KV Logo" />
+</p>
 
-A modern, responsive portfolio website built with Svelte and Tailwind CSS.
+<h1 align="center">Kent Vuong — Portfolio</h1>
+
+<p align="center">
+  A modern, responsive portfolio website built with SvelteKit and Tailwind CSS, deployed on Cloudflare Pages.
+</p>
 
 ## Features
 
-- Responsive design that works on mobile, tablet, and desktop
-- Clean, modern UI with smooth animations
-- Project showcase with detailed cards
-- Technical skills visualization
+- Responsive mobile-first design
+- Custom KV gradient logo and branded gradient text
+- Animated drifting gradient orbs in the hero section
+- Smooth scrolling via [Lenis](https://github.com/darkroomengineering/lenis) on Chromium, native CSS smooth scroll on Firefox
+- Project showcase with swipeable carousel
+- Technical skills visualization with categorized progress bars
 - Email obfuscation to prevent scraping by bots
-- Fast performance and accessibility features
-- Dark mode support
-- SEO optimized
+- Cloudflare Web Analytics
 
 ## Tech Stack
 
-- **Frontend Framework**: SvelteKit
+- **Framework**: SvelteKit
 - **Styling**: Tailwind CSS
-- **Email Protection**: Custom obfuscation system
+- **Smooth Scroll**: Lenis (Chromium) / native CSS (Firefox)
 - **Deployment**: Cloudflare Pages
 - **Analytics**: Cloudflare Web Analytics
-
-## Key Implementation Details
-
-### Email Obfuscation
-
-The site implements a custom email obfuscation system to protect against email harvesting bots:
-- Uses XOR cipher to encode email address in the HTML
-- Client-side JavaScript decodes the email only when needed
-- No plain text email addresses in source code or DOM
-- Works with both header icon and contact button
-
-### Project Showcase
-
-The portfolio includes a showcase of projects with:
-- Visual thumbnails
-- Project descriptions
-- Technology tags
-- Direct links to live sites
-
-### Responsive Design
-
-- Mobile-first approach
-- Optimized layouts for various screen sizes
-- Maintains clean aesthetics across devices
 
 ## Project Structure
 
 ```
-portfolio/
-├── public/              # Static assets
-│   └── emailProtection.js  # Email protection script
+ktvuong/
 ├── src/
-│   ├── components/      # Reusable UI components
-│   ├── data/            # Project and skills data
-│   ├── lib/             # Utility functions
-│   ├── routes/          # Page routes
-│   ├── app.css          # Global styles
-│   ├── app.html         # HTML template
-│   └── main.js          # Entry point
-├── .gitignore
-├── package.json
-├── README.md
+│   ├── lib/components/    # Header, Footer, Hero
+│   ├── routes/
+│   │   ├── +layout.svelte # Lenis init, global layout
+│   │   └── +page.svelte   # Main page (about, projects, skills, contact)
+│   ├── app.css            # Global styles, gradient text, orb animations
+│   └── app.html           # HTML template
+├── static/
+│   ├── favicon.svg        # KV gradient logo
+│   ├── emailProtection.js # Email obfuscation script
+│   └── site*img/          # Project thumbnails
 ├── svelte.config.js
-├── tailwind.config.js
-└── vite.config.js
+├── vite.config.js
+└── package.json
 ```
 
-## Customization
+## Email Obfuscation
 
-### Adding Projects
-
-To add a new project, edit the projects array:
-
-```javascript
-const projects = [
-    {
-       title: 'Project Name',
-       description: 'Description of the project',
-       image: '/path/to/image.jpg',
-       tags: ['Tag1', 'Tag2', 'Tag3'],
-       link: 'https://project-link.com'
-    }
-    // Add more projects here
-];
-```
-
-### Updating Skills
-
-The skills section can be customized by editing the skills list:
-
-```javascript
-<ul class="skills flex flex-wrap gap-2">
-    <li class="bg-amber-200 text-sm px-3 py-2 rounded-md">JavaScript</li>
-    <li class="bg-amber-200 text-sm px-3 py-2 rounded-md">TypeScript</li>
-    <!-- Add more skills here -->
-</ul>
-```
+The site uses a custom email obfuscation system to protect against harvesting bots:
+- XOR cipher encodes the email address in HTML
+- Client-side JavaScript decodes it only when needed
+- No plain text email addresses in source code or DOM
 
 ## License
 
@@ -104,6 +60,4 @@ MIT
 
 ## Contact
 
-Kent Vuong - Contact information available on the website
-
-Project Link: [https://github.com/Mooshieblob1/ktvuong](https://github.com/Mooshieblob1/ktvuong)
+Kent Vuong — [GitHub](https://github.com/Mooshieblob1) · [LinkedIn](https://www.linkedin.com/in/kentvuong88/)
