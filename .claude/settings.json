@@ -23,7 +23,12 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Bash(sed -i '240s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:mousemove={\\(e\\) => { if \\(isActive\\) { cardEl = e.currentTarget; handleMouseMove\\(e\\); } }}|' src/routes/+page.svelte)",
+      "Bash(sed -i '241s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:mouseleave={\\(\\) => { if \\(isActive\\) handleMouseLeave\\(\\); }}|' src/routes/+page.svelte)",
+      "Bash(sed -i '242s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:touchstart={\\(e\\) => { if \\(isActive\\) handleTouchStart\\(e\\); }}|' src/routes/+page.svelte)",
+      "Bash(sed -i '243s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:touchend={\\(e\\) => { if \\(isActive\\) handleTouchEnd\\(e\\); }}|' src/routes/+page.svelte)",
+      "Bash(npm run:*)"
     ]
   }
 }

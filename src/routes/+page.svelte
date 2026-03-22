@@ -1,9 +1,33 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
 
 	let mobileMenuOpen = false;
 	let currentProjectIndex = 0;
 	let touchStartX = 0;
+	let tiltEl: HTMLElement | null = null;
+
+	// Cumulative scroll position (not wrapped) so tweened can interpolate smoothly
+	let targetPosition = 0;
+	const scrollPosition = tweened(0, { duration: 600, easing: cubicOut });
+
+	function handleMouseMove(e: MouseEvent) {
+		const card = (e.currentTarget as HTMLElement);
+		const inner = card.querySelector('.carousel-card-tilt') as HTMLElement;
+		if (!inner) return;
+		tiltEl = inner;
+		const rect = card.getBoundingClientRect();
+		const rx = -(((e.clientY - rect.top) / rect.height - 0.5) * 2) * 5;
+		const ry = (((e.clientX - rect.left) / rect.width - 0.5) * 2) * 5;
+		inner.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+	}
+
+	function handleMouseLeave() {
+		if (!tiltEl) return;
+		tiltEl.style.transform = '';
+		tiltEl = null;
+	}
 
 	const projects = [
 		{
@@ -68,14 +92,27 @@
 		}
 	];
 
-	const skills = [
-		{ name: 'JavaScript/TypeScript', level: 95 },
-		{ name: 'React/Vue/Svelte', level: 90 },
-		{ name: 'Node.js/Express', level: 88 },
-		{ name: 'AWS/Azure/GCP', level: 85 },
-		{ name: 'Rust/Tauri', level: 80 },
-		{ name: 'Docker/Kubernetes', level: 82 },
-		{ name: 'Python/Go', level: 78 }
+	const skillCategories = [
+		{
+			title: 'Frontend',
+			icon: '◆',
+			skills: ['JavaScript', 'TypeScript', 'React', 'Vue.js', 'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'SCSS']
+		},
+		{
+			title: 'Backend',
+			icon: '◆',
+			skills: ['Node.js', 'Express', 'Python', 'Django', 'Rust', 'PostgreSQL', 'MongoDB', 'REST APIs', 'GraphQL', 'WebSocket']
+		},
+		{
+			title: 'Desktop & Systems',
+			icon: '◆',
+			skills: ['Tauri', 'Rust', 'Cross-platform Builds', 'IPC & Native APIs']
+		},
+		{
+			title: 'DevOps & Cloud',
+			icon: '◆',
+			skills: ['AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'CI/CD', 'GitHub Actions', 'Terraform', 'Ansible']
+		}
 	];
 
 	function toggleMobileMenu() {
@@ -83,11 +120,26 @@
 	}
 
 	function nextProject() {
+		targetPosition += 1;
 		currentProjectIndex = (currentProjectIndex + 1) % projects.length;
+		scrollPosition.set(targetPosition);
 	}
 
 	function prevProject() {
+		targetPosition -= 1;
 		currentProjectIndex = currentProjectIndex === 0 ? projects.length - 1 : currentProjectIndex - 1;
+		scrollPosition.set(targetPosition);
+	}
+
+	function goToProject(index: number) {
+		const N = projects.length;
+		const currentWrapped = ((targetPosition % N) + N) % N;
+		let diff = index - currentWrapped;
+		if (diff > N / 2) diff -= N;
+		if (diff < -N / 2) diff += N;
+		targetPosition += diff;
+		currentProjectIndex = index;
+		scrollPosition.set(targetPosition);
 	}
 
 	function scrollToSection(sectionId: string) {
@@ -174,180 +226,82 @@
 		<h2 class="section-title">Featured Projects</h2>
 		<p class="section-subtitle">Some of my recent work</p>
 
-		<!-- Mobile Navigation Buttons -->
-		<div class="mobile-project-nav mb-4 md:hidden">
-			<button
-				class="mobile-nav-btn mobile-nav-prev"
-				on:click={prevProject}
-				aria-label="Previous project"
-			>
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M15 18L9 12L15 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-				Previous
-			</button>
-			<button
-				class="mobile-nav-btn mobile-nav-next"
-				on:click={nextProject}
-				aria-label="Next project"
-			>
-				Next
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M9 18L15 12L9 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-			</button>
-		</div>
-
-		<div class="project-showcase">
-			<button
-				class="project-nav project-nav-prev hidden md:flex"
-				on:click={prevProject}
-				aria-label="Previous project"
-			>
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M15 18L9 12L15 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
-			</button>
-
-			<div class="project-card" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>
-				{#if projects[currentProjectIndex].image}
-					<div class="project-image">
-						<img
-							src={projects[currentProjectIndex].image}
-							alt={projects[currentProjectIndex].title}
-							loading="lazy"
-						/>
+		<div class="carousel-scene">
+			<div class="carousel-track">
+				{#each projects as project, index}
+					{@const rawOffset = index - $scrollPosition}
+					{@const offset = rawOffset - Math.round(rawOffset / projects.length) * projects.length}
+					{@const absOffset = Math.abs(offset)}
+					{@const isActive = index === currentProjectIndex}
+					<div
+						class="carousel-card"
+						class:carousel-card-active={isActive}
+						style:transform="translateX({offset * 105}%) scale({Math.max(0.5, 1 - absOffset * 0.12)}) rotateY({offset * -6}deg)"
+						style:opacity={absOffset > 2 ? 0 : absOffset < 0.5 ? 1 : Math.max(0, 1 - absOffset * 0.45)}
+						style:filter="blur({absOffset < 0.5 ? 0 : absOffset * 2}px)"
+						style:z-index={10 - Math.round(absOffset)}
+						on:mousemove={(e) => { if (isActive) handleMouseMove(e); }}
+						on:mouseleave={() => { if (isActive) handleMouseLeave(); }}
+						on:touchstart={(e) => { if (isActive) handleTouchStart(e); }}
+						on:touchend={(e) => { if (isActive) handleTouchEnd(e); }}
+					>
+						<div class="carousel-card-tilt">
+						<div class="carousel-card-inner">
+							{#if project.image}
+								<div class="project-image">
+									<img src={project.image} alt={project.title} loading="lazy" />
+								</div>
+							{/if}
+							<div class="project-info">
+								<h3 class="project-title">{project.title}</h3>
+								<p class="project-description">{project.description}</p>
+								<div class="project-tech">
+									{#each project.tech as tech}
+										<span class="tech-tag">{tech}</span>
+									{/each}
+								</div>
+								<div class="project-links">
+									<a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+										<i class="fab fa-github"></i> Code
+									</a>
+									{#if project.demo}
+										<a href={project.demo} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+											<i class="fas fa-external-link-alt"></i> Visit
+										</a>
+									{/if}
+								</div>
+							</div>
+						</div>
+						</div>
 					</div>
-				{/if}
-				<div class="project-info">
-					<h3 class="project-title">{projects[currentProjectIndex].title}</h3>
-					<p class="project-description">{projects[currentProjectIndex].description}</p>
-					<div class="project-tech">
-						{#each projects[currentProjectIndex].tech as tech}
-							<span class="tech-tag">{tech}</span>
-						{/each}
-					</div>
-					<div class="project-links">
-						<a
-							href={projects[currentProjectIndex].github}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-outline"
-						>
-							<svg
-								class="h-5 w-5"
-								width="20"
-								height="20"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M9 19C4 20.5 4 16.5 2 16M22 16V18.13C22 19.48 21.36 20.44 20.09 20.93L18 21.5C16.5 22 15.5 21 15.5 19.5V16.5C15.5 15.5 16 14.5 16.5 14C12.5 13.5 8.5 12 8.5 5.5C8.5 4 9 2.5 10 1.5C9.5 0 10 -1.5 12 -1C14 -0.5 15.5 0.5 16.5 1.5C18 1 19.5 1 21 1.5C22 0.5 23.5 -0.5 25.5 -1C27.5 -1.5 28 0 27.5 1.5C28.5 2.5 29 4 29 5.5C29 12 25 13.5 21 14C21.5 14.5 22 15.5 22 16.5V19.5"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-							Code
-						</a>
-						{#if projects[currentProjectIndex].demo}
-							<a
-								href={projects[currentProjectIndex].demo}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="btn btn-primary"
-							>
-								<svg
-									width="20"
-									height="20"
-									viewBox="0 0 24 24"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M18 13V6C18 5.44772 17.5523 5 17 5H5C4.44772 5 4 5.44772 4 6V18C4 18.5523 4.44772 19 5 19H12M18 13L22 17M18 13V17M18 13H14"
-										stroke="currentColor"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
-								Visit
-							</a>
-						{/if}
-					</div>
-				</div>
+				{/each}
 			</div>
 
-			<button
-				class="project-nav project-nav-next hidden md:flex"
-				on:click={nextProject}
-				aria-label="Next project"
-			>
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M9 18L15 12L9 6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
+			<button class="carousel-nav carousel-nav-prev" on:click={prevProject} aria-label="Previous project">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			</button>
+			<button class="carousel-nav carousel-nav-next" on:click={nextProject} aria-label="Next project">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 			</button>
 		</div>
 
-		<div class="project-indicators">
-			{#each projects as project, index}
+		<div class="carousel-indicators">
+			{#each projects as _, index}
 				<button
-					class="indicator {index === currentProjectIndex ? 'active' : ''}"
-					on:click={() => (currentProjectIndex = index)}
+					class="carousel-dot"
+					class:active={index === currentProjectIndex}
+					on:click={() => { goToProject(index); }}
 					aria-label="Go to project {index + 1}"
-				></button>
+				>
+					<span class="carousel-dot-fill"></span>
+				</button>
 			{/each}
+		</div>
+
+		<div class="carousel-counter">
+			<span class="carousel-counter-current">{String(currentProjectIndex + 1).padStart(2, '0')}</span>
+			<span class="carousel-counter-sep">/</span>
+			<span class="carousel-counter-total">{String(projects.length).padStart(2, '0')}</span>
 		</div>
 	</div>
 </section>
@@ -358,58 +312,17 @@
 		<h2 class="section-title">Skills & Expertise</h2>
 		<p class="section-subtitle">Technologies I work with</p>
 
-		<div class="skills-grid">
-			{#each skills as skill}
-				<div class="skill-item">
-					<div class="skill-header">
-						<span class="skill-name">{skill.name}</span>
-						<span class="skill-percentage">{skill.level}%</span>
-					</div>
-					<div class="skill-bar">
-						<div class="skill-progress" style="width: {skill.level}%"></div>
+		<div class="skills-categories">
+			{#each skillCategories as category}
+				<div class="skill-category">
+					<h3>{category.title}</h3>
+					<div class="skill-tags">
+						{#each category.skills as skill}
+							<span class="skill-tag">{skill}</span>
+						{/each}
 					</div>
 				</div>
 			{/each}
-		</div>
-
-		<div class="skills-categories">
-			<div class="skill-category">
-				<h3>Frontend</h3>
-				<ul>
-					<li>React, Vue.js, Svelte</li>
-					<li>Next.js, Nuxt.js</li>
-					<li>TypeScript, JavaScript</li>
-					<li>Tailwind CSS, SCSS</li>
-				</ul>
-			</div>
-			<div class="skill-category">
-				<h3>Backend</h3>
-				<ul>
-					<li>Node.js, Express</li>
-					<li>Python, Django</li>
-					<li>Rust</li>
-					<li>PostgreSQL, MongoDB</li>
-					<li>REST APIs, GraphQL, WebSocket</li>
-				</ul>
-			</div>
-			<div class="skill-category">
-				<h3>Desktop & Systems</h3>
-				<ul>
-					<li>Tauri</li>
-					<li>Rust</li>
-					<li>Cross-platform Builds</li>
-					<li>IPC & Native APIs</li>
-				</ul>
-			</div>
-			<div class="skill-category">
-				<h3>DevOps & Cloud</h3>
-				<ul>
-					<li>AWS, Azure, GCP</li>
-					<li>Docker, Kubernetes</li>
-					<li>CI/CD, GitHub Actions</li>
-					<li>Terraform, Ansible</li>
-				</ul>
-			</div>
 		</div>
 	</div>
 </section>
