@@ -3,7 +3,6 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
-	let mobileMenuOpen = false;
 	let currentProjectIndex = 0;
 	let touchStartX = 0;
 	let tiltEl: HTMLElement | null = null;
@@ -13,13 +12,13 @@
 	const scrollPosition = tweened(0, { duration: 600, easing: cubicOut });
 
 	function handleMouseMove(e: MouseEvent) {
-		const card = (e.currentTarget as HTMLElement);
+		const card = e.currentTarget as HTMLElement;
 		const inner = card.querySelector('.carousel-card-tilt') as HTMLElement;
 		if (!inner) return;
 		tiltEl = inner;
 		const rect = card.getBoundingClientRect();
 		const rx = -(((e.clientY - rect.top) / rect.height - 0.5) * 2) * 5;
-		const ry = (((e.clientX - rect.left) / rect.width - 0.5) * 2) * 5;
+		const ry = ((e.clientX - rect.left) / rect.width - 0.5) * 2 * 5;
 		inner.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
 	}
 
@@ -96,12 +95,33 @@
 		{
 			title: 'Frontend',
 			icon: '◆',
-			skills: ['JavaScript', 'TypeScript', 'React', 'Vue.js', 'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'SCSS']
+			skills: [
+				'JavaScript',
+				'TypeScript',
+				'React',
+				'Vue.js',
+				'Svelte',
+				'Next.js',
+				'Nuxt.js',
+				'Tailwind CSS',
+				'SCSS'
+			]
 		},
 		{
 			title: 'Backend',
 			icon: '◆',
-			skills: ['Node.js', 'Express', 'Python', 'Django', 'Rust', 'PostgreSQL', 'MongoDB', 'REST APIs', 'GraphQL', 'WebSocket']
+			skills: [
+				'Node.js',
+				'Express',
+				'Python',
+				'Django',
+				'Rust',
+				'PostgreSQL',
+				'MongoDB',
+				'REST APIs',
+				'GraphQL',
+				'WebSocket'
+			]
 		},
 		{
 			title: 'Desktop & Systems',
@@ -111,13 +131,19 @@
 		{
 			title: 'DevOps & Cloud',
 			icon: '◆',
-			skills: ['AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'CI/CD', 'GitHub Actions', 'Terraform', 'Ansible']
+			skills: [
+				'AWS',
+				'Azure',
+				'GCP',
+				'Docker',
+				'Kubernetes',
+				'CI/CD',
+				'GitHub Actions',
+				'Terraform',
+				'Ansible'
+			]
 		}
 	];
-
-	function toggleMobileMenu() {
-		mobileMenuOpen = !mobileMenuOpen;
-	}
 
 	function nextProject() {
 		targetPosition += 1;
@@ -144,7 +170,6 @@
 
 	function scrollToSection(sectionId: string) {
 		document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-		mobileMenuOpen = false;
 	}
 
 	function handleTouchStart(event: TouchEvent) {
@@ -154,12 +179,33 @@
 	function handleTouchEnd(event: TouchEvent) {
 		const swipeDistance = touchStartX - event.changedTouches[0].screenX;
 		if (Math.abs(swipeDistance) > 50) {
-			swipeDistance > 0 ? nextProject() : prevProject();
+			if (swipeDistance > 0) {
+				nextProject();
+			} else {
+				prevProject();
+			}
 		}
+	}
+
+	function openExternal(url: string) {
+		window.open(url, '_blank', 'noopener,noreferrer');
 	}
 
 	let formSuccess = false;
 	let formError = '';
+
+	function getFailureErrorMessage(data: unknown): string {
+		if (
+			typeof data === 'object' &&
+			data !== null &&
+			'error' in data &&
+			typeof (data as { error: unknown }).error === 'string'
+		) {
+			return (data as { error: string }).error;
+		}
+
+		return 'Something went wrong.';
+	}
 </script>
 
 <svelte:head>
@@ -175,7 +221,10 @@
 	<div class="hero-content">
 		<div class="hero-text fade-in">
 			<h1 class="hero-title">
-				Hi, I'm <span style="white-space: nowrap;"><span class="text-gradient-cyan">Kent</span> <span class="text-gradient-blue">Vuong</span></span>
+				Hi, I'm <span style="white-space: nowrap;"
+					><span class="text-gradient-cyan">Kent</span>
+					<span class="text-gradient-blue">Vuong</span></span
+				>
 			</h1>
 			<p class="hero-subtitle">Full-Stack & DevOps Engineer</p>
 			<p class="hero-description">
@@ -228,7 +277,7 @@
 
 		<div class="carousel-scene">
 			<div class="carousel-track">
-				{#each projects as project, index}
+				{#each projects as project, index (project.id)}
 					{@const rawOffset = index - $scrollPosition}
 					{@const offset = rawOffset - Math.round(rawOffset / projects.length) * projects.length}
 					{@const absOffset = Math.abs(offset)}
@@ -236,61 +285,111 @@
 					<div
 						class="carousel-card"
 						class:carousel-card-active={isActive}
-						style:transform="translateX({offset * 105}%) scale({Math.max(0.5, 1 - absOffset * 0.12)}) rotateY({offset * -6}deg)"
-						style:opacity={absOffset > 2 ? 0 : absOffset < 0.5 ? 1 : Math.max(0, 1 - absOffset * 0.45)}
+						role="presentation"
+						style:transform="translateX({offset * 105}%) scale({Math.max(
+							0.5,
+							1 - absOffset * 0.12
+						)}) rotateY({offset * -6}deg)"
+						style:opacity={absOffset > 2
+							? 0
+							: absOffset < 0.5
+								? 1
+								: Math.max(0, 1 - absOffset * 0.45)}
 						style:filter="blur({absOffset < 0.5 ? 0 : absOffset * 2}px)"
 						style:z-index={10 - Math.round(absOffset)}
-						on:mousemove={(e) => { if (isActive) handleMouseMove(e); }}
-						on:mouseleave={() => { if (isActive) handleMouseLeave(); }}
-						on:touchstart={(e) => { if (isActive) handleTouchStart(e); }}
-						on:touchend={(e) => { if (isActive) handleTouchEnd(e); }}
+						on:mousemove={(e) => {
+							if (isActive) handleMouseMove(e);
+						}}
+						on:mouseleave={() => {
+							if (isActive) handleMouseLeave();
+						}}
+						on:touchstart={(e) => {
+							if (isActive) handleTouchStart(e);
+						}}
+						on:touchend={(e) => {
+							if (isActive) handleTouchEnd(e);
+						}}
 					>
 						<div class="carousel-card-tilt">
-						<div class="carousel-card-inner">
-							{#if project.image}
-								<div class="project-image">
-									<img src={project.image} alt={project.title} loading="lazy" />
-								</div>
-							{/if}
-							<div class="project-info">
-								<h3 class="project-title">{project.title}</h3>
-								<p class="project-description">{project.description}</p>
-								<div class="project-tech">
-									{#each project.tech as tech}
-										<span class="tech-tag">{tech}</span>
-									{/each}
-								</div>
-								<div class="project-links">
-									<a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-										<i class="fab fa-github"></i> Code
-									</a>
-									{#if project.demo}
-										<a href={project.demo} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-											<i class="fas fa-external-link-alt"></i> Visit
-										</a>
-									{/if}
+							<div class="carousel-card-inner">
+								{#if project.image}
+									<div class="project-image">
+										<img src={project.image} alt={project.title} loading="lazy" />
+									</div>
+								{/if}
+								<div class="project-info">
+									<h3 class="project-title">{project.title}</h3>
+									<p class="project-description">{project.description}</p>
+									<div class="project-tech">
+										{#each project.tech as tech (`${project.id}-${tech}`)}
+											<span class="tech-tag">{tech}</span>
+										{/each}
+									</div>
+									<div class="project-links">
+										<button
+											type="button"
+											class="btn btn-outline"
+											on:click={() => openExternal(project.github)}
+										>
+											<i class="fab fa-github"></i> Code
+										</button>
+										{#if project.demo}
+											<button
+												type="button"
+												class="btn btn-primary"
+												on:click={() => openExternal(project.demo)}
+											>
+												<i class="fas fa-external-link-alt"></i> Visit
+											</button>
+										{/if}
+									</div>
 								</div>
 							</div>
-						</div>
 						</div>
 					</div>
 				{/each}
 			</div>
 
-			<button class="carousel-nav carousel-nav-prev" on:click={prevProject} aria-label="Previous project">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			<button
+				class="carousel-nav carousel-nav-prev"
+				on:click={prevProject}
+				aria-label="Previous project"
+			>
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+					><path
+						d="M15 18L9 12L15 6"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/></svg
+				>
 			</button>
-			<button class="carousel-nav carousel-nav-next" on:click={nextProject} aria-label="Next project">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			<button
+				class="carousel-nav carousel-nav-next"
+				on:click={nextProject}
+				aria-label="Next project"
+			>
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+					><path
+						d="M9 18L15 12L9 6"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/></svg
+				>
 			</button>
 		</div>
 
 		<div class="carousel-indicators">
-			{#each projects as _, index}
+			{#each projects as project, index (project.id)}
 				<button
 					class="carousel-dot"
 					class:active={index === currentProjectIndex}
-					on:click={() => { goToProject(index); }}
+					on:click={() => {
+						goToProject(index);
+					}}
 					aria-label="Go to project {index + 1}"
 				>
 					<span class="carousel-dot-fill"></span>
@@ -299,7 +398,9 @@
 		</div>
 
 		<div class="carousel-counter">
-			<span class="carousel-counter-current">{String(currentProjectIndex + 1).padStart(2, '0')}</span>
+			<span class="carousel-counter-current"
+				>{String(currentProjectIndex + 1).padStart(2, '0')}</span
+			>
 			<span class="carousel-counter-sep">/</span>
 			<span class="carousel-counter-total">{String(projects.length).padStart(2, '0')}</span>
 		</div>
@@ -313,11 +414,11 @@
 		<p class="section-subtitle">Technologies I work with</p>
 
 		<div class="skills-categories">
-			{#each skillCategories as category}
+			{#each skillCategories as category (category.title)}
 				<div class="skill-category">
 					<h3>{category.title}</h3>
 					<div class="skill-tags">
-						{#each category.skills as skill}
+						{#each category.skills as skill (skill)}
 							<span class="skill-tag">{skill}</span>
 						{/each}
 					</div>
@@ -437,8 +538,10 @@
 							stroke-linejoin="round"
 						/>
 					</svg>
-					<a href="https://www.linkedin.com/in/kentvuong88/" target="_blank" rel="noopener noreferrer"
-						>LinkedIn</a
+					<a
+						href="https://www.linkedin.com/in/kentvuong88/"
+						target="_blank"
+						rel="noopener noreferrer">LinkedIn</a
 					>
 				</div>
 			</div>
@@ -454,7 +557,7 @@
 						if (result.type === 'success') {
 							formSuccess = true;
 						} else if (result.type === 'failure') {
-							formError = result.data?.error ?? 'Something went wrong.';
+							formError = getFailureErrorMessage(result.data);
 						} else {
 							formError = 'Something went wrong.';
 						}
@@ -473,32 +576,15 @@
 				{/if}
 				<div class="form-group">
 					<label for="name">Name</label>
-					<input
-						type="text"
-						id="name"
-						name="name"
-						required
-						placeholder="Your name"
-					/>
+					<input type="text" id="name" name="name" required placeholder="Your name" />
 				</div>
 				<div class="form-group">
 					<label for="email">Email</label>
-					<input
-						type="email"
-						id="email"
-						name="email"
-						required
-						placeholder="Your email"
-					/>
+					<input type="email" id="email" name="email" required placeholder="Your email" />
 				</div>
 				<div class="form-group">
 					<label for="message">Message</label>
-					<textarea
-						id="message"
-						name="message"
-						required
-						placeholder="Your message"
-						rows="5"
+					<textarea id="message" name="message" required placeholder="Your message" rows="5"
 					></textarea>
 				</div>
 				<button type="submit" class="btn btn-primary btn-full"> Send Message </button>

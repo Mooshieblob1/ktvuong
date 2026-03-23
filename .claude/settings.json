@@ -1,34 +1,34 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(cut -d'{' -f1)",
-      "Read(//@media/**)",
-      "Bash(npx svelte-check:*)",
-      "Bash(npx svelte-kit:*)",
-      "Bash(pnpm svelte-kit:*)",
-      "Bash(pnpm svelte-check:*)",
-      "Bash(pnpm exec:*)",
-      "Bash(pnpm install:*)",
-      "Bash(gh repo:*)",
-      "Bash(gh api:*)",
-      "Bash(curl -sL \"https://raw.githubusercontent.com/Mooshieblob1/MooshieUI/main/qq20fhm.png\" -o /home/blob/Repos/ktvuong/static/site6img/thumb.png)",
-      "Bash(pnpm build:*)",
-      "Bash(echo \"EXIT: $?\")",
-      "Skill(claude-api)",
-      "Skill(claude-api:*)",
-      "mcp__claude_ai_Cloudflare_Developer_Platform__accounts_list",
-      "mcp__claude_ai_Cloudflare_Developer_Platform__set_active_account",
-      "mcp__claude_ai_Cloudflare_Developer_Platform__workers_list",
-      "Bash(pnpm -v)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(pnpm add:*)",
-      "Bash(sed -i '240s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:mousemove={\\(e\\) => { if \\(isActive\\) { cardEl = e.currentTarget; handleMouseMove\\(e\\); } }}|' src/routes/+page.svelte)",
-      "Bash(sed -i '241s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:mouseleave={\\(\\) => { if \\(isActive\\) handleMouseLeave\\(\\); }}|' src/routes/+page.svelte)",
-      "Bash(sed -i '242s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:touchstart={\\(e\\) => { if \\(isActive\\) handleTouchStart\\(e\\); }}|' src/routes/+page.svelte)",
-      "Bash(sed -i '243s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:touchend={\\(e\\) => { if \\(isActive\\) handleTouchEnd\\(e\\); }}|' src/routes/+page.svelte)",
-      "Bash(npm run:*)"
-    ]
-  }
+	"permissions": {
+		"allow": [
+			"Bash(cut -d'{' -f1)",
+			"Read(//@media/**)",
+			"Bash(npx svelte-check:*)",
+			"Bash(npx svelte-kit:*)",
+			"Bash(pnpm svelte-kit:*)",
+			"Bash(pnpm svelte-check:*)",
+			"Bash(pnpm exec:*)",
+			"Bash(pnpm install:*)",
+			"Bash(gh repo:*)",
+			"Bash(gh api:*)",
+			"Bash(curl -sL \"https://raw.githubusercontent.com/Mooshieblob1/MooshieUI/main/qq20fhm.png\" -o /home/blob/Repos/ktvuong/static/site6img/thumb.png)",
+			"Bash(pnpm build:*)",
+			"Bash(echo \"EXIT: $?\")",
+			"Skill(claude-api)",
+			"Skill(claude-api:*)",
+			"mcp__claude_ai_Cloudflare_Developer_Platform__accounts_list",
+			"mcp__claude_ai_Cloudflare_Developer_Platform__set_active_account",
+			"mcp__claude_ai_Cloudflare_Developer_Platform__workers_list",
+			"Bash(pnpm -v)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(git push:*)",
+			"Bash(pnpm add:*)",
+			"Bash(sed -i '240s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:mousemove={\\(e\\) => { if \\(isActive\\) { cardEl = e.currentTarget; handleMouseMove\\(e\\); } }}|' src/routes/+page.svelte)",
+			"Bash(sed -i '241s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:mouseleave={\\(\\) => { if \\(isActive\\) handleMouseLeave\\(\\); }}|' src/routes/+page.svelte)",
+			"Bash(sed -i '242s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:touchstart={\\(e\\) => { if \\(isActive\\) handleTouchStart\\(e\\); }}|' src/routes/+page.svelte)",
+			"Bash(sed -i '243s|.*|\\\\t\\\\t\\\\t\\\\t\\\\t\\\\t\\\\ton:touchend={\\(e\\) => { if \\(isActive\\) handleTouchEnd\\(e\\); }}|' src/routes/+page.svelte)",
+			"Bash(npm run:*)"
+		]
+	}
 }

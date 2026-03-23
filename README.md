@@ -50,6 +50,7 @@ ktvuong/
 ## Email Obfuscation
 
 The site uses a custom email obfuscation system to protect against harvesting bots:
+
 - XOR cipher encodes the email address in HTML
 - Client-side JavaScript decodes it only when needed
 - No plain text email addresses in source code or DOM

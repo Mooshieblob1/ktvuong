@@ -16,7 +16,9 @@
 					e.preventDefault();
 					window.location.href = 'mailto:' + decoded;
 				});
-			} catch (_) {}
+			} catch {
+				return;
+			}
 		});
 	}
 

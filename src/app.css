@@ -663,8 +663,12 @@ section {
 	transform: translateY(-50%) scale(1.1);
 }
 
-.carousel-nav-prev { left: 0; }
-.carousel-nav-next { right: 0; }
+.carousel-nav-prev {
+	left: 0;
+}
+.carousel-nav-next {
+	right: 0;
+}
 
 /* Carousel Indicators */
 .carousel-indicators {
@@ -1027,7 +1031,6 @@ section {
 	color: #64748b;
 }
 
-
 /* Mobile Utilities */
 @media (max-width: 480px) {
 	.text-responsive {
@@ -1142,7 +1145,6 @@ section {
 		padding: 0.5rem;
 		font-size: 0.75rem;
 	}
-
 }
 
 /* Tablet improvements */

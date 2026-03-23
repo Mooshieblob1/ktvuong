@@ -4,7 +4,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import '../app.css';
 
-	let lenis: any;
+	let lenis: Window['__lenis'];
 
 	onMount(async () => {
 		const isFirefox = navigator.userAgent.includes('Firefox');
@@ -16,7 +16,7 @@
 				smoothWheel: true,
 				autoRaf: true
 			});
-			(window as any).__lenis = lenis;
+			window.__lenis = lenis;
 			document.documentElement.classList.add('lenis-active');
 		}
 	});
