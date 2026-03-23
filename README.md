@@ -27,6 +27,11 @@
 - **Deployment**: Cloudflare Pages
 - **Analytics**: Cloudflare Web Analytics
 
+## Runtime Requirements
+
+- Node.js `>= 20.19.0`
+- pnpm `>= 10.32.1`
+
 ## Project Structure
 
 ```
