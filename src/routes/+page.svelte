@@ -31,16 +31,29 @@
 	const projects = [
 		{
 			id: 1,
+			title: 'MooshieUI',
+			description:
+				'A modern, beginner-friendly desktop frontend for ComfyUI built with Tauri. Features text-to-image, image-to-image, inpainting, built-in upscaling, ControlNet support, and a one-click installer.',
+			tech: ['Svelte', 'Tauri', 'Rust', 'TypeScript', 'Tailwind'],
+			github: 'https://github.com/Mooshieblob1/MooshieUI',
+			demo: null,
+			image:
+				'https://opengraph.githubassets.com/ae818a6ebe47065ddc9244709a79988f6212ba21325f34e584e85adddb36e03c/Mooshieblob1/MooshieUI',
+			fallback: '/site6img/thumb.png'
+		},
+		{
+			id: 2,
 			title: 'mooshieblob.com',
 			description:
 				'My fun alias profile showcasing my AI projects and online persona, featuring interactive demos and creative experiments.',
 			tech: ['Nuxt.js', 'Tailwind', 'Cloudflare', 'AI Integration'],
 			github: 'https://github.com/Mooshieblob1/mooshieblob1.github.io',
 			demo: 'https://mooshieblob.com',
-			image: '/site1img/thumb1.webp'
+			image: 'https://mooshieblob.com/assets/images/page.png',
+			fallback: '/site1img/thumb1.webp'
 		},
 		{
-			id: 2,
+			id: 3,
 			title: 'ktvuong.com',
 			description:
 				"This is the site you're on right now! My personal portfolio website highlighting my technical skills, professional journey, and project accomplishments.",
@@ -50,44 +63,35 @@
 			image: null
 		},
 		{
-			id: 3,
+			id: 4,
 			title: 'team-blob.mooshieblob.com',
 			description:
 				'A fictional esports team website with interactive elements, player profiles, and match history - all built for fun.',
 			tech: ['SvelteKit', 'Tailwind', 'Cloudflare', 'Interactive UI'],
 			github: 'https://github.com/Mooshieblob1/team-blob',
 			demo: 'https://team-blob.mooshieblob.com',
-			image: '/site3img/thumb.png'
+			image: 'https://team-blob.mooshieblob.com/team-blob-logo.png'
 		},
 		{
-			id: 4,
+			id: 5,
 			title: 'gpu.garden',
 			description:
 				'A frontend for a free shared GPU server for TouhouAI members, featuring image generation tools and notion-like notebooks.',
 			tech: ['SvelteKit', 'Tailwind', 'GPU Sharing', 'AI Tools'],
 			github: 'https://github.com/mchaker/gpugarden-site',
 			demo: 'https://gpu.garden',
-			image: '/site4img/thumb.png'
+			image: 'https://gpu.garden/favicon.png'
 		},
 		{
-			id: 5,
+			id: 6,
 			title: 'ComfyUI_NAIDGenerator',
 			description:
 				'A custom ComfyUI node that enables NovelAI API key integration, expanding generation options for users.',
 			tech: ['ComfyUI', 'NovelAI', 'Python', 'API Integration'],
 			github: 'https://github.com/Mooshieblob1/ComfyUI_NAIDGenerator',
 			demo: null,
-			image: '/site5img/thumb.png'
-		},
-		{
-			id: 6,
-			title: 'MooshieUI',
-			description:
-				'A modern, beginner-friendly desktop frontend for ComfyUI built with Tauri. Features text-to-image, image-to-image, inpainting, built-in upscaling, ControlNet support, and a one-click installer.',
-			tech: ['Svelte', 'Tauri', 'Rust', 'TypeScript', 'Tailwind'],
-			github: 'https://github.com/Mooshieblob1/MooshieUI',
-			demo: null,
-			image: '/site6img/thumb.png'
+			image:
+				'https://opengraph.githubassets.com/b4f99c38b720522271e089d605e565de46e77d02088bb7b6d32781dd8cb8aa14/Mooshieblob1/ComfyUI_NAIDGenerator'
 		}
 	];
 
@@ -232,10 +236,10 @@
 				code, automation, and delivering exceptional user experiences.
 			</p>
 			<div class="hero-buttons">
-				<button class="btn btn-primary" on:click={() => scrollToSection('projects')}>
+				<button class="btn btn-primary" onclick={() => scrollToSection('projects')}>
 					View My Work
 				</button>
-				<button class="btn btn-secondary" on:click={() => scrollToSection('contact')}>
+				<button class="btn btn-secondary" onclick={() => scrollToSection('contact')}>
 					Get In Touch
 				</button>
 			</div>
@@ -297,16 +301,16 @@
 								: Math.max(0, 1 - absOffset * 0.45)}
 						style:filter="blur({absOffset < 0.5 ? 0 : absOffset * 2}px)"
 						style:z-index={10 - Math.round(absOffset)}
-						on:mousemove={(e) => {
+						onmousemove={(e) => {
 							if (isActive) handleMouseMove(e);
 						}}
-						on:mouseleave={() => {
+						onmouseleave={() => {
 							if (isActive) handleMouseLeave();
 						}}
-						on:touchstart={(e) => {
+						ontouchstart={(e) => {
 							if (isActive) handleTouchStart(e);
 						}}
-						on:touchend={(e) => {
+						ontouchend={(e) => {
 							if (isActive) handleTouchEnd(e);
 						}}
 					>
@@ -314,7 +318,12 @@
 							<div class="carousel-card-inner">
 								{#if project.image}
 									<div class="project-image">
-										<img src={project.image} alt={project.title} loading="lazy" />
+										<img
+									src={project.image}
+									alt={project.title}
+									loading="lazy"
+									onerror={(e) => { if ('fallback' in project && project.fallback) (e.currentTarget as HTMLImageElement).src = project.fallback as string; }}
+								/>
 									</div>
 								{/if}
 								<div class="project-info">
@@ -329,7 +338,7 @@
 										<button
 											type="button"
 											class="btn btn-outline"
-											on:click={() => openExternal(project.github)}
+										onclick={() => openExternal(project.github)}
 										>
 											<i class="fab fa-github"></i> Code
 										</button>
@@ -337,7 +346,7 @@
 											<button
 												type="button"
 												class="btn btn-primary"
-												on:click={() => openExternal(project.demo)}
+											onclick={() => openExternal(project.demo)}
 											>
 												<i class="fas fa-external-link-alt"></i> Visit
 											</button>
@@ -352,7 +361,7 @@
 
 			<button
 				class="carousel-nav carousel-nav-prev"
-				on:click={prevProject}
+				onclick={prevProject}
 				aria-label="Previous project"
 			>
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -367,7 +376,7 @@
 			</button>
 			<button
 				class="carousel-nav carousel-nav-next"
-				on:click={nextProject}
+				onclick={nextProject}
 				aria-label="Next project"
 			>
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -387,7 +396,7 @@
 				<button
 					class="carousel-dot"
 					class:active={index === currentProjectIndex}
-					on:click={() => {
+					onclick={() => {
 						goToProject(index);
 					}}
 					aria-label="Go to project {index + 1}"
