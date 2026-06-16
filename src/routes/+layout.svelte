@@ -4,11 +4,13 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import '../app.css';
 
+	let { children } = $props();
 	let lenis: Window['__lenis'];
 
 	onMount(async () => {
 		const isFirefox = navigator.userAgent.includes('Firefox');
-		if (!isFirefox) {
+		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (!isFirefox && !reduced) {
 			const { default: Lenis } = await import('lenis');
 			lenis = new Lenis({
 				duration: 1.2,
@@ -22,16 +24,24 @@
 	});
 
 	onDestroy(() => {
-		if (lenis) {
-			lenis.destroy();
-		}
+		if (lenis) lenis.destroy();
 	});
 </script>
+
+<svelte:head>
+	<title>Kent Vuong — Software Engineer</title>
+	<meta
+		name="description"
+		content="Full-stack & DevOps engineer based in Perth. Selected work and open-source projects."
+	/>
+	<!-- Keep the portfolio out of search results — only people you send the link to find it. -->
+	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+</svelte:head>
 
 <Header />
 
 <main>
-	<slot />
+	{@render children()}
 </main>
 
 <Footer />

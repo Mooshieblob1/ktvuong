@@ -2,37 +2,60 @@
 	const year = new Date().getFullYear();
 </script>
 
-<!-- Footer -->
-<footer class="border-t border-slate-800 py-8">
-	<div class="container mx-auto px-4 md:px-8">
-		<div class="flex flex-col items-center justify-between md:flex-row">
-			<div class="mb-4 flex items-center space-x-2 md:mb-0">
-				<img src="/favicon.svg" alt="KV logo" class="h-6 w-6 rounded" />
-				<span class="text-lg font-bold">Kent Vuong</span>
-			</div>
-
-			<div class="text-slate-400 md:text-center">
-				&copy; {year} Kent Vuong. All rights reserved.
-			</div>
-
-			<div class="mt-4 flex space-x-4 md:mt-0">
-				<a
-					href="https://github.com/mooshieblob1"
-					target="_blank"
-					class="hover:text-accent text-slate-400 transition-colors"
-					aria-label="Visit GitHub profile"
-				>
-					<i class="fab fa-github fa-lg"></i>
-				</a>
-				<a
-					href="https://www.linkedin.com/in/kentvuong88/"
-					target="_blank"
-					class="hover:text-accent text-slate-400 transition-colors"
-					aria-label="Visit LinkedIn profile"
-				>
-					<i class="fab fa-linkedin-in fa-lg"></i>
-				</a>
+<footer>
+	<div class="inner">
+		<div class="brand">
+			<img src="/mooshie-logo.png" alt="MooshieUI" />
+			<div class="lines">
+				<span class="name">Kent Vuong</span>
+				<span class="mono">Built by the maker of MooshieUI · {year}</span>
 			</div>
 		</div>
+		<span class="mono tagline">Mooshie yellow on near-black</span>
 	</div>
 </footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border-700);
+		background: var(--surface-950);
+	}
+	.inner {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: clamp(28px, 4vw, 40px) clamp(20px, 5vw, 48px);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		flex-wrap: wrap;
+	}
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.brand img {
+		width: 32px;
+		height: 32px;
+		border-radius: var(--radius-md);
+	}
+	.lines {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.name {
+		font-weight: 700;
+		color: var(--text-strong);
+		font-size: var(--text-sm);
+	}
+	.mono {
+		font-family: var(--font-mono);
+		font-size: var(--text-10);
+		color: var(--text-subtle);
+	}
+	.tagline {
+		letter-spacing: 0.04em;
+	}
+</style>
