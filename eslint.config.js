@@ -21,6 +21,11 @@ export default ts.config(
 				...globals.browser,
 				...globals.node
 			}
+		},
+		rules: {
+			// This project only links to external URLs (GitHub, demos, mailto)
+			// and doesn't use SvelteKit's type-safe internal routing.
+			'svelte/no-navigation-without-resolve': 'off'
 		}
 	},
 	{

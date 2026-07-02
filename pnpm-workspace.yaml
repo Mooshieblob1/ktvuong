@@ -1,0 +1,9 @@
+packages:
+  - '.'
+
+onlyBuiltDependencies:
+  - esbuild
+
+overrides:
+  defu: '>=6.1.5'
+  cookie: '>=0.7.0'
