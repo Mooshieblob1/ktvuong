@@ -29,7 +29,7 @@
 
 ## Runtime Requirements
 
-- Node.js `>= 20.19.0`
+- Node.js `>= 22.14.0`
 - pnpm `>= 10.32.1`
 
 ## Project Structure
