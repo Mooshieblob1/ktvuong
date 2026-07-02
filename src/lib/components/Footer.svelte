@@ -5,7 +5,7 @@
 <footer>
 	<div class="inner">
 		<div class="brand">
-			<img src="/mooshie-logo.png" alt="MooshieUI" />
+			<img src="/mooshie-logo.png" alt="Kent Vuong" />
 			<div class="lines">
 				<span class="name">Kent Vuong</span>
 				<span class="mono">Built by the maker of MooshieUI · {year}</span>
