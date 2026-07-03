@@ -48,9 +48,26 @@
 		gap: 16px;
 		flex-wrap: wrap;
 		padding: 12px clamp(16px, 4vw, 48px);
-		background: color-mix(in srgb, var(--bg) 78%, transparent);
-		backdrop-filter: blur(14px);
-		border-bottom: 1px solid var(--border-700);
+		/* Lighter wash so the hero reads through, still legible over lower sections. */
+		background: color-mix(in srgb, var(--bg) 60%, transparent);
+		backdrop-filter: blur(12px);
+		border-bottom: none;
+	}
+	/* Gradient hairline divider, offset just below the bar. */
+	nav::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -1px;
+		height: 1px;
+		background: linear-gradient(
+			to right,
+			transparent,
+			color-mix(in srgb, var(--text) 20%, transparent),
+			transparent
+		);
+		pointer-events: none;
 	}
 	.brand {
 		display: flex;

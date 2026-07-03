@@ -1,199 +1,272 @@
 <script lang="ts">
 	import { scrollToId } from '$lib/scroll';
-	import NodeGraph from './NodeGraph.svelte';
 	import Button from './ui/Button.svelte';
 	import StatusDot from './ui/StatusDot.svelte';
 
 	const openToWork = true;
+
+	// Accurate to what the repos demonstrate (see src/lib/data/skills.ts).
+	// Rendered twice in the template so the -50% marquee loop is seamless.
+	const stack = [
+		'Svelte',
+		'SvelteKit',
+		'TypeScript',
+		'Rust',
+		'Tauri',
+		'Python',
+		'Docker',
+		'Cloudflare',
+		'Tailwind CSS'
+	];
 </script>
 
 <section id="about" class="hero">
-	<div class="text">
+	<!-- Decorative backdrop: clips its own children so the page never scrolls sideways. -->
+	<div class="backdrop" aria-hidden="true">
+		<div class="aurora"></div>
+		<div class="blur-shape"></div>
+	</div>
+
+	<div class="content">
 		<div class="eyebrow">
-			<span class="rule"></span>
-			<span>Full-stack · DevOps · AI tooling</span>
-		</div>
-		<h1>Kent Vuong</h1>
-		<p class="lead">
-			I build fast, practical software — from desktop AI tools to web apps and the infrastructure
-			under them.
-		</p>
-		<p class="desc">
-			Creator of <span class="hl">MooshieUI</span>, a beginner-friendly desktop frontend for
-			ComfyUI. I care about clean code, native performance, and removing friction for the people who
-			use what I make.
-		</p>
-		<div class="cta">
-			<Button size="lg" onclick={() => scrollToId('work')}>View my work</Button>
-			<Button variant="secondary" size="lg" onclick={() => scrollToId('contact')}
-				>Get in touch</Button
-			>
-		</div>
-		<div class="status">
 			<StatusDot
 				status={openToWork ? 'online' : 'idle'}
 				pulse={openToWork}
 				label={openToWork ? 'Available for work' : 'Currently heads-down'}
 			/>
+			<span class="sep"></span>
+			<span class="tag">Full-stack · DevOps · AI tooling</span>
+		</div>
+
+		<h1>Kent <span class="grad">Vuong</span></h1>
+
+		<p class="lead">
+			I build fast, practical software — from desktop AI tools to web apps and the infrastructure
+			under them.
+		</p>
+
+		<div class="cta">
+			<Button size="lg" onclick={() => scrollToId('work')}>View my work</Button>
+			<Button variant="secondary" size="lg" onclick={() => scrollToId('contact')}>
+				Get in touch
+			</Button>
 		</div>
 	</div>
 
-	<div class="visual">
-		<NodeGraph />
-		<div class="terminal">
-			<div class="tbar">
-				<span class="d red"></span>
-				<span class="d yellow"></span>
-				<span class="d green"></span>
-				<span class="ttitle">zsh — whoami</span>
-			</div>
-			<div class="tbody">
-				<div><span class="prompt">$</span> <span class="cmd">whoami</span></div>
-				<div class="out">→ Kent Vuong · software engineer</div>
-				<div class="sp"><span class="prompt">$</span> <span class="cmd">cat focus.txt</span></div>
-				<div class="out">→ Svelte · Rust · Tauri · Python · AI/ML</div>
-				<div class="sp">
-					<span class="prompt">$</span> <span class="cmd">connect --social</span><span
-						class="cursor"
-					></span>
-				</div>
-			</div>
+	<div class="marquee" aria-hidden="true">
+		<div class="marquee-label">
+			<span>Built with</span>
+			<span>the tools I reach for</span>
+		</div>
+		<div class="marquee-viewport">
+			<ul class="marquee-track">
+				{#each [...stack, ...stack] as tech, i (i)}
+					<li class="chip">
+						<span class="tile liquid-glass">{tech[0]}</span>
+						<span class="chip-name">{tech}</span>
+					</li>
+				{/each}
+			</ul>
 		</div>
 	</div>
 </section>
 
 <style>
 	.hero {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: clamp(110px, 15vh, 160px) clamp(20px, 5vw, 48px) clamp(48px, 8vh, 90px);
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
-		gap: clamp(32px, 5vw, 64px);
-		align-items: center;
-	}
-	.text {
+		position: relative;
+		min-height: 100vh;
+		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
-		gap: 22px;
+	}
+
+	/* --- Backdrop ---------------------------------------------------------- */
+	.backdrop {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+	.aurora {
+		position: absolute;
+		inset: -20%;
+		background:
+			radial-gradient(
+				38% 44% at 32% 34%,
+				color-mix(in srgb, var(--accent-500) 26%, transparent),
+				transparent 72%
+			),
+			radial-gradient(
+				34% 40% at 70% 62%,
+				color-mix(in srgb, var(--accent-600) 22%, transparent),
+				transparent 70%
+			),
+			radial-gradient(
+				46% 54% at 54% 48%,
+				color-mix(in srgb, var(--accent-400) 12%, transparent),
+				transparent 76%
+			);
+		animation: mb-aurora 24s var(--ease-standard) infinite;
+		will-change: transform;
+	}
+	.blur-shape {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: min(984px, 100vw);
+		height: 527px;
+		transform: translate(-50%, -50%);
+		background: var(--surface-950);
+		opacity: 0.9;
+		filter: blur(82px);
+	}
+
+	/* --- Centered content -------------------------------------------------- */
+	.content {
+		position: relative;
+		z-index: 10;
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		gap: 20px;
+		padding: 108px clamp(20px, 5vw, 48px) 32px;
 	}
 	.eyebrow {
 		display: inline-flex;
 		align-items: center;
-		gap: 10px;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px;
 		font-family: var(--font-mono);
 		font-size: var(--text-xs);
-		letter-spacing: 0.16em;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: var(--text-muted);
 	}
-	.rule {
-		width: 22px;
-		height: 2px;
-		background: var(--accent-500);
-		border-radius: 2px;
+	.sep {
+		width: 1px;
+		height: 14px;
+		background: var(--border-700);
+	}
+	.tag {
+		white-space: nowrap;
 	}
 	h1 {
 		margin: 0;
-		font-size: clamp(2.4rem, 6vw, 4.2rem);
-		font-weight: 700;
-		line-height: 1.04;
-		letter-spacing: -0.03em;
+		max-width: 100%;
+		font-family: var(--font-sans);
+		font-weight: 500;
+		font-size: clamp(2.75rem, 12vw, 200px);
+		line-height: 1.02;
+		letter-spacing: -0.024em;
 		color: var(--text-strong);
+	}
+	.grad {
+		background-image: linear-gradient(to left, #cc9900, #ffcc00, #ffe680);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
 	}
 	.lead {
 		margin: 0;
-		font-size: clamp(1.05rem, 2.4vw, 1.4rem);
-		color: var(--text);
-		font-weight: 500;
-		line-height: 1.4;
-		max-width: 30ch;
-	}
-	.desc {
-		margin: 0;
-		font-size: var(--text-base);
+		max-width: 42ch;
+		font-size: var(--text-lg);
+		line-height: 1.6;
 		color: var(--text-muted);
-		line-height: 1.65;
-		max-width: 46ch;
-	}
-	.hl {
-		color: var(--accent-400);
-		font-weight: 600;
+		opacity: 0.92;
 	}
 	.cta {
 		display: flex;
-		gap: 12px;
 		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 8px;
+	}
+	/* Round the shared Button pills to echo the source design. */
+	.cta :global(.btn) {
+		border-radius: var(--radius-full);
+		padding-left: 24px;
+		padding-right: 24px;
+	}
+
+	/* --- Tech marquee (pinned to the bottom of the hero) ------------------- */
+	.marquee {
+		position: relative;
+		z-index: 10;
+		width: 100%;
+		max-width: 64rem;
+		margin: 0 auto;
+		display: flex;
 		align-items: center;
-		margin-top: 4px;
+		gap: 2.5rem;
+		padding: 0 clamp(20px, 5vw, 48px) 40px;
 	}
-	.status {
-		margin-top: 6px;
-	}
-	.visual {
+	.marquee-label {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
-	}
-	.terminal {
-		background: var(--surface-900);
-		border: 1px solid var(--border-700);
-		border-radius: var(--radius-lg);
-		overflow: hidden;
-		box-shadow: var(--shadow-sm);
-	}
-	.tbar {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		padding: 9px 12px;
-		border-bottom: 1px solid color-mix(in srgb, var(--border-700) 60%, transparent);
-	}
-	.d {
-		width: 9px;
-		height: 9px;
-		border-radius: 50%;
-	}
-	.red {
-		background: var(--danger-hover);
-	}
-	.yellow {
-		background: var(--warning);
-	}
-	.green {
-		background: var(--success);
-	}
-	.ttitle {
-		margin-left: 6px;
-		font-family: var(--font-mono);
-		font-size: var(--text-10);
+		flex-shrink: 0;
+		font-size: var(--text-sm);
+		line-height: 1.35;
 		color: var(--text-subtle);
 	}
-	.tbody {
-		padding: 14px 16px;
+	.marquee-viewport {
+		flex: 1 1 auto;
+		min-width: 0;
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+		mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+	}
+	.marquee-track {
+		display: flex;
+		align-items: center;
+		gap: 4rem;
+		width: max-content;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		animation: mb-marquee 28s linear infinite;
+		will-change: transform;
+	}
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		white-space: nowrap;
+	}
+	.tile {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		border-radius: var(--radius-md);
 		font-family: var(--font-mono);
-		font-size: var(--text-xs);
-		line-height: 1.85;
+		font-size: 12px;
+		font-weight: 700;
+		color: var(--text-strong);
 	}
-	.prompt {
-		color: var(--accent-500);
-	}
-	.cmd {
+	.chip-name {
+		font-size: var(--text-base);
+		font-weight: 600;
 		color: var(--text);
 	}
-	.out {
-		color: var(--success-text);
-	}
-	.sp {
-		margin-top: 6px;
-	}
-	.cursor {
-		display: inline-block;
-		width: 7px;
-		height: 14px;
-		background: var(--accent-500);
-		margin-left: 5px;
-		vertical-align: -2px;
-		animation: mb-blink 1.1s steps(1) infinite;
+
+	@media (max-width: 640px) {
+		.marquee {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+		}
+		.marquee-label {
+			flex-direction: row;
+			gap: 6px;
+		}
+		.marquee-viewport {
+			width: 100%;
+		}
 	}
 </style>

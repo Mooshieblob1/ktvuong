@@ -224,6 +224,9 @@
 	.scene {
 		position: relative;
 		perspective: 1500px;
+		/* Off-active cards fan out past the viewport via translateX; clip that
+		   horizontal spill so the page never scrolls sideways on mobile. */
+		overflow-x: clip;
 	}
 	.track {
 		position: relative;

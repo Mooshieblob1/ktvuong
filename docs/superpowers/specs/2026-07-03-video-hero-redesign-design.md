@@ -51,8 +51,8 @@ the personal-portfolio content.
 The hero is a `min-h-screen` flex column with three stacked concerns:
 
 ```
-<section id="about" class="hero">        min-height:100vh; overflow:visible; display:flex; flex-direction:column
-  ├─ .backdrop (aria-hidden, pointer-events:none, absolute inset:0, z-index:0)
+<section id="about" class="hero">        min-height:100vh; display:flex; flex-direction:column
+  ├─ .backdrop (aria-hidden, pointer-events:none, absolute inset:0, z-index:0, overflow:hidden)
   │    ├─ .aurora        drifting radial-gradient glows (Mooshie Yellow on near-black)
   │    └─ .blur-shape    984×527 soft dark rectangle, blur(82px), centered
   ├─ .content (position:relative; z-index:10; flex:1; centered)
@@ -65,8 +65,11 @@ The hero is a `min-h-screen` flex column with three stacked concerns:
        └─ .marquee-track   infinite translateX(0 → -50%) scroll, list duplicated
 ```
 
-The section keeps `overflow: visible` so the `blur(82px)` shape is not clipped, matching
-the spec's note. The global `Header` is fixed above this section (unchanged structure).
+Rather than the spec's `overflow: visible` section, the `.backdrop` layer clips its own
+children (`overflow: hidden`). Because the hero is full-viewport and the blur shape is
+centered, clipping at the backdrop bounds is visually invisible, and it guarantees the
+oversized aurora / blur never force horizontal page scroll on mobile. The global `Header`
+is fixed above this section (unchanged structure).
 
 ### Backdrop
 
@@ -106,7 +109,7 @@ the spec's note. The global `Header` is fixed above this section (unchanged stru
     (yellow ramp — the on-brand replacement for the spec's indigo→purple→amber).
 - **Subtitle `.lead`:** "I build fast, practical software — from desktop AI tools to web
   apps and the infrastructure under them." `font-size: var(--text-lg)`, `color:
-  var(--text-muted)`, constrained width (~`38ch`/`max-w-md`), slightly reduced opacity.
+var(--text-muted)`, constrained width (~`38ch`/`max-w-md`), slightly reduced opacity.
 - **CTAs:** existing `Button` component. "View my work" → `scrollToId('work')` (primary),
   "Get in touch" → `scrollToId('contact')` (secondary). Rendered with pill radius
   (`border-radius: var(--radius-full)`) to echo the spec's rounded buttons; use `size="lg"`.
@@ -118,7 +121,7 @@ the spec's note. The global `Header` is fixed above this section (unchanged stru
   `text-sm`. Two lines.
 - **Track (right):** a flex row of tech items, **duplicated once** for a seamless loop,
   animated `@keyframes marquee { from { transform: translateX(0) } to { transform:
-  translateX(-50%) } }` at `~25s linear infinite`. `gap` ~`4rem` between items.
+translateX(-50%) } }` at `~25s linear infinite`. `gap` ~`4rem` between items.
 - **Item:** a `.liquid-glass` `24×24` `rounded-lg` tile showing the tech's first letter,
   followed by the tech name (`font-weight: 600`, `--text` / `--text-strong`).
 - **Tech list (accurate to the repos, from `skills.ts`):** Svelte, SvelteKit, TypeScript,
@@ -134,24 +137,35 @@ the spec's note. The global `Header` is fixed above this section (unchanged stru
   spec (the one literal lift, since it's defined as a reusable utility):
   ```css
   .liquid-glass {
-    background: rgba(255, 255, 255, 0.01);
-    background-blend-mode: luminosity;
-    backdrop-filter: blur(4px);
-    border: none;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
+  	background: rgba(255, 255, 255, 0.01);
+  	background-blend-mode: luminosity;
+  	backdrop-filter: blur(4px);
+  	border: none;
+  	box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  	position: relative;
+  	overflow: hidden;
   }
   .liquid-glass::before {
-    content: "";
-    position: absolute; inset: 0; border-radius: inherit; padding: 1.4px;
-    background: linear-gradient(180deg,
-      rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%,
-      rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
-      rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-    pointer-events: none;
+  	content: '';
+  	position: absolute;
+  	inset: 0;
+  	border-radius: inherit;
+  	padding: 1.4px;
+  	background: linear-gradient(
+  		180deg,
+  		rgba(255, 255, 255, 0.45) 0%,
+  		rgba(255, 255, 255, 0.15) 20%,
+  		rgba(255, 255, 255, 0) 40%,
+  		rgba(255, 255, 255, 0) 60%,
+  		rgba(255, 255, 255, 0.15) 80%,
+  		rgba(255, 255, 255, 0.45) 100%
+  	);
+  	-webkit-mask:
+  		linear-gradient(#fff 0 0) content-box,
+  		linear-gradient(#fff 0 0);
+  	-webkit-mask-composite: xor;
+  	mask-composite: exclude;
+  	pointer-events: none;
   }
   ```
 - `@keyframes marquee` (translateX 0 → -50%).
@@ -178,10 +192,13 @@ the spec's note. The global `Header` is fixed above this section (unchanged stru
 
 ## Files touched
 
-| File | Change |
-|------|--------|
-| `src/lib/components/Hero.svelte` | Full rewrite: full-screen centered hero, backdrop, headline, CTAs, marquee. |
-| `src/lib/components/Header.svelte` | Transparent-over-hero + gradient divider (style-only). |
-| `src/app.css` | Add `.liquid-glass`, `@keyframes marquee`, aurora keyframes. |
-| `docs/superpowers/specs/2026-07-03-video-hero-redesign-design.md` | This doc. |
+| File                                                              | Change                                                                      |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `src/lib/components/Hero.svelte`                                  | Full rewrite: full-screen centered hero, backdrop, headline, CTAs, marquee. |
+| `src/lib/components/Header.svelte`                                | Transparent-over-hero + gradient divider (style-only).                      |
+| `src/app.css`                                                     | Add `.liquid-glass`, `@keyframes marquee`, aurora keyframes.                |
+| `docs/superpowers/specs/2026-07-03-video-hero-redesign-design.md` | This doc.                                                                   |
+
+```
+
 ```
