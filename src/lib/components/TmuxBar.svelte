@@ -73,9 +73,11 @@
 		</button>
 	{/each}
 	<div class="tmux-right">
+		<button class="rofi-chip" onclick={() => window.dispatchEvent(new CustomEvent('kv:rofi'))}>
+			^K rofi
+		</button>
 		<span class="ok">● up {Math.floor(upk / 60) + 1}m</span>
 		<span>scroll {pct}%</span>
-		<span class="hint">^K rofi</span>
 		<span>arch@kv:~</span>
 		<span>{clock}</span>
 	</div>

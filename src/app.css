@@ -184,6 +184,49 @@ body {
 }
 
 /* ==========================================================================
+   Amber CRT theme — phosphor terminal look, toggled via [data-theme=amber]
+   (rofi "Toggle theme", tmux THEME chip, or theme.cycleTheme()).
+   ========================================================================== */
+:root[data-theme='amber'] {
+	--theme-sub: #3a2c10;
+	--accent-foreground: #1a1200;
+	--bg: #0c0904;
+	--accent-500: #ffb000;
+	--accent-400: #ffc94d;
+	--accent-300: #ffdd85;
+	--accent-600: #c98a00;
+	--text: #ffdba8;
+	--text-strong: #fff3d9;
+	--text-muted: #c9a469;
+	--text-subtle: #94743f;
+	--success: #ffd166;
+	--success-text: #ffe3a3;
+	--shadow-accent: 0 10px 24px color-mix(in srgb, var(--accent-500) 26%, transparent);
+}
+:root[data-theme='amber'] body {
+	/* Re-tint ambient light + add faint CRT scanline overlay. */
+	background:
+		radial-gradient(1100px 700px at 12% -8%, rgba(255, 176, 0, 0.1), transparent 60%),
+		radial-gradient(900px 640px at 108% 12%, rgba(255, 120, 0, 0.05), transparent 62%),
+		radial-gradient(1000px 800px at 50% 118%, rgba(255, 176, 0, 0.06), transparent 58%), var(--bg);
+}
+:root[data-theme='amber'] body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 99;
+	pointer-events: none;
+	background: repeating-linear-gradient(180deg, transparent 0 2px, rgba(0, 0, 0, 0.14) 2px 4px);
+	opacity: 0.35;
+}
+:root[data-theme='amber'] .grad {
+	background-image: linear-gradient(to left, #b87700, #ffb000, #ffdd85);
+}
+:root[data-theme='amber'] .wordmark span {
+	background-image: linear-gradient(to left, #b87700, #ffb000, #ffdd85);
+}
+
+/* ==========================================================================
    Liquid-glass utilities — Apple-style frosted material: deep backdrop
    frost, gradient rim light, soft top sheen. `liquid-glass` for small
    tiles, `glass-panel` for cards/sections.
@@ -423,6 +466,20 @@ body {
 }
 .hint {
 	color: var(--accent-400);
+}
+.rofi-chip {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	letter-spacing: inherit;
+	color: var(--accent-400);
+	cursor: pointer;
+	white-space: nowrap;
+}
+.rofi-chip:hover {
+	color: var(--accent-300);
+	text-shadow: 0 0 8px color-mix(in srgb, var(--accent-500) 55%, transparent);
 }
 @media (max-width: 720px) {
 	.tmux-right {

@@ -35,6 +35,14 @@
 				<span class="idx">0{i + 1}</span>{l.label}
 			</button>
 		{/each}
+		<button
+			class="rofi-btn"
+			onclick={() => window.dispatchEvent(new CustomEvent('kv:rofi'))}
+			aria-label="Open command palette"
+			title="Ctrl+K"
+		>
+			<span class="idx">⌘</span>Search
+		</button>
 		<a
 			class="gh"
 			href="https://github.com/Mooshieblob1"
@@ -124,6 +132,13 @@
 		font-size: 9px;
 		color: var(--accent-500);
 		letter-spacing: 0.08em;
+	}
+	.rofi-btn {
+		border: 1px solid color-mix(in srgb, #fff 10%, transparent) !important;
+		background: rgba(255, 255, 255, 0.04) !important;
+	}
+	.rofi-btn .idx {
+		font-size: 11px;
 	}
 	.gh {
 		display: inline-flex;

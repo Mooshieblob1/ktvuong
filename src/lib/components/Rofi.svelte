@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { scrollToId } from '$lib/scroll';
 	import { projects } from '$lib/data/projects';
+	import { cycleTheme } from '$lib/theme';
 
 	interface Cmd {
 		label: string;
@@ -37,11 +37,16 @@
 			run: () => window.open('https://www.linkedin.com/in/kentvuong88/', '_blank', 'noopener')
 		},
 		{
-			label: 'Toggle theme…',
-			hint: 'system',
+			label: 'Toggle theme',
+			hint: 'dark ⇄ amber CRT',
 			run: () => {
-				/* placeholder — wired when light theme exists */
+				cycleTheme();
 			}
+		},
+		{
+			label: 'Open terminal',
+			hint: 'ctrl+`',
+			run: () => window.dispatchEvent(new CustomEvent('kv:term'))
 		}
 	]);
 
@@ -90,6 +95,17 @@
 		if (open) sel = 0;
 	});
 
+	// External open channel (tmux bar chip, etc.). Keeps toggle semantics.
+	$effect(() => {
+		const toggle = () => {
+			open = !open;
+			query = '';
+			sel = 0;
+		};
+		window.addEventListener('kv:rofi', toggle);
+		return () => window.removeEventListener('kv:rofi', toggle);
+	});
+
 	function exec(c: Cmd) {
 		open = false;
 		c.run();
@@ -117,11 +133,6 @@
 			exec(results[sel]);
 		}
 	}
-
-	onMount(() => {
-		window.addEventListener('keydown', onKey);
-		return () => window.removeEventListener('keydown', onKey);
-	});
 </script>
 
 <svelte:window onkeydown={onKey} />

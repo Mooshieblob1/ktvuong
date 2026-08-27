@@ -4,9 +4,22 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import TmuxBar from '$lib/components/TmuxBar.svelte';
 	import Rofi from '$lib/components/Rofi.svelte';
+	import Terminal from '$lib/components/Terminal.svelte';
+	import Denoise from '$lib/components/Denoise.svelte';
 	import '../app.css';
 
 	let { children } = $props();
+
+	onMount(() => {
+		try {
+			const saved = localStorage.getItem('kv-theme');
+			if (saved === 'amber' || saved === 'dark') {
+				document.documentElement.dataset.theme = saved;
+			}
+		} catch {
+			/* private mode */
+		}
+	});
 	let lenis: Window['__lenis'];
 
 	onMount(async () => {
@@ -49,6 +62,11 @@
 <Footer />
 <TmuxBar />
 <Rofi />
+<Terminal />
+
+<div class="denoise-host" aria-hidden="true">
+	<Denoise />
+</div>
 
 <style>
 	main {
