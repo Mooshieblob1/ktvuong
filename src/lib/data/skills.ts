@@ -7,23 +7,23 @@ export interface SkillGroup {
 /** Trimmed to what the repos actually demonstrate — not an aspirational list. */
 export const skillGroups: SkillGroup[] = [
 	{
-		title: 'Frontend',
+		title: 'Generative AI',
 		icon: '◆',
-		skills: ['Svelte', 'SvelteKit', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Nuxt.js']
+		skills: ['ComfyUI', 'Stable Diffusion', 'Flux', 'NovelAI API', 'ControlNet', 'Tiled diffusion']
 	},
 	{
-		title: 'Systems & Desktop',
+		title: 'Tool & App Building',
 		icon: '◆',
-		skills: ['Rust', 'Tauri', 'Cross-platform builds', 'Native APIs']
+		skills: ['Svelte', 'SvelteKit', 'TypeScript', 'Tauri', 'Rust', 'Tailwind CSS']
 	},
 	{
-		title: 'AI / ML',
+		title: 'ML Pipelines',
 		icon: '◆',
-		skills: ['ComfyUI', 'Stable Diffusion', 'NovelAI API', 'OCR & ML pipelines', 'Local LLM / TTS']
+		skills: ['Python', 'OCR & captioning (WD14)', 'Model workflows', 'Local LLM / TTS']
 	},
 	{
-		title: 'Backend & Infra',
+		title: 'Web & Deploy',
 		icon: '◆',
-		skills: ['Python', 'Node.js', 'Docker', 'Cloudflare', 'REST APIs']
+		skills: ['Node.js', 'Cloudflare', 'REST APIs', 'Nuxt.js']
 	}
 ];

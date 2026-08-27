@@ -1,184 +1,112 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { projects } from '$lib/data/projects';
-
-	let active = $state(0);
-	let timer: ReturnType<typeof setInterval> | null = null;
-	const N = projects.length;
-
-	function pause() {
-		if (timer) {
-			clearInterval(timer);
-			timer = null;
-		}
-	}
-	function next() {
-		active = (active + 1) % N;
-	}
-	function prev() {
-		active = (active - 1 + N) % N;
-	}
-	function goTo(i: number) {
-		active = i;
-	}
-	const userNext = () => {
-		pause();
-		next();
-	};
-	const userPrev = () => {
-		pause();
-		prev();
-	};
-	const userGo = (i: number) => {
-		pause();
-		goTo(i);
-	};
-
-	const cards = $derived(
-		projects.map((p, i) => {
-			let offset = i - active;
-			if (offset > N / 2) offset -= N;
-			if (offset < -N / 2) offset += N;
-			const abs = Math.abs(offset);
-			return {
-				...p,
-				initial: p.title[0],
-				og: `https://opengraph.githubassets.com/ogcard1/${p.og}`,
-				style: `transform: translateX(calc(-50% + ${offset * 58}%)) scale(${Math.max(
-					0.8,
-					1 - abs * 0.09
-				)}) rotateY(${offset * -5}deg); opacity: ${
-					abs > 2 ? 0 : abs < 0.5 ? 1 : Math.max(0, 1 - abs * 0.4)
-				}; filter: ${abs < 0.5 ? 'none' : `blur(${abs * 1.4}px)`}; z-index: ${
-					20 - Math.round(abs)
-				}; pointer-events: ${abs < 0.5 ? 'auto' : 'none'};`
-			};
-		})
-	);
+	import { reveal } from '$lib/actions/reveal';
+	import { spotlight } from '$lib/actions/spotlight';
+	import { drift, parallax, wordReveal } from '$lib/actions/scrollfx';
+	import { tilt } from '$lib/actions/tilt';
+	import ScrambleText from './ScrambleText.svelte';
 
 	function imgError(e: Event) {
-		(e.currentTarget as HTMLImageElement).style.opacity = '0';
+		const img = e.currentTarget as HTMLImageElement;
+		img.style.opacity = '0';
 	}
-
-	onMount(() => {
-		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (!reduced) timer = setInterval(next, 7000);
-		return () => pause();
-	});
 </script>
 
 <section id="work" class="work">
-	<header>
+	<span class="ghost-num" data-num="01" aria-hidden="true" use:parallax={{ speed: 0.08 }}>01</span>
+	<header use:reveal>
 		<div class="head-left">
-			<div class="eyebrow"><span class="rule"></span><span>Selected work</span></div>
-			<h2>Things I've shipped</h2>
+			<span class="sec-index"><b>01</b> selected tools</span>
+			<h2><ScrambleText text="Things I've built" /></h2>
 		</div>
-		<p class="head-note">
-			A handful I'm proud of. Everything else is live below, straight from GitHub.
+		<p class="head-note wt" use:wordReveal>
+			Apps, nodes and guides from the Mooshie workshop. Everything else is live below, straight from
+			GitHub.
 		</p>
 	</header>
 
-	<div class="scene">
-		<div class="track">
-			{#each cards as card (card.title)}
-				<div class="card" style={card.style}>
-					<div class="inner">
-						<div class="media">
-							<span class="initial">{card.initial}</span>
-							<img src={card.og} alt={card.title} loading="lazy" onerror={imgError} />
-						</div>
-						<div class="info">
-							<span class="tag">{card.tag}</span>
-							<h3>{card.title}</h3>
-							<p>{card.description}</p>
-							<div class="tech">
-								{#each card.tech as t (t)}
-									<span class="chip">{t}</span>
-								{/each}
-							</div>
-							<div class="links">
-								<a class="lbtn ghost" href={card.github} target="_blank" rel="noopener">
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-										><path
-											d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.85 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"
-										/></svg
-									>
-									Code
-								</a>
-								{#if card.demo}
-									<a class="lbtn primary" href={card.demo} target="_blank" rel="noopener">
-										Visit
-										<svg
-											width="15"
-											height="15"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2.2"
-											stroke-linecap="round"
-											stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg
-										>
-									</a>
-								{/if}
-							</div>
-						</div>
+	<div class="bento">
+		{#each projects as p, i (p.og)}
+			<a
+				class="cell glass-panel hud spot"
+				class:wide={i === 0}
+				href={p.github}
+				target="_blank"
+				rel="noopener"
+				use:reveal={{ delay: (i % 3) * 70 }}
+				use:spotlight
+				use:tilt={{ max: 5 }}
+				use:drift={{ max: 7, mult: 0.045 }}
+			>
+				<span class="hud-c"></span>
+				{#if i === 0}
+					<div class="media">
+						<span class="initial">{p.title[0]}</span>
+						<img
+							src="https://opengraph.githubassets.com/ogcard1/{p.og}"
+							alt="{p.title} preview"
+							loading="eager"
+							onerror={imgError}
+						/>
+					</div>
+				{/if}
+				<div class="body">
+					<div class="tagrow">
+						<span class="tag">{p.tag}</span>
+						{#if p.stars}
+							<span class="starbadge">
+								<svg
+									width="12"
+									height="12"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									><path
+										d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"
+									/></svg
+								>
+								{p.stars}
+							</span>
+						{/if}
+					</div>
+					<h3>{p.title}</h3>
+					<p>{p.description}</p>
+					<div class="tech">
+						{#each p.tech as t (t)}
+							<span class="chip">{t}</span>
+						{/each}
 					</div>
 				</div>
-			{/each}
-		</div>
-
-		<div class="controls">
-			<button class="nav" aria-label="Previous" onclick={userPrev}>
-				<svg
-					width="22"
-					height="22"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"><path d="M15 18 9 12l6-6" /></svg
-				>
-			</button>
-			<div class="dots">
-				{#each projects as p, i (p.title)}
-					<button
-						class="dot"
-						class:active={i === active}
-						aria-label="Go to project"
-						onclick={() => userGo(i)}
-					></button>
-				{/each}
-			</div>
-			<button class="nav" aria-label="Next" onclick={userNext}>
-				<svg
-					width="22"
-					height="22"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
-				>
-			</button>
-			<span class="counter">
-				<span class="cur">{String(active + 1).padStart(2, '0')}</span> / {String(N).padStart(
-					2,
-					'0'
-				)}
-			</span>
-		</div>
+				<span class="go" aria-hidden="true">
+					<svg
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.2"
+						stroke-linecap="round"
+						stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg
+					>
+				</span>
+			</a>
+		{/each}
 	</div>
 </section>
 
 <style>
 	.work {
+		position: relative;
 		max-width: 1320px;
 		margin: 0 auto;
 		padding: clamp(40px, 7vh, 80px) clamp(20px, 5vw, 48px);
 	}
 	header {
+		position: relative;
+		z-index: 2;
 		display: flex;
 		align-items: flex-end;
 		justify-content: space-between;
@@ -189,23 +117,7 @@
 	.head-left {
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
-	}
-	.eyebrow {
-		display: inline-flex;
-		align-items: center;
-		gap: 10px;
-		font-family: var(--font-mono);
-		font-size: var(--text-xs);
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--text-muted);
-	}
-	.rule {
-		width: 22px;
-		height: 2px;
-		background: var(--accent-500);
-		border-radius: 2px;
+		gap: 12px;
 	}
 	h2 {
 		margin: 0;
@@ -216,52 +128,50 @@
 	}
 	.head-note {
 		margin: 0;
-		max-width: 34ch;
+		max-width: 36ch;
 		color: var(--text-muted);
 		font-size: var(--text-sm);
 		line-height: 1.6;
 	}
-	.scene {
-		position: relative;
-		perspective: 1500px;
-		/* Off-active cards fan out past the viewport via translateX; clip that
-		   horizontal spill so the page never scrolls sideways on mobile. */
-		overflow-x: clip;
-	}
-	.track {
-		position: relative;
-		height: 460px;
-	}
-	.card {
-		position: absolute;
-		top: 0;
-		left: 50%;
-		width: min(94%, 860px);
-		height: 440px;
-		will-change: transform;
-		transition:
-			transform 0.6s var(--ease-spring),
-			opacity 0.45s var(--ease-out),
-			filter 0.45s;
-	}
-	.inner {
+
+	/* --- Bento grid ---------------------------------------------------------- */
+	.bento {
 		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-		height: 100%;
-		background: var(--surface-900);
-		border: 1px solid var(--border-700);
-		border-radius: var(--radius-xl);
-		overflow: hidden;
-		box-shadow: var(--shadow-panel);
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 14px;
+	}
+	.cell {
+		display: flex;
+		flex-direction: column;
+		text-decoration: none;
+		transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+			translate3d(0, var(--vy, 0px), 0);
+		transform-style: preserve-3d;
+		transition:
+			border-color var(--dur-base),
+			box-shadow var(--dur-base);
+	}
+	.cell.wide {
+		grid-column: span 2;
+		grid-row: span 2;
+	}
+	.cell:hover {
+		border-color: color-mix(in srgb, #fff 18%, transparent);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.1),
+			0 24px 60px rgba(0, 0, 0, 0.5);
 	}
 	.media {
 		position: relative;
+		flex: 1 1 auto;
+		min-height: 240px;
 		overflow: hidden;
 		background: linear-gradient(
 			135deg,
 			color-mix(in srgb, var(--accent-500) 13%, var(--surface-800)),
 			var(--surface-950)
 		);
+		border-bottom: 1px solid color-mix(in srgb, #fff 6%, transparent);
 	}
 	.initial {
 		position: absolute;
@@ -269,10 +179,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 96px;
+		font-size: 110px;
 		font-weight: 700;
 		font-family: var(--font-mono);
-		color: color-mix(in srgb, var(--accent-500) 26%, transparent);
+		color: color-mix(in srgb, var(--accent-500) 22%, transparent);
 		user-select: none;
 	}
 	.media img {
@@ -281,16 +191,27 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		object-position: top left;
+		transition: transform var(--dur-slow) var(--ease-out);
 	}
-	.info {
-		padding: clamp(20px, 2.6vw, 34px);
+	.cell:hover .media img {
+		transform: scale(1.025);
+	}
+	.body {
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
-		justify-content: center;
+		gap: 12px;
+		padding: 22px;
+		flex: 1 1 auto;
+		position: relative;
+		z-index: 3;
+	}
+	.tagrow {
+		display: flex;
+		align-items: center;
+		gap: 10px;
 	}
 	.tag {
-		align-self: flex-start;
 		font-family: var(--font-mono);
 		font-size: var(--text-10);
 		letter-spacing: 0.12em;
@@ -301,23 +222,41 @@
 		background: color-mix(in srgb, var(--accent-500) 14%, transparent);
 		border: 1px solid color-mix(in srgb, var(--accent-500) 32%, transparent);
 	}
-	.info h3 {
+	.starbadge {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--text-muted);
+		padding: 3px 9px;
+		border-radius: var(--radius-sm);
+		background: var(--surface-800);
+		border: 1px solid var(--border-700);
+	}
+	h3 {
 		margin: 0;
-		font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+		font-size: clamp(1.15rem, 1.8vw, 1.45rem);
 		font-weight: 700;
 		letter-spacing: -0.02em;
 		color: var(--text-strong);
 	}
-	.info p {
+	.cell.wide h3 {
+		font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+	}
+	.body p {
 		margin: 0;
 		color: var(--text-muted);
 		font-size: var(--text-sm);
 		line-height: 1.6;
+		flex: 1 1 auto;
 	}
 	.tech {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 7px;
+		margin-top: auto;
 	}
 	.chip {
 		display: inline-flex;
@@ -325,108 +264,56 @@
 		height: 25px;
 		padding: 0 10px;
 		border-radius: var(--radius-sm);
-		background: var(--surface-800);
-		border: 1px solid var(--border-700);
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid color-mix(in srgb, #fff 8%, transparent);
 		color: var(--text-muted);
 		font-size: var(--text-xs);
 		font-weight: 500;
 	}
-	.links {
-		display: flex;
-		gap: 10px;
-		flex-wrap: wrap;
-		margin-top: 6px;
-	}
-	.lbtn {
+	.go {
+		position: absolute;
+		top: 14px;
+		right: 14px;
 		display: inline-flex;
 		align-items: center;
-		gap: 7px;
-		height: 38px;
-		padding: 0 16px;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
 		border-radius: var(--radius-md);
-		font-size: var(--text-sm);
-		font-weight: 600;
-		text-decoration: none;
-		transition:
-			background var(--dur-fast),
-			border-color var(--dur-fast);
-	}
-	.lbtn.ghost {
-		background: var(--surface-800);
-		border: 1px solid var(--border-700);
-		color: var(--text);
-	}
-	.lbtn.ghost:hover {
-		background: var(--neutral-700);
-		border-color: var(--neutral-600);
-	}
-	.lbtn.primary {
-		background: var(--accent-500);
-		color: var(--accent-foreground);
-		box-shadow: var(--shadow-accent);
-	}
-	.lbtn.primary:hover {
-		background: var(--accent-400);
-	}
-	.controls {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 18px;
-		margin-top: 26px;
-	}
-	.nav {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 44px;
-		height: 44px;
-		border-radius: var(--radius-full);
-		border: 1px solid var(--border-700);
-		background: var(--surface-900);
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid color-mix(in srgb, #fff 12%, transparent);
 		color: var(--text-muted);
-		cursor: pointer;
+		opacity: 0;
+		transform: translate(-3px, 3px);
 		transition:
-			color var(--dur-fast),
-			border-color var(--dur-fast),
-			transform var(--dur-fast);
+			opacity var(--dur-base),
+			transform var(--dur-base) var(--ease-spring),
+			color var(--dur-base),
+			border-color var(--dur-base);
+		z-index: 4;
 	}
-	.nav:hover {
+	.cell:hover .go {
+		opacity: 1;
+		transform: translate(0, 0);
 		color: var(--accent-500);
-		border-color: color-mix(in srgb, var(--accent-500) 45%, var(--border-700));
-		transform: scale(1.06);
+		border-color: color-mix(in srgb, var(--accent-500) 45%, transparent);
 	}
-	.dots {
-		display: flex;
-		align-items: center;
-		gap: 9px;
+
+	@media (max-width: 1020px) {
+		.bento {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 	}
-	.dot {
-		width: 9px;
-		height: 9px;
-		border-radius: 99px;
-		border: none;
-		padding: 0;
-		background: var(--neutral-700);
-		cursor: pointer;
-		transition:
-			width 0.35s var(--ease-spring),
-			background 0.25s;
-	}
-	.dot.active {
-		width: 28px;
-		background: var(--accent-500);
-		box-shadow: 0 0 8px color-mix(in srgb, var(--accent-500) 50%, transparent);
-	}
-	.counter {
-		margin-left: 6px;
-		font-family: var(--font-mono);
-		font-size: var(--text-sm);
-		letter-spacing: 0.08em;
-		color: var(--text-subtle);
-	}
-	.cur {
-		color: var(--accent-500);
-		font-weight: 600;
+	@media (max-width: 640px) {
+		.bento {
+			grid-template-columns: 1fr;
+		}
+		.cell.wide {
+			grid-column: span 1;
+			grid-row: span 1;
+		}
+		.media {
+			min-height: 200px;
+		}
 	}
 </style>

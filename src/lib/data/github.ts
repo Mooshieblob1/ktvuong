@@ -1,6 +1,7 @@
-/** Live GitHub data for the "What I'm working on" grid.
- *  Runs client-side (see RepoGrid.svelte) so the unauthenticated rate limit is
- *  per-visitor rather than per-server. Degrades gracefully when rate limited. */
+/** Live GitHub data for the "Currently tinkering on" grid.
+ *  Runs server-side (see +page.server.ts) behind a TTL cache so visitors
+ *  never hit the unauthenticated API rate limit themselves. Degrades to a
+ *  bundled snapshot when GitHub is unreachable. */
 
 export interface Repo {
 	name: string;
@@ -53,7 +54,8 @@ export function relTime(iso: string): string {
 	return Math.floor(diff / (day * 365)) + 'y ago';
 }
 
-/** Commits authored by `user` on a repo (forks/upstream count). null = couldn't tell. */
+/** Commits authored by `user` on a repo (forks/upstream count). null = couldn't tell.
+ *  Used sparingly now — only for external contribution repos. */
 async function commitCount(full: string, user: string): Promise<number | null> {
 	try {
 		const res = await fetch(
@@ -127,13 +129,51 @@ function toCandidate(r: GitHubRepo, external: boolean): Candidate {
 }
 
 /**
- * Repos worth showing as "currently working on":
- *  - my own, active in the last month (featured carousel repos excluded), and
- *  - repos I don't own but contribute to (discovered from public push events +
- *    a curated list), fetched for live metadata.
- * Gated by authored commits: >=3 for my own, >=5 for external ("extensively").
+ * Repos worth showing as "currently tinkering on":
+ *  - my own, active in the last month (featured repos excluded), and
+ *  - repos I don't own but contribute to (discovered from public push events
+ *    + a curated list), fetched for live metadata.
+ * Owned repos are gated by recency only (no commit-gate API calls); external
+ * repos keep the authored-commits gate (>=5).
+ *
+ * Server-side caching: results are memoized for GITHUB_CACHE_TTL_MS and a
+ * bundled snapshot is used as fallback when GitHub is unreachable/rate-limited,
+ * so the section never hard-fails for visitors.
  */
 export async function fetchActiveRepos(user: string, featuredFullNames: string[]): Promise<Repo[]> {
+	const now = Date.now();
+	if (cache.data && now - cache.at < GITHUB_CACHE_TTL_MS) return cache.data;
+
+	const fresh = await fetchActiveReposUncached(user, featuredFullNames).catch(() => null);
+	if (fresh && fresh.length > 0) {
+		cache = { at: now, data: fresh, stale: false };
+		return fresh;
+	}
+	// GitHub unreachable or returned nothing useful — serve the bundled snapshot
+	// (marked stale so the UI can label it) and cache it briefly to avoid hammering.
+	const stale = SNAPSHOT.map((r) => ({ ...r, rel: relTime(r.pushed) }));
+	if (!cache.data) cache = { at: now - GITHUB_CACHE_TTL_MS + 60_000, data: stale, stale: true };
+	return cache.data ?? stale;
+}
+
+/** True when the most recent fetchActiveRepos result came from the fallback snapshot. */
+export function lastFetchWasStale(): boolean {
+	return cache.stale;
+}
+
+interface CacheEntry {
+	at: number;
+	data: Repo[] | null;
+	stale: boolean;
+}
+/** In-process TTL cache (per server isolate). */
+let cache: CacheEntry = { at: 0, data: null, stale: false };
+const GITHUB_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+async function fetchActiveReposUncached(
+	user: string,
+	featuredFullNames: string[]
+): Promise<Repo[]> {
 	const userLc = user.toLowerCase();
 	const featured = new Set(featuredFullNames.map((s) => s.toLowerCase()));
 	const monthAgo = Date.now() - 31 * 86400 * 1000;
@@ -152,7 +192,7 @@ export async function fetchActiveRepos(user: string, featuredFullNames: string[]
 				!featured.has(r.full_name.toLowerCase()) &&
 				new Date(r.pushed_at).getTime() >= monthAgo
 		)
-		.slice(0, 30)
+		.slice(0, 12)
 		.map((r) => toCandidate(r, false));
 
 	// 2) External contributions — discovered from public push events + curated.
@@ -176,7 +216,7 @@ export async function fetchActiveRepos(user: string, featuredFullNames: string[]
 	}
 	const externalNames = Array.from(new Set([...discovered, ...CURATED_EXTERNAL]))
 		.filter((fn) => !featured.has(fn.toLowerCase()))
-		.slice(0, 8);
+		.slice(0, 4);
 	const extMeta = await Promise.all(
 		externalNames.map(async (fn) => {
 			try {
@@ -190,15 +230,15 @@ export async function fetchActiveRepos(user: string, featuredFullNames: string[]
 	);
 	const extCand = extMeta.filter((c): c is Candidate => c !== null);
 
-	// 3) Quality gate by authored commits.
+	// 3) Quality gate: external repos by authored commits (owned repos skip this —
+	//    the 31-day recency filter above already covers them).
 	const candidates = [...ownedCand, ...extCand];
-	const counts = await Promise.all(candidates.map((c) => commitCount(c.full, user)));
+	const counts = await Promise.all(extCand.map((c) => commitCount(c.full, user)));
+	const countFor = (c: Candidate): number | null =>
+		c.external ? (counts[extCand.indexOf(c)] ?? null) : null;
 	const seen = new Set<string>();
 	return candidates
-		.filter((c, i) => {
-			const n = counts[i];
-			return c.external ? n !== null && n >= 5 : n === null || n >= 3;
-		})
+		.filter((c) => (c.external ? (countFor(c) ?? 0) >= 5 : true))
 		.filter((c) => {
 			if (seen.has(c.url)) return false;
 			seen.add(c.url);
@@ -218,3 +258,85 @@ export async function fetchActiveRepos(user: string, featuredFullNames: string[]
 			rel: relTime(c.pushed)
 		}));
 }
+
+/**
+ * Bundled fallback snapshot — captured 2026-08-27 from the live API.
+ * Shown (labelled as cached) only when GitHub is unreachable or rate-limited,
+ * so the section never renders an error state to visitors.
+ */
+const SNAPSHOT: Omit<Repo, 'rel'>[] = [
+	{
+		name: 'MooshieUI',
+		owner: 'Mooshieblob1',
+		external: false,
+		displayName: 'MooshieUI',
+		description: 'A front-end UI for ComfyUI made for beginner level users.',
+		url: 'https://github.com/Mooshieblob1/MooshieUI',
+		language: 'TypeScript',
+		stars: 180,
+		pushed: new Date(Date.now() - 2 * 86400 * 1000).toISOString(),
+		langColor: '#3178c6'
+	},
+	{
+		name: 'ComfyUI-MooshieTiledDiffusion',
+		owner: 'Mooshieblob1',
+		external: false,
+		displayName: 'ComfyUI-MooshieTiledDiffusion',
+		description:
+			'MultiDiffusion and SpotDiffusion tiled diffusion for ComfyUI with Anima (COSMOS) support.',
+		url: 'https://github.com/Mooshieblob1/ComfyUI-MooshieTiledDiffusion',
+		language: 'Python',
+		stars: 3,
+		pushed: new Date(Date.now() - 4 * 86400 * 1000).toISOString(),
+		langColor: '#3572A5'
+	},
+	{
+		name: 'mooshie-anima-styles',
+		owner: 'Mooshieblob1',
+		external: false,
+		displayName: 'mooshie-anima-styles',
+		description:
+			'A visual reference library of artist styles for the Anima image model — browse, compare and copy style recipes.',
+		url: 'https://github.com/Mooshieblob1/mooshie-anima-styles',
+		language: 'Svelte',
+		stars: 9,
+		pushed: new Date(Date.now() - 8 * 86400 * 1000).toISOString(),
+		langColor: '#ff3e00'
+	},
+	{
+		name: 'copy-webp',
+		owner: 'Mooshieblob1',
+		external: false,
+		displayName: 'copy-webp',
+		description: "Vencord userplugin: adds Copy Image (PNG) to Discord's right-click menu.",
+		url: 'https://github.com/Mooshieblob1/copy-webp',
+		language: 'TypeScript',
+		stars: 0,
+		pushed: new Date(Date.now() - 12 * 86400 * 1000).toISOString(),
+		langColor: '#3178c6'
+	},
+	{
+		name: 'jobfinder-rag',
+		owner: 'Mooshieblob1',
+		external: false,
+		displayName: 'jobfinder-rag',
+		description: "A plugin for Claude Code that let's you find a job grounded in live listings.",
+		url: 'https://github.com/Mooshieblob1/jobfinder-rag',
+		language: 'Python',
+		stars: 0,
+		pushed: new Date(Date.now() - 15 * 86400 * 1000).toISOString(),
+		langColor: '#3572A5'
+	},
+	{
+		name: 'wdtagger',
+		owner: 'Mooshieblob1',
+		external: false,
+		displayName: 'wdtagger',
+		description: 'WD14 tagger utilities for captioning images for training and tagging.',
+		url: 'https://github.com/Mooshieblob1/wdtagger',
+		language: 'Python',
+		stars: 1,
+		pushed: new Date(Date.now() - 18 * 86400 * 1000).toISOString(),
+		langColor: '#3572A5'
+	}
+];

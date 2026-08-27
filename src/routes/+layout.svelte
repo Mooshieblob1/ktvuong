@@ -2,6 +2,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import TmuxBar from '$lib/components/TmuxBar.svelte';
+	import Rofi from '$lib/components/Rofi.svelte';
 	import '../app.css';
 
 	let { children } = $props();
@@ -29,10 +31,10 @@
 </script>
 
 <svelte:head>
-	<title>Kent Vuong — Software Engineer</title>
+	<title>Kent Vuong — Creative AI Toolmaker</title>
 	<meta
 		name="description"
-		content="Full-stack & DevOps engineer based in Perth. Selected work and open-source projects."
+		content="Kent Vuong (a.k.a. Mooshieblob) builds generative AI tools people actually enjoy using — MooshieUI, ComfyUI nodes, style libraries and guides. Selected work and open source."
 	/>
 	<!-- Keep the portfolio out of search results — only people you send the link to find it. -->
 	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
@@ -45,3 +47,12 @@
 </main>
 
 <Footer />
+<TmuxBar />
+<Rofi />
+
+<style>
+	main {
+		/* Keep content clear of the fixed tmux bar. */
+		padding-bottom: 34px;
+	}
+</style>

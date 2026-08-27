@@ -1,19 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { fetchActiveRepos, type Repo } from '$lib/data/github';
-	import { featuredFullNames } from '$lib/data/projects';
+	import type { Repo } from '$lib/data/github';
+	import { reveal } from '$lib/actions/reveal';
+	import { spotlight } from '$lib/actions/spotlight';
+	import { drift, parallax, wordReveal } from '$lib/actions/scrollfx';
+	import ScrambleText from './ScrambleText.svelte';
 	import SegmentedControl from './ui/SegmentedControl.svelte';
 	import StatusDot from './ui/StatusDot.svelte';
 
-	const GH_USER = 'Mooshieblob1';
+	let { data }: { data: { repos: Repo[] | null; stale: boolean } } = $props();
+
 	const INITIAL = 9;
 
-	let repos = $state<Repo[] | null>(null);
-	let error = $state(false);
 	let sort = $state<'recent' | 'stars'>('recent');
 	let expanded = $state(false);
 
-	const loading = $derived(repos === null && !error);
+	const repos = $derived(data.repos);
+	const stale = $derived(data.stale);
+	const loading = $derived(repos === null);
 	const sorted = $derived(
 		repos
 			? [...repos].sort((a, b) =>
@@ -25,25 +28,24 @@
 	);
 	const visible = $derived(expanded ? sorted : sorted.slice(0, INITIAL));
 	const hasMore = $derived(sorted.length > INITIAL && !expanded);
-	const noRepos = $derived(repos !== null && repos.length === 0 && !error);
-
-	onMount(async () => {
-		try {
-			repos = await fetchActiveRepos(GH_USER, featuredFullNames);
-		} catch {
-			error = true;
-		}
-	});
+	const noRepos = $derived(repos !== null && repos.length === 0);
 </script>
 
 <section id="repos" class="repos">
-	<header>
+	<span class="ghost-num" data-num="02" aria-hidden="true" use:parallax={{ speed: 0.08 }}>02</span>
+	<header use:reveal>
 		<div class="head-left">
-			<div class="eyebrow"><span class="rule"></span><span>Live from GitHub</span></div>
-			<h2>What I'm working on</h2>
-			<div class="sub">
-				<StatusDot status="online" pulse />
-				<span>Recent work &amp; open-source contributions, pulled live from GitHub</span>
+			<span class="sec-index"><b>02</b> live from GitHub</span>
+			<h2><ScrambleText text="Currently tinkering on" /></h2>
+			<div class="sub wt" use:wordReveal>
+				<StatusDot status={stale ? 'idle' : 'online'} pulse={!stale} />
+				<span>
+					{#if stale}
+						Showing a recent snapshot — live GitHub data is temporarily unavailable
+					{:else}
+						Experiments &amp; open-source contributions, pulled live from GitHub
+					{/if}
+				</span>
 			</div>
 		</div>
 		<div class="sortbar">
@@ -62,24 +64,25 @@
 				<div class="skel"></div>
 			{/each}
 		</div>
-	{:else if error}
-		<div class="notice">
-			Couldn't reach the GitHub API right now.
-			<a href="https://github.com/{GH_USER}" target="_blank" rel="noopener"
-				>View the profile directly →</a
-			>
-		</div>
 	{:else if noRepos}
 		<div class="notice">
 			Nothing to show right now — see the featured work above, or
-			<a href="https://github.com/{GH_USER}" target="_blank" rel="noopener"
+			<a href="https://github.com/Mooshieblob1" target="_blank" rel="noopener"
 				>browse everything on GitHub →</a
 			>
 		</div>
 	{:else}
 		<div class="grid">
 			{#each visible as repo (repo.url)}
-				<a class="repo" href={repo.url} target="_blank" rel="noopener">
+				<a
+					class="repo glass-panel hud spot"
+					href={repo.url}
+					target="_blank"
+					rel="noopener"
+					use:spotlight
+					use:drift={{ max: 5, mult: 0.035 }}
+				>
+					<span class="hud-c"></span>
 					<div class="top">
 						<span class="title">
 							<svg
@@ -97,22 +100,43 @@
 							>
 							<span class="name">{repo.displayName}</span>
 						</span>
-						<span class="stars">
-							<svg
-								width="13"
-								height="13"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								><path
-									d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"
-								/></svg
-							>
-							{repo.stars}
-						</span>
+						{#if repo.external}
+							<span class="contrib">
+								<svg
+									width="11"
+									height="11"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle
+										cx="18"
+										cy="9"
+										r="2.5"
+									/><path d="M6 8.5v7M8.5 6.5l7 1.5M8.5 16.5l7-6" /></svg
+								>
+								contributor
+							</span>
+						{:else}
+							<span class="stars">
+								<svg
+									width="13"
+									height="13"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									><path
+										d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"
+									/></svg
+								>
+								{repo.stars}
+							</span>
+						{/if}
 					</div>
 					<p class="desc">{repo.description}</p>
 					<div class="meta">
@@ -135,26 +159,6 @@
 							>
 							{repo.rel}
 						</span>
-						{#if repo.external}
-							<span class="contrib">
-								<svg
-									width="11"
-									height="11"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2.2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle
-										cx="18"
-										cy="9"
-										r="2.5"
-									/><path d="M6 8.5v7M8.5 6.5l7 1.5M8.5 16.5l7-6" /></svg
-								>
-								contributor
-							</span>
-						{/if}
 					</div>
 				</a>
 			{/each}
@@ -181,11 +185,14 @@
 
 <style>
 	.repos {
+		position: relative;
 		max-width: 1320px;
 		margin: 0 auto;
 		padding: clamp(40px, 7vh, 80px) clamp(20px, 5vw, 48px);
 	}
 	header {
+		position: relative;
+		z-index: 2;
 		display: flex;
 		align-items: flex-end;
 		justify-content: space-between;
@@ -197,22 +204,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 14px;
-	}
-	.eyebrow {
-		display: inline-flex;
-		align-items: center;
-		gap: 10px;
-		font-family: var(--font-mono);
-		font-size: var(--text-xs);
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--text-muted);
-	}
-	.rule {
-		width: 22px;
-		height: 2px;
-		background: var(--accent-500);
-		border-radius: 2px;
 	}
 	h2 {
 		margin: 0;
@@ -267,19 +258,15 @@
 		flex-direction: column;
 		gap: 11px;
 		padding: 18px;
-		background: var(--surface-900);
-		border: 1px solid var(--border-700);
-		border-radius: var(--radius-lg);
 		text-decoration: none;
-		transition:
-			transform var(--dur-base) var(--ease-spring),
-			border-color var(--dur-base),
-			box-shadow var(--dur-base);
+		transform: translate3d(0, var(--vy, 0px), 0);
+		will-change: transform;
 	}
 	.repo:hover {
-		transform: translateY(-3px);
-		border-color: color-mix(in srgb, var(--accent-500) 45%, var(--border-700));
-		box-shadow: var(--shadow-md);
+		border-color: color-mix(in srgb, #fff 18%, transparent);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.1),
+			0 20px 48px rgba(0, 0, 0, 0.5);
 	}
 	.top {
 		display: flex;

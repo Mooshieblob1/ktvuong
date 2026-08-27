@@ -218,9 +218,13 @@
 	.frame {
 		border-radius: var(--radius-xl);
 		overflow: hidden;
-		border: 1px solid var(--border-700);
-		background: var(--surface-900);
-		box-shadow: var(--shadow-panel);
+		border: 1px solid color-mix(in srgb, #fff 9%, transparent);
+		background: color-mix(in srgb, var(--surface-900) 55%, transparent);
+		backdrop-filter: blur(16px) saturate(150%);
+		-webkit-backdrop-filter: blur(16px) saturate(150%);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 24px 60px rgba(0, 0, 0, 0.45);
 	}
 	.bar {
 		display: flex;

@@ -5,17 +5,19 @@
 <h1 align="center">Kent Vuong — Portfolio</h1>
 
 <p align="center">
-  A modern, responsive portfolio website built with SvelteKit and Tailwind CSS, deployed on Cloudflare Pages.
+  Portfolio for Kent Vuong (a.k.a. Mooshieblob on GitHub) — a creative AI toolmaker building
+  generative-AI tools that artists actually enjoy using. Built with SvelteKit and Tailwind CSS,
+  deployed on Cloudflare Pages.
 </p>
 
 ## Features
 
 - Responsive mobile-first design
-- Custom KV gradient logo and branded gradient text
-- Animated drifting gradient orbs in the hero section
+- Mooshie Yellow branding on near-black, lifted from the MooshieUI design system
+- Animated ComfyUI node-graph canvas in the hero, plus drifting gradient orbs
 - Smooth scrolling via [Lenis](https://github.com/darkroomengineering/lenis) on Chromium, native CSS smooth scroll on Firefox
-- Project showcase with swipeable carousel
-- Technical skills visualization with categorized progress bars
+- Bento-style project showcase grid
+- Live "currently tinkering on" repo grid, pulled from the GitHub API
 - Email obfuscation to prevent scraping by bots
 - Cloudflare Web Analytics
 
@@ -37,18 +39,19 @@
 ```
 ktvuong/
 ├── src/
-│   ├── lib/components/    # Header, Footer, Hero
+│   ├── lib/components/    # Header, Footer, Hero, NodeGraph
+│   ├── lib/data/          # Featured projects, skills, GitHub fetcher
 │   ├── routes/
 │   │   ├── +layout.svelte # Lenis init, global layout
-│   │   └── +page.svelte   # Main page (about, projects, skills, contact)
-│   ├── app.css            # Global styles, gradient text, orb animations
+│   │   └── +page.svelte   # Main page (about, tools, repos, skills, contact)
+│   ├── app.css            # Global styles, tool-window chrome, animations
 │   └── app.html           # HTML template
 ├── static/
 │   ├── favicon.svg        # KV gradient logo
 │   ├── emailProtection.js # Email obfuscation script
 │   └── site*img/          # Project thumbnails
 ├── svelte.config.js
-├── vite.config.js
+├── vite.config.ts
 └── package.json
 ```
 

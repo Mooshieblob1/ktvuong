@@ -80,13 +80,16 @@
 		background: var(--accent-400);
 	}
 	.secondary {
-		background: var(--surface-800);
+		background: rgba(255, 255, 255, 0.06);
 		color: var(--text);
-		border-color: var(--border-700);
+		border-color: color-mix(in srgb, #fff 12%, transparent);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
 	}
 	.secondary:hover {
-		background: var(--neutral-700);
-		border-color: var(--neutral-600);
+		background: rgba(255, 255, 255, 0.1);
+		border-color: color-mix(in srgb, #fff 20%, transparent);
 	}
 	.ghost {
 		background: transparent;

@@ -1,5 +1,24 @@
 import { fail } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
+import { fetchActiveRepos, lastFetchWasStale } from '$lib/data/github';
+import { featuredFullNames } from '$lib/data/projects';
+
+const GH_USER = 'Mooshieblob1';
+
+export const load: PageServerLoad = async ({ setHeaders }) => {
+	let repos = null;
+	try {
+		repos = await fetchActiveRepos(GH_USER, featuredFullNames);
+	} catch {
+		repos = null;
+	}
+	// Cache at the CDN edge for 5 minutes; stale-while-revalidate keeps the last
+	// good response available if GitHub is down.
+	setHeaders({
+		'cache-control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600'
+	});
+	return { reposData: { repos, stale: lastFetchWasStale() } };
+};
 
 export const actions: Actions = {
 	contact: async ({ request, platform }) => {

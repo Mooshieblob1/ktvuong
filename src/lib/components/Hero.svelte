@@ -1,62 +1,139 @@
 <script lang="ts">
 	import { scrollToId } from '$lib/scroll';
+	import { reveal } from '$lib/actions/reveal';
+	import { spotlight } from '$lib/actions/spotlight';
 	import Button from './ui/Button.svelte';
 	import StatusDot from './ui/StatusDot.svelte';
+	import NodeGraph from './NodeGraph.svelte';
 
 	const openToWork = true;
 
 	// Accurate to what the repos demonstrate (see src/lib/data/skills.ts).
 	// Rendered twice in the template so the -50% marquee loop is seamless.
 	const stack = [
+		'ComfyUI',
+		'Stable Diffusion',
+		'Flux',
+		'NovelAI',
 		'Svelte',
-		'SvelteKit',
-		'TypeScript',
-		'Rust',
 		'Tauri',
+		'Rust',
 		'Python',
-		'Docker',
-		'Cloudflare',
 		'Tailwind CSS'
 	];
+
+	const stats = [
+		{ n: 180, suffix: '★', label: 'on MooshieUI' },
+		{ n: 63, suffix: '', label: 'public repos' },
+		{ n: 6, suffix: '+', label: 'AI tools shipped' }
+	];
+
+	/** Count-up when the stat scrolls into view. */
+	function countUp(node: HTMLElement, params: { n: number; suffix: string }) {
+		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (reduced) {
+			node.textContent = `${params.n}${params.suffix}`;
+			return { destroy: () => {} };
+		}
+		const dur = 1100;
+		const run = () => {
+			const t0 = performance.now();
+			const tick = (now: number) => {
+				const p = Math.min(1, (now - t0) / dur);
+				const eased = 1 - Math.pow(1 - p, 3);
+				node.textContent = `${Math.round(params.n * eased)}${params.suffix}`;
+				if (p < 1) requestAnimationFrame(tick);
+			};
+			requestAnimationFrame(tick);
+		};
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					if (e.isIntersecting) {
+						run();
+						io.disconnect();
+					}
+				}
+			},
+			{ threshold: 0.5 }
+		);
+		io.observe(node);
+		return {
+			destroy: () => io.disconnect()
+		};
+	}
 </script>
 
 <section id="about" class="hero">
-	<!-- Decorative backdrop: clips its own children so the page never scrolls sideways. -->
+	<!-- Backdrop layers: aurora + blueprint grid + scanline + grain. -->
 	<div class="backdrop" aria-hidden="true">
 		<div class="aurora"></div>
-		<div class="blur-shape"></div>
+		<div class="gridlines tex"></div>
+		<div class="scan-sweep"></div>
+		<div class="noise"></div>
 	</div>
 
 	<div class="content">
-		<div class="eyebrow">
-			<StatusDot
-				status={openToWork ? 'online' : 'idle'}
-				pulse={openToWork}
-				label={openToWork ? 'Available for work' : 'Currently heads-down'}
-			/>
-			<span class="sep"></span>
-			<span class="tag">Full-stack · DevOps · AI tooling</span>
-		</div>
+		<div class="cols">
+			<div class="left">
+				<div class="eyebrow" use:reveal>
+					<StatusDot
+						status={openToWork ? 'online' : 'idle'}
+						pulse={openToWork}
+						label={openToWork ? 'Available for work' : 'Currently heads-down'}
+					/>
+					<span class="sep"></span>
+					<span class="tag">Creative AI tooling · Desktop apps · Open source</span>
+				</div>
 
-		<h1>Kent <span class="grad">Vuong</span></h1>
+				<h1 use:reveal={{ delay: 60 }}>Kent <span class="grad">Vuong</span></h1>
 
-		<p class="lead">
-			I build fast, practical software — from desktop AI tools to web apps and the infrastructure
-			under them.
-		</p>
+				<p class="lead" use:reveal={{ delay: 120 }}>
+					I build generative AI art tools that artists actually enjoy using — desktop apps, ComfyUI
+					nodes and guides that hide the plumbing and put the fun back in.
+				</p>
 
-		<div class="cta">
-			<Button size="lg" onclick={() => scrollToId('work')}>View my work</Button>
-			<Button variant="secondary" size="lg" onclick={() => scrollToId('contact')}>
-				Get in touch
-			</Button>
+				<div class="cta" use:reveal={{ delay: 180 }}>
+					<Button size="lg" onclick={() => scrollToId('work')}>Explore the tools</Button>
+					<Button variant="secondary" size="lg" onclick={() => scrollToId('contact')}>
+						Get in touch
+					</Button>
+				</div>
+
+				<dl class="stats" use:reveal={{ delay: 240 }}>
+					{#each stats as s (s.label)}
+						<div class="stat">
+							<dt>{s.label}</dt>
+							<dd class="glow" use:countUp={{ n: s.n, suffix: s.suffix }}>0{s.suffix}</dd>
+						</div>
+					{/each}
+				</dl>
+
+				<div class="readout mono" use:reveal={{ delay: 300 }} aria-hidden="true">
+					<span class="ro prompt"><span class="ps1">[kv@arch ~]$</span> pacman -Qi mooshieui</span>
+					<span class="ro ok">installed 180★ · deps: comfyui, svelte, tauri</span>
+					<span class="ro">lat -31.95° lon 115.86°</span>
+					<span class="ro accent">uptime: since 2020</span>
+				</div>
+			</div>
+
+			<div class="right" use:reveal={{ delay: 200 }}>
+				<div class="graphwrap hud" use:spotlight>
+					<span class="hud-c"></span>
+					<NodeGraph />
+				</div>
+				<div class="graph-meta mono" aria-hidden="true">
+					<span>LIVE RENDER PIPELINE — CANVAS / RAF</span>
+					<span class="ok">● 60 FPS</span>
+				</div>
+			</div>
 		</div>
 	</div>
 
 	<div class="marquee" aria-hidden="true">
 		<div class="marquee-label">
-			<span>Built with</span>
-			<span>the tools I reach for</span>
+			<span>Powered by</span>
+			<span>the models &amp; tools I build on</span>
 		</div>
 		<div class="marquee-viewport">
 			<ul class="marquee-track">
@@ -78,6 +155,16 @@
 		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
+		overflow: hidden;
+	}
+	.mono {
+		font-family: var(--font-mono);
+	}
+	.ok {
+		color: var(--success);
+	}
+	.accent {
+		color: var(--accent-400);
 	}
 
 	/* --- Backdrop ---------------------------------------------------------- */
@@ -85,7 +172,6 @@
 		position: absolute;
 		inset: 0;
 		z-index: 0;
-		overflow: hidden;
 		pointer-events: none;
 	}
 	.aurora {
@@ -93,53 +179,59 @@
 		inset: -20%;
 		background:
 			radial-gradient(
-				38% 44% at 32% 34%,
-				color-mix(in srgb, var(--accent-500) 26%, transparent),
+				38% 44% at 26% 36%,
+				color-mix(in srgb, var(--accent-500) 30%, transparent),
 				transparent 72%
 			),
 			radial-gradient(
-				34% 40% at 70% 62%,
-				color-mix(in srgb, var(--accent-600) 22%, transparent),
+				34% 40% at 74% 58%,
+				color-mix(in srgb, #8caaff 16%, transparent),
 				transparent 70%
 			),
 			radial-gradient(
 				46% 54% at 54% 48%,
-				color-mix(in srgb, var(--accent-400) 12%, transparent),
+				color-mix(in srgb, var(--accent-400) 14%, transparent),
 				transparent 76%
 			);
 		animation: mb-aurora 24s var(--ease-standard) infinite;
 		will-change: transform;
 	}
-	.blur-shape {
+	.tex {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: min(984px, 100vw);
-		height: 527px;
-		transform: translate(-50%, -50%);
-		background: var(--surface-950);
-		opacity: 0.9;
-		filter: blur(82px);
+		inset: 0;
+		opacity: 0.55;
 	}
 
-	/* --- Centered content -------------------------------------------------- */
+	/* --- Two-column composition -------------------------------------------- */
 	.content {
 		position: relative;
 		z-index: 10;
 		flex: 1 1 auto;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		text-align: center;
-		gap: 20px;
-		padding: 108px clamp(20px, 5vw, 48px) 32px;
+		padding: 128px clamp(20px, 5vw, 48px) 40px;
+		max-width: 1400px;
+		margin: 0 auto;
+		width: 100%;
+	}
+	.cols {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+		align-items: center;
+		gap: clamp(28px, 5vw, 72px);
+		width: 100%;
+	}
+	.left {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		text-align: left;
+		gap: 22px;
 	}
 	.eyebrow {
 		display: inline-flex;
 		align-items: center;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 12px;
 		font-family: var(--font-mono);
 		font-size: var(--text-xs);
@@ -157,12 +249,11 @@
 	}
 	h1 {
 		margin: 0;
-		max-width: 100%;
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: clamp(2.75rem, 12vw, 200px);
-		line-height: 1.02;
-		letter-spacing: -0.024em;
+		font-size: clamp(3rem, 7.5vw, 7rem);
+		line-height: 0.98;
+		letter-spacing: -0.03em;
 		color: var(--text-strong);
 	}
 	.grad {
@@ -173,7 +264,7 @@
 	}
 	.lead {
 		margin: 0;
-		max-width: 42ch;
+		max-width: 44ch;
 		font-size: var(--text-lg);
 		line-height: 1.6;
 		color: var(--text-muted);
@@ -182,9 +273,8 @@
 	.cta {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 12px;
-		margin-top: 8px;
+		margin-top: 2px;
 	}
 	/* Round the shared Button pills to echo the source design. */
 	.cta :global(.btn) {
@@ -193,7 +283,72 @@
 		padding-right: 24px;
 	}
 
-	/* --- Tech marquee (pinned to the bottom of the hero) ------------------- */
+	/* --- Stats + readout ----------------------------------------------------- */
+	.stats {
+		display: flex;
+		flex-wrap: wrap;
+		gap: clamp(20px, 3vw, 40px);
+		margin: 10px 0 0;
+		padding: 0;
+	}
+	.stat {
+		display: flex;
+		flex-direction: column-reverse;
+		gap: 2px;
+	}
+	.stat dt {
+		font-size: var(--text-xs);
+		color: var(--text-subtle);
+	}
+	.stat dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--text-xl);
+		font-weight: 600;
+		color: var(--text-strong);
+	}
+	.readout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 6px;
+	}
+	.ro {
+		display: inline-flex;
+		align-items: center;
+		height: 22px;
+		padding: 0 10px;
+		border-radius: 3px;
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		color: var(--text-subtle);
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid color-mix(in srgb, #fff 7%, transparent);
+	}
+	.ps1 {
+		color: var(--accent-400);
+		margin-right: 6px;
+	}
+
+	/* --- Node graph column --------------------------------------------------- */
+	.right {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.graphwrap {
+		position: relative;
+	}
+	.graph-meta {
+		display: flex;
+		justify-content: space-between;
+		font-size: 10px;
+		letter-spacing: 0.14em;
+		color: var(--text-subtle);
+	}
+
+	/* --- Tech marquee -------------------------------------------------------- */
 	.marquee {
 		position: relative;
 		z-index: 10;
@@ -255,6 +410,14 @@
 		color: var(--text);
 	}
 
+	@media (max-width: 980px) {
+		.cols {
+			grid-template-columns: 1fr;
+		}
+		.right {
+			max-width: 560px;
+		}
+	}
 	@media (max-width: 640px) {
 		.marquee {
 			flex-direction: column;

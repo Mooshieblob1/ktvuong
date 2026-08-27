@@ -4,10 +4,12 @@
 	import RepoGrid from '$lib/components/RepoGrid.svelte';
 	import Skills from '$lib/components/Skills.svelte';
 	import Contact from '$lib/components/Contact.svelte';
+
+	let { data } = $props();
 </script>
 
 <Hero />
 <FeaturedProjects />
-<RepoGrid />
+<RepoGrid data={data.reposData} />
 <Skills />
 <Contact />

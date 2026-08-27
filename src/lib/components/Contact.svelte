@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { reveal } from '$lib/actions/reveal';
 	import Input from './ui/Input.svelte';
 	import Textarea from './ui/Textarea.svelte';
 	import Button from './ui/Button.svelte';
+	import ScrambleText from './ScrambleText.svelte';
+	import WinBar from './WinBar.svelte';
 
 	let sent = $state(false);
 	let errMsg = $state('');
@@ -14,12 +17,12 @@
 
 <section id="contact" class="contact">
 	<div class="grid">
-		<div class="info">
-			<div class="eyebrow"><span class="rule"></span><span>Say hello</span></div>
-			<h2>Let's build something</h2>
+		<div class="info" use:reveal>
+			<span class="sec-index"><b>04</b> say hello</span>
+			<h2><ScrambleText text="Let's build something" /></h2>
 			<p>
-				Open to full-stack, DevOps and AI/ML roles. Have a project, a role, or just want to talk
-				shop? My inbox is open.
+				Open to roles in AI tooling, creative software and front-end engineering — or if you're
+				making something with generative image models and need a hand, my inbox is open.
 			</p>
 			<div class="rows">
 				{#if emailRevealed}
@@ -85,38 +88,43 @@
 			</div>
 		</div>
 
-		<form
-			method="POST"
-			action="?/contact"
-			use:enhance={() => {
-				sent = false;
-				errMsg = '';
-				return async ({ result, update }) => {
-					if (result.type === 'success') sent = true;
-					else if (result.type === 'failure')
-						errMsg = (result.data?.error as string) || 'Something went wrong.';
-					else errMsg = 'Something went wrong.';
-					await update({ reset: true });
-				};
-			}}
-		>
-			{#if sent}
-				<div class="flash ok">Message sent! I'll get back to you soon.</div>
-			{/if}
-			{#if errMsg}
-				<div class="flash err">{errMsg}</div>
-			{/if}
-			<Input label="Name" name="name" placeholder="Your name" required />
-			<Input label="Email" name="email" type="email" placeholder="you@example.com" required />
-			<Textarea
-				label="Message"
-				name="message"
-				rows={5}
-				placeholder="What's on your mind?"
-				required
-			/>
-			<Button type="submit" size="lg" fullWidth>Send message</Button>
-		</form>
+		<div class="toolwin hud compose" use:reveal={{ delay: 120 }}>
+			<span class="hud-c"></span>
+			<WinBar title="kent@ktvuong:~/contact — new-message.txt" live="smtp: ready">
+				<form
+					method="POST"
+					action="?/contact"
+					use:enhance={() => {
+						sent = false;
+						errMsg = '';
+						return async ({ result, update }) => {
+							if (result.type === 'success') sent = true;
+							else if (result.type === 'failure')
+								errMsg = (result.data?.error as string) || 'Something went wrong.';
+							else errMsg = 'Something went wrong.';
+							await update({ reset: true });
+						};
+					}}
+				>
+					{#if sent}
+						<div class="flash ok">Message sent! I'll get back to you soon.</div>
+					{/if}
+					{#if errMsg}
+						<div class="flash err">{errMsg}</div>
+					{/if}
+					<Input label="Name" name="name" placeholder="Your name" required />
+					<Input label="Email" name="email" type="email" placeholder="you@example.com" required />
+					<Textarea
+						label="Message"
+						name="message"
+						rows={5}
+						placeholder="What are we building?"
+						required
+					/>
+					<Button type="submit" size="lg" fullWidth>Send message</Button>
+				</form>
+			</WinBar>
+		</div>
 	</div>
 </section>
 
@@ -136,22 +144,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 22px;
-	}
-	.eyebrow {
-		display: inline-flex;
-		align-items: center;
-		gap: 10px;
-		font-family: var(--font-mono);
-		font-size: var(--text-xs);
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--text-muted);
-	}
-	.rule {
-		width: 22px;
-		height: 2px;
-		background: var(--accent-500);
-		border-radius: 2px;
 	}
 	h2 {
 		margin: 0;
@@ -206,15 +198,14 @@
 	.mono {
 		font-family: var(--font-mono);
 	}
+	.compose {
+		box-shadow: var(--shadow-panel);
+	}
 	form {
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
 		padding: clamp(22px, 3vw, 30px);
-		background: var(--surface-900);
-		border: 1px solid var(--border-700);
-		border-radius: var(--radius-xl);
-		box-shadow: var(--shadow-panel);
 	}
 	.flash {
 		padding: 12px 14px;

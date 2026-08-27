@@ -8,16 +8,32 @@
 		{ id: 'skills', label: 'Skills' },
 		{ id: 'contact', label: 'Contact' }
 	];
+
+	let progress = $state(0);
+
+	$effect(() => {
+		const onScroll = () => {
+			const doc = document.documentElement;
+			const max = doc.scrollHeight - window.innerHeight;
+			progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+		};
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	});
 </script>
 
-<nav>
+<nav class="glass-nav">
 	<div class="brand">
 		<span class="mono-tile">KV</span>
 		<span class="name">Kent Vuong</span>
+		<span class="ver">/ creative AI tools</span>
 	</div>
 	<div class="links">
-		{#each links as l (l.id)}
-			<button onclick={() => scrollToId(l.id)}>{l.label}</button>
+		{#each links as l, i (l.id)}
+			<button onclick={() => scrollToId(l.id)}>
+				<span class="idx">0{i + 1}</span>{l.label}
+			</button>
 		{/each}
 		<a
 			class="gh"
@@ -33,42 +49,14 @@
 			>
 		</a>
 	</div>
+	<!-- Scroll progress beam along the bottom edge of the pill. -->
+	<div class="beam" aria-hidden="true">
+		<div class="fill" style="transform: scaleX({progress})"></div>
+	</div>
 </nav>
 
 <style>
-	nav {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 50;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 16px;
-		flex-wrap: wrap;
-		padding: 12px clamp(16px, 4vw, 48px);
-		/* Lighter wash so the hero reads through, still legible over lower sections. */
-		background: color-mix(in srgb, var(--bg) 60%, transparent);
-		backdrop-filter: blur(12px);
-		border-bottom: none;
-	}
-	/* Gradient hairline divider, offset just below the bar. */
-	nav::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: -1px;
-		height: 1px;
-		background: linear-gradient(
-			to right,
-			transparent,
-			color-mix(in srgb, var(--text) 20%, transparent),
-			transparent
-		);
-		pointer-events: none;
-	}
+	/* Layout lives in the shared .glass-nav utility (app.css). */
 	.brand {
 		display: flex;
 		align-items: center;
@@ -96,13 +84,22 @@
 		letter-spacing: -0.01em;
 		white-space: nowrap;
 	}
+	.ver {
+		font-family: var(--font-mono);
+		font-size: var(--text-10);
+		color: var(--text-subtle);
+		white-space: nowrap;
+	}
 	.links {
 		display: flex;
 		align-items: center;
-		gap: clamp(4px, 1.4vw, 22px);
+		gap: clamp(2px, 0.8vw, 10px);
 		flex-wrap: wrap;
 	}
 	.links button {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
 		background: none;
 		border: none;
 		cursor: pointer;
@@ -110,11 +107,23 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
 		font-weight: 500;
-		padding: 6px 8px;
-		transition: color var(--dur-fast);
+		padding: 6px 12px;
+		border-radius: var(--radius-full);
+		transition:
+			color var(--dur-fast),
+			background var(--dur-fast),
+			box-shadow var(--dur-fast);
 	}
 	.links button:hover {
 		color: var(--text-strong);
+		background: rgba(255, 255, 255, 0.07);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	}
+	.idx {
+		font-family: var(--font-mono);
+		font-size: 9px;
+		color: var(--accent-500);
+		letter-spacing: 0.08em;
 	}
 	.gh {
 		display: inline-flex;
@@ -124,15 +133,39 @@
 		height: 34px;
 		margin-left: 4px;
 		border-radius: var(--radius-md);
-		border: 1px solid var(--border-700);
+		border: 1px solid color-mix(in srgb, #fff 10%, transparent);
 		color: var(--text-muted);
-		background: var(--surface-900);
+		background: rgba(255, 255, 255, 0.04);
 		transition:
 			color var(--dur-fast),
 			border-color var(--dur-fast);
 	}
 	.gh:hover {
 		color: var(--accent-500);
-		border-color: color-mix(in srgb, var(--accent-500) 45%, var(--border-700));
+		border-color: color-mix(in srgb, var(--accent-500) 45%, transparent);
+	}
+	.beam {
+		position: absolute;
+		left: 16px;
+		right: 16px;
+		bottom: 3px;
+		height: 2px;
+		border-radius: 2px;
+		overflow: hidden;
+		background: rgba(255, 255, 255, 0.06);
+		pointer-events: none;
+	}
+	.fill {
+		height: 100%;
+		background: linear-gradient(90deg, var(--accent-600), var(--accent-500), var(--accent-300));
+		box-shadow: 0 0 10px color-mix(in srgb, var(--accent-500) 60%, transparent);
+		transform-origin: left;
+		will-change: transform;
+	}
+	@media (max-width: 860px) {
+		.ver,
+		.idx {
+			display: none;
+		}
 	}
 </style>

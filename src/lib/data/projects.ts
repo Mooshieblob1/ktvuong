@@ -1,6 +1,8 @@
 export interface Project {
 	title: string;
 	tag: string;
+	/** Snapshot star count — shown as social proof on the flagship. */
+	stars?: number;
 	description: string;
 	tech: string[];
 	github: string;
@@ -13,36 +15,48 @@ export const projects: Project[] = [
 	{
 		title: 'MooshieUI',
 		tag: 'Flagship',
+		stars: 180,
 		description:
-			'A beginner-friendly desktop frontend for ComfyUI, built with Tauri — text-to-image, img2img, inpainting, built-in upscaling and ControlNet behind a clean guided UI. One-click installer, no Python setup.',
+			'A beginner-friendly desktop frontend for ComfyUI, built with Tauri — text-to-image, img2img, inpainting, built-in upscaling and ControlNet behind a clean guided UI. One-click installer: no Python, no terminal.',
 		tech: ['Svelte', 'Tauri', 'Rust', 'TypeScript', 'Tailwind'],
 		github: 'https://github.com/Mooshieblob1/MooshieUI',
 		demo: null,
 		og: 'Mooshieblob1/MooshieUI'
 	},
 	{
-		title: 'koharu',
-		tag: 'AI / ML',
+		title: 'MooshieTiledDiffusion',
+		tag: 'ComfyUI node',
 		description:
-			'An ML-powered manga translator written in Rust — text detection, OCR and translation pipelined into one fast native tool.',
-		tech: ['Rust', 'Machine Learning', 'OCR'],
-		github: 'https://github.com/Mooshieblob1/koharu',
+			'MultiDiffusion and SpotDiffusion tiled diffusion nodes for ComfyUI, with Anima (COSMOS) support — big-image generation on modest GPUs. Standalone export from MooshieUI.',
+		tech: ['Python', 'ComfyUI', 'Diffusion'],
+		github: 'https://github.com/Mooshieblob1/ComfyUI-MooshieTiledDiffusion',
 		demo: null,
-		og: 'Mooshieblob1/koharu'
+		og: 'Mooshieblob1/ComfyUI-MooshieTiledDiffusion'
 	},
 	{
-		title: 'gpu.garden',
-		tag: 'Web',
+		title: 'The ComfyUI Guide',
+		tag: 'Education',
 		description:
-			'A SvelteKit frontend for a free shared GPU server for the TouhouAI community — image-generation tools and Notion-like notebooks.',
-		tech: ['SvelteKit', 'Tailwind', 'AI Tools'],
-		github: 'https://github.com/mchaker/gpugarden-site',
-		demo: 'https://gpu.garden',
-		og: 'mchaker/gpugarden-site'
+			'A comprehensive tutorial site for ComfyUI — learn AI art creation, explore workflows and pick up community tips, written for people picking up image generation for the first time.',
+		tech: ['SvelteKit', 'Tailwind', 'MDsveX'],
+		github: 'https://github.com/Mooshieblob1/comfyui-site.github.io',
+		demo: 'https://comfytut.mooshieblob.com',
+		og: 'Mooshieblob1/comfyui-site.github.io'
+	},
+	{
+		title: 'Anima Style Library',
+		tag: 'Style research',
+		stars: 9,
+		description:
+			'A visual reference library of artist styles for the Anima image model — browse, compare and copy style recipes so artists spend time creating instead of wrangling tags.',
+		tech: ['Svelte', 'Danbooru tags', 'Anima'],
+		github: 'https://github.com/Mooshieblob1/mooshie-anima-styles',
+		demo: null,
+		og: 'Mooshieblob1/mooshie-anima-styles'
 	},
 	{
 		title: 'NAID Generator',
-		tag: 'AI / ML',
+		tag: 'Contribution',
 		description:
 			'A custom ComfyUI node that integrates NovelAI Diffusion via API key, expanding generation options directly inside the node graph.',
 		tech: ['Python', 'ComfyUI', 'NovelAI', 'API'],
@@ -51,18 +65,18 @@ export const projects: Project[] = [
 		og: 'Mooshieblob1/ComfyUI_NAIDGenerator'
 	},
 	{
-		title: 'team-blob',
-		tag: 'Web',
+		title: 'gpu.garden',
+		tag: 'Community',
 		description:
-			'A fictional esports team site with interactive player profiles and match history — built for fun with SvelteKit on Cloudflare.',
-		tech: ['SvelteKit', 'Tailwind', 'Cloudflare'],
-		github: 'https://github.com/Mooshieblob1/team-blob',
-		demo: 'https://team-blob.mooshieblob.com',
-		og: 'Mooshieblob1/team-blob'
+			'A SvelteKit frontend for a free shared GPU server for the TouhouAI community — image-generation tools and Notion-like notebooks for creators, no setup required.',
+		tech: ['SvelteKit', 'Tailwind', 'AI Tools'],
+		github: 'https://github.com/mchaker/gpugarden-site',
+		demo: 'https://gpu.garden',
+		og: 'mchaker/gpugarden-site'
 	},
 	{
 		title: 'mooshieblob.com',
-		tag: 'Persona',
+		tag: 'Creative lab',
 		description:
 			'My alias profile showcasing AI projects and creative experiments — interactive demos under my online persona, mooshieblob.',
 		tech: ['Nuxt.js', 'Tailwind', 'Cloudflare'],

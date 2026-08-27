@@ -5,8 +5,8 @@
 /* ==========================================================================
    MooshieUI design tokens — lifted from the MooshieUI design system.
    Dark is canonical; Mooshie Yellow (#ffcc00) is the one accent.
+   Fonts are loaded via <link> in app.html.
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
 	/* Neutral ramp */
@@ -118,7 +118,12 @@ html.lenis-active {
 }
 body {
 	margin: 0;
-	background: var(--bg);
+	/* Ambient light sources behind everything — glass panels refract these. */
+	background:
+		radial-gradient(1100px 700px at 12% -8%, rgba(255, 204, 0, 0.08), transparent 60%),
+		radial-gradient(900px 640px at 108% 12%, rgba(140, 170, 255, 0.06), transparent 62%),
+		radial-gradient(1000px 800px at 50% 118%, rgba(255, 204, 0, 0.05), transparent 58%), var(--bg);
+	background-attachment: fixed;
 	color: var(--text);
 	font-family: var(--font-sans);
 	-webkit-font-smoothing: antialiased;
@@ -179,15 +184,19 @@ body {
 }
 
 /* ==========================================================================
-   Liquid-glass utility — reusable frosted tile with a soft gradient rim.
-   Lifted verbatim from the hero spec (the one global utility exception).
+   Liquid-glass utilities — Apple-style frosted material: deep backdrop
+   frost, gradient rim light, soft top sheen. `liquid-glass` for small
+   tiles, `glass-panel` for cards/sections.
    ========================================================================== */
 .liquid-glass {
-	background: rgba(255, 255, 255, 0.01);
+	background: rgba(255, 255, 255, 0.04);
 	background-blend-mode: luminosity;
-	backdrop-filter: blur(4px);
+	backdrop-filter: blur(12px) saturate(150%);
+	-webkit-backdrop-filter: blur(12px) saturate(150%);
 	border: none;
-	box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+	box-shadow:
+		inset 0 1px 1px rgba(255, 255, 255, 0.14),
+		0 8px 24px rgba(0, 0, 0, 0.35);
 	position: relative;
 	overflow: hidden;
 }
@@ -199,12 +208,12 @@ body {
 	padding: 1.4px;
 	background: linear-gradient(
 		180deg,
-		rgba(255, 255, 255, 0.45) 0%,
-		rgba(255, 255, 255, 0.15) 20%,
+		rgba(255, 255, 255, 0.5) 0%,
+		rgba(255, 255, 255, 0.16) 20%,
 		rgba(255, 255, 255, 0) 40%,
 		rgba(255, 255, 255, 0) 60%,
-		rgba(255, 255, 255, 0.15) 80%,
-		rgba(255, 255, 255, 0.45) 100%
+		rgba(255, 255, 255, 0.16) 80%,
+		rgba(255, 255, 255, 0.5) 100%
 	);
 	-webkit-mask:
 		linear-gradient(#fff 0 0) content-box,
@@ -212,6 +221,521 @@ body {
 	-webkit-mask-composite: xor;
 	mask-composite: exclude;
 	pointer-events: none;
+}
+.liquid-glass::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 38%);
+	pointer-events: none;
+}
+.glass-panel {
+	position: relative;
+	background: color-mix(in srgb, var(--surface-900) 62%, transparent);
+	backdrop-filter: blur(20px) saturate(160%);
+	-webkit-backdrop-filter: blur(20px) saturate(160%);
+	border: 1px solid color-mix(in srgb, #fff 8%, transparent);
+	border-radius: var(--radius-xl);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.08),
+		0 20px 50px rgba(0, 0, 0, 0.4);
+	overflow: hidden;
+}
+/* Gradient rim light on glass panels — brighter where light would catch. */
+.glass-panel::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 1px;
+	background: linear-gradient(
+		135deg,
+		rgba(255, 255, 255, 0.22) 0%,
+		rgba(255, 255, 255, 0.05) 30%,
+		rgba(255, 255, 255, 0) 55%,
+		rgba(255, 255, 255, 0.1) 100%
+	);
+	-webkit-mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
+}
+/* Specular top sheen. */
+.glass-panel::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background:
+		radial-gradient(120% 60% at 50% -20%, rgba(255, 255, 255, 0.09), transparent 60%),
+		linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 30%);
+	pointer-events: none;
+}
+
+/* ==========================================================================
+   Tool-window chrome (glass edition) — shared by skills panels + contact
+   form: frosted bar, traffic lights, hairline borders.
+   ========================================================================== */
+.toolwin {
+	background: color-mix(in srgb, var(--surface-900) 55%, transparent);
+	backdrop-filter: blur(18px) saturate(150%);
+	-webkit-backdrop-filter: blur(18px) saturate(150%);
+	border: 1px solid color-mix(in srgb, #fff 8%, transparent);
+	border-radius: var(--radius-lg);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.07),
+		0 16px 40px rgba(0, 0, 0, 0.38);
+	overflow: hidden;
+}
+.toolwin-bar {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	border-bottom: 1px solid color-mix(in srgb, #fff 6%, transparent);
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+}
+.tl {
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	box-shadow:
+		inset 0 -1px 1px rgba(0, 0, 0, 0.25),
+		0 0 4px color-mix(in srgb, currentColor 0%, transparent);
+}
+.tl.red {
+	background: var(--danger-hover);
+}
+.tl.yellow {
+	background: var(--warning);
+}
+.tl.green {
+	background: var(--success);
+}
+
+/* i3/sway-style window buttons — square mono glyphs, no traffic lights. */
+.wbtn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	border-radius: 3px;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	line-height: 1;
+	color: var(--text-subtle);
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid color-mix(in srgb, #fff 8%, transparent);
+	cursor: pointer;
+	padding: 0;
+	flex-shrink: 0;
+	transition:
+		color var(--dur-fast),
+		border-color var(--dur-fast),
+		background var(--dur-fast);
+}
+.wbtn:hover {
+	color: var(--text-strong);
+	border-color: color-mix(in srgb, #fff 22%, transparent);
+	background: rgba(255, 255, 255, 0.09);
+}
+.wbtn.wclose:hover {
+	color: var(--danger-text);
+	border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+	background: color-mix(in srgb, var(--danger) 14%, transparent);
+}
+.wbtn.wmax:hover {
+	color: var(--accent-400);
+	border-color: color-mix(in srgb, var(--accent-500) 50%, transparent);
+	background: color-mix(in srgb, var(--accent-500) 12%, transparent);
+}
+
+/* tmux-style bottom status bar — session, clickable windows, live clock. */
+.tmuxbar {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 60;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	height: 30px;
+	padding: 0 10px;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	letter-spacing: 0.04em;
+	color: var(--text-muted);
+	background: color-mix(in srgb, var(--neutral-950) 80%, transparent);
+	backdrop-filter: blur(14px) saturate(140%);
+	-webkit-backdrop-filter: blur(14px) saturate(140%);
+	border-top: 1px solid color-mix(in srgb, #fff 7%, transparent);
+	user-select: none;
+}
+.tmux-session {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	padding: 0 12px;
+	color: var(--accent-500);
+	background: color-mix(in srgb, var(--accent-500) 13%, transparent);
+	font-weight: 600;
+}
+.tmux-win {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	height: 100%;
+	padding: 0 12px;
+	cursor: pointer;
+	color: var(--text-subtle);
+	border: none;
+	background: none;
+	font: inherit;
+	transition:
+		color var(--dur-fast),
+		background var(--dur-fast);
+}
+.tmux-win:hover {
+	color: var(--text);
+	background: rgba(255, 255, 255, 0.06);
+}
+.tmux-win.active {
+	color: #111;
+	background: var(--accent-500);
+	font-weight: 600;
+}
+.tmux-right {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	color: var(--text-subtle);
+	white-space: nowrap;
+}
+.tmux-right .ok {
+	color: var(--success);
+}
+.hint {
+	color: var(--accent-400);
+}
+@media (max-width: 720px) {
+	.tmux-right {
+		display: none;
+	}
+	.tmux-win {
+		padding: 0 9px;
+	}
+}
+.toolwin-title {
+	margin-left: 6px;
+	font-family: var(--font-mono);
+	font-size: var(--text-10);
+	letter-spacing: 0.06em;
+	color: var(--text-subtle);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.toolwin-live {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: var(--font-mono);
+	font-size: var(--text-10);
+	color: var(--text-subtle);
+}
+.ldot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--success);
+	box-shadow: 0 0 6px var(--success);
+	display: inline-block;
+}
+
+/* Floating glass nav pill (Header) — frosted capsule with rim light. */
+.glass-nav {
+	position: fixed;
+	top: 14px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 50;
+	width: min(1120px, calc(100vw - 28px));
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 9px 16px;
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--surface-950) 55%, transparent);
+	backdrop-filter: blur(18px) saturate(170%);
+	-webkit-backdrop-filter: blur(18px) saturate(170%);
+	border: 1px solid color-mix(in srgb, #fff 9%, transparent);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.1),
+		0 14px 34px rgba(0, 0, 0, 0.42);
+}
+.glass-nav::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 1px;
+	background: linear-gradient(
+		180deg,
+		rgba(255, 255, 255, 0.3),
+		rgba(255, 255, 255, 0.04) 40%,
+		rgba(255, 255, 255, 0.02) 70%,
+		rgba(255, 255, 255, 0.16)
+	);
+	-webkit-mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
+}
+
+/* Faint dot-grid texture for hero/backdrop areas. */
+.dotgrid {
+	background-image: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--text) 9%, transparent) 1px,
+		transparent 1px
+	);
+	background-size: 22px 22px;
+}
+
+/* ==========================================================================
+   Hi-tech HUD primitives
+   ========================================================================== */
+
+/* Scanline sweep — a slow light band that travels down the viewport once. */
+.scan-sweep {
+	pointer-events: none;
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	z-index: 1;
+}
+.scan-sweep::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 120px;
+	top: -140px;
+	background: linear-gradient(
+		180deg,
+		transparent,
+		color-mix(in srgb, var(--accent-500) 5%, transparent) 45%,
+		color-mix(in srgb, var(--accent-500) 12%, transparent) 50%,
+		color-mix(in srgb, var(--accent-500) 5%, transparent) 55%,
+		transparent
+	);
+	animation: mb-scan 9s var(--ease-standard) infinite;
+}
+@keyframes mb-scan {
+	0% {
+		transform: translateY(0);
+		opacity: 0;
+	}
+	8% {
+		opacity: 1;
+	}
+	60% {
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(calc(100vh + 280px));
+		opacity: 0;
+	}
+}
+
+/* Film-grain noise via layered repeating gradients (no asset needed). */
+.noise {
+	pointer-events: none;
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	opacity: 0.5;
+	mix-blend-mode: overlay;
+	background-image:
+		repeating-conic-gradient(rgba(255, 255, 255, 0.025) 0% 0.0001%, transparent 0.0002% 0.0003%),
+		radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+	background-size:
+		2px 2px,
+		3px 3px;
+}
+
+/* HUD corner brackets — wrap any panel for sci-fi targeting corners. */
+.hud {
+	position: relative;
+}
+.hud::before,
+.hud::after,
+.hud > .hud-c::before,
+.hud > .hud-c::after {
+	content: '';
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	z-index: 3;
+	pointer-events: none;
+	border-color: color-mix(in srgb, var(--accent-500) 65%, transparent);
+	border-style: solid;
+	border-width: 0;
+	transition: border-color var(--dur-base);
+}
+.hud::before {
+	top: -1px;
+	left: -1px;
+	border-top-width: 1.5px;
+	border-left-width: 1.5px;
+}
+.hud::after {
+	top: -1px;
+	right: -1px;
+	border-top-width: 1.5px;
+	border-right-width: 1.5px;
+}
+.hud > .hud-c::before {
+	bottom: -1px;
+	left: -1px;
+	border-bottom-width: 1.5px;
+	border-left-width: 1.5px;
+}
+.hud > .hud-c::after {
+	bottom: -1px;
+	right: -1px;
+	border-bottom-width: 1.5px;
+	border-right-width: 1.5px;
+}
+.hud:hover::before,
+.hud:hover::after,
+.hud:hover > .hud-c::before,
+.hud:hover > .hud-c::after {
+	border-color: var(--accent-500);
+}
+
+/* Mono section index — "01 / WORK" style kicker. */
+.sec-index {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-family: var(--font-mono);
+	font-size: var(--text-10);
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--text-subtle);
+}
+.sec-index b {
+	color: var(--accent-500);
+	font-weight: 600;
+}
+.sec-index::after {
+	content: '';
+	width: 34px;
+	height: 1px;
+	background: linear-gradient(to right, var(--accent-500), transparent);
+}
+
+/* Blueprint grid-lines backdrop (large cells, very faint). */
+.gridlines {
+	background-image:
+		linear-gradient(color-mix(in srgb, #fff 3.5%, transparent) 1px, transparent 1px),
+		linear-gradient(90deg, color-mix(in srgb, #fff 3.5%, transparent) 1px, transparent 1px);
+	background-size: 56px 56px;
+	-webkit-mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent);
+	mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent);
+}
+
+/* Accent glow for mono labels. */
+.glow {
+	text-shadow:
+		0 0 12px color-mix(in srgb, var(--accent-500) 55%, transparent),
+		0 0 32px color-mix(in srgb, var(--accent-500) 25%, transparent);
+}
+
+/* Spotlight glow driven by --mx/--my (see actions/spotlight.ts). */
+.spot {
+	position: relative;
+}
+.spot::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: radial-gradient(
+		220px circle at var(--mx, 50%) var(--my, 50%),
+		color-mix(in srgb, var(--accent-500) 9%, transparent),
+		transparent 65%
+	);
+	opacity: 0;
+	transition: opacity var(--dur-base);
+	pointer-events: none;
+	z-index: 2;
+}
+.spot:hover::after {
+	opacity: 1;
+}
+
+/* Reveal-on-scroll primitives (see actions/reveal.ts). */
+.reveal {
+	opacity: 0;
+	transform: translateY(18px);
+	transition:
+		opacity 0.7s var(--ease-out),
+		transform 0.7s var(--ease-out);
+	transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.in {
+	opacity: 1;
+	transform: none;
+}
+
+/* Word-by-word reveal (see actions/scrollfx.ts wordReveal). */
+.wt {
+	/* container: words are injected as .w spans */
+}
+.wt .w {
+	color: color-mix(in srgb, var(--text-muted) 34%, transparent);
+	transition: color 0.35s var(--ease-out);
+}
+.wt .w.on {
+	color: var(--text-strong);
+}
+
+/* Ghost section numeral — huge, faint, parallax-drifting index behind headings. */
+.ghost-num {
+	position: absolute;
+	top: -0.18em;
+	right: 0;
+	z-index: 0;
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: clamp(6rem, 16vw, 13rem);
+	line-height: 1;
+	letter-spacing: -0.05em;
+	color: transparent;
+	-webkit-text-stroke: 1px color-mix(in srgb, #fff 6%, transparent);
+	pointer-events: none;
+	user-select: none;
+	will-change: transform;
+}
+.ghost-num::after {
+	content: attr(data-num);
+	position: absolute;
+	inset: 0;
+	color: color-mix(in srgb, var(--accent-500) 4%, transparent);
+	-webkit-text-stroke: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
