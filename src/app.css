@@ -38,6 +38,11 @@
 	--accent: var(--accent-500);
 	--accent-hover: var(--accent-400);
 
+	/* Structural marks — hairlines, brackets and section indices are neutral
+	   so the accent can mean one thing only: interactive, or live. */
+	--line: color-mix(in srgb, #fff 11%, transparent);
+	--line-strong: color-mix(in srgb, #fff 20%, transparent);
+
 	/* Surfaces */
 	--theme-sub: var(--neutral-700);
 	--bg: var(--neutral-950);
@@ -120,9 +125,10 @@ body {
 	margin: 0;
 	/* Ambient light sources behind everything — glass panels refract these. */
 	background:
-		radial-gradient(1100px 700px at 12% -8%, rgba(255, 204, 0, 0.08), transparent 60%),
-		radial-gradient(900px 640px at 108% 12%, rgba(140, 170, 255, 0.06), transparent 62%),
-		radial-gradient(1000px 800px at 50% 118%, rgba(255, 204, 0, 0.05), transparent 58%), var(--bg);
+		radial-gradient(1100px 700px at 12% -8%, rgba(255, 204, 0, 0.035), transparent 60%),
+		radial-gradient(900px 640px at 108% 12%, rgba(140, 170, 255, 0.05), transparent 62%),
+		radial-gradient(1000px 800px at 50% 118%, rgba(255, 255, 255, 0.022), transparent 58%),
+		var(--bg);
 	background-attachment: fixed;
 	color: var(--text);
 	font-family: var(--font-sans);
@@ -185,7 +191,7 @@ body {
 
 /* ==========================================================================
    Amber CRT theme — phosphor terminal look, toggled via [data-theme=amber]
-   (rofi "Toggle theme", tmux THEME chip, or theme.cycleTheme()).
+   (rofi "Toggle theme", or theme.cycleTheme()).
    ========================================================================== */
 :root[data-theme='amber'] {
 	--theme-sub: #3a2c10;
@@ -218,12 +224,6 @@ body {
 	pointer-events: none;
 	background: repeating-linear-gradient(180deg, transparent 0 2px, rgba(0, 0, 0, 0.14) 2px 4px);
 	opacity: 0.35;
-}
-:root[data-theme='amber'] .grad {
-	background-image: linear-gradient(to left, #b87700, #ffb000, #ffdd85);
-}
-:root[data-theme='amber'] .wordmark span {
-	background-image: linear-gradient(to left, #b87700, #ffb000, #ffdd85);
 }
 
 /* ==========================================================================
@@ -398,97 +398,6 @@ body {
 	background: color-mix(in srgb, var(--accent-500) 12%, transparent);
 }
 
-/* tmux-style bottom status bar — session, clickable windows, live clock. */
-.tmuxbar {
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 60;
-	display: flex;
-	align-items: center;
-	gap: 2px;
-	height: 30px;
-	padding: 0 10px;
-	font-family: var(--font-mono);
-	font-size: 11px;
-	letter-spacing: 0.04em;
-	color: var(--text-muted);
-	background: color-mix(in srgb, var(--neutral-950) 80%, transparent);
-	backdrop-filter: blur(14px) saturate(140%);
-	-webkit-backdrop-filter: blur(14px) saturate(140%);
-	border-top: 1px solid color-mix(in srgb, #fff 7%, transparent);
-	user-select: none;
-}
-.tmux-session {
-	display: flex;
-	align-items: center;
-	height: 100%;
-	padding: 0 12px;
-	color: var(--accent-500);
-	background: color-mix(in srgb, var(--accent-500) 13%, transparent);
-	font-weight: 600;
-}
-.tmux-win {
-	display: flex;
-	align-items: center;
-	gap: 7px;
-	height: 100%;
-	padding: 0 12px;
-	cursor: pointer;
-	color: var(--text-subtle);
-	border: none;
-	background: none;
-	font: inherit;
-	transition:
-		color var(--dur-fast),
-		background var(--dur-fast);
-}
-.tmux-win:hover {
-	color: var(--text);
-	background: rgba(255, 255, 255, 0.06);
-}
-.tmux-win.active {
-	color: #111;
-	background: var(--accent-500);
-	font-weight: 600;
-}
-.tmux-right {
-	margin-left: auto;
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	color: var(--text-subtle);
-	white-space: nowrap;
-}
-.tmux-right .ok {
-	color: var(--success);
-}
-.hint {
-	color: var(--accent-400);
-}
-.rofi-chip {
-	background: none;
-	border: none;
-	padding: 0;
-	font: inherit;
-	letter-spacing: inherit;
-	color: var(--accent-400);
-	cursor: pointer;
-	white-space: nowrap;
-}
-.rofi-chip:hover {
-	color: var(--accent-300);
-	text-shadow: 0 0 8px color-mix(in srgb, var(--accent-500) 55%, transparent);
-}
-@media (max-width: 720px) {
-	.tmux-right {
-		display: none;
-	}
-	.tmux-win {
-		padding: 0 9px;
-	}
-}
 .toolwin-title {
 	margin-left: 6px;
 	font-family: var(--font-mono);
@@ -592,9 +501,9 @@ body {
 	background: linear-gradient(
 		180deg,
 		transparent,
-		color-mix(in srgb, var(--accent-500) 5%, transparent) 45%,
-		color-mix(in srgb, var(--accent-500) 12%, transparent) 50%,
-		color-mix(in srgb, var(--accent-500) 5%, transparent) 55%,
+		color-mix(in srgb, #fff 3%, transparent) 45%,
+		color-mix(in srgb, #fff 7%, transparent) 50%,
+		color-mix(in srgb, #fff 3%, transparent) 55%,
 		transparent
 	);
 	animation: mb-scan 9s var(--ease-standard) infinite;
@@ -646,7 +555,7 @@ body {
 	height: 14px;
 	z-index: 3;
 	pointer-events: none;
-	border-color: color-mix(in srgb, var(--accent-500) 65%, transparent);
+	border-color: var(--line-strong);
 	border-style: solid;
 	border-width: 0;
 	transition: border-color var(--dur-base);
@@ -694,14 +603,14 @@ body {
 	color: var(--text-subtle);
 }
 .sec-index b {
-	color: var(--accent-500);
+	color: var(--text-strong);
 	font-weight: 600;
 }
 .sec-index::after {
 	content: '';
 	width: 34px;
 	height: 1px;
-	background: linear-gradient(to right, var(--accent-500), transparent);
+	background: linear-gradient(to right, var(--line-strong), transparent);
 }
 
 /* Blueprint grid-lines backdrop (large cells, very faint). */
@@ -714,11 +623,10 @@ body {
 	mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent);
 }
 
-/* Accent glow for mono labels. */
-.glow {
-	text-shadow:
-		0 0 12px color-mix(in srgb, var(--accent-500) 55%, transparent),
-		0 0 32px color-mix(in srgb, var(--accent-500) 25%, transparent);
+/* Instrument numerals — readouts line up column-wise as values change. */
+.tnum {
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: 'tnum' 1;
 }
 
 /* Spotlight glow driven by --mx/--my (see actions/spotlight.ts). */
@@ -732,7 +640,7 @@ body {
 	border-radius: inherit;
 	background: radial-gradient(
 		220px circle at var(--mx, 50%) var(--my, 50%),
-		color-mix(in srgb, var(--accent-500) 9%, transparent),
+		color-mix(in srgb, #fff 7%, transparent),
 		transparent 65%
 	);
 	opacity: 0;
@@ -791,7 +699,7 @@ body {
 	content: attr(data-num);
 	position: absolute;
 	inset: 0;
-	color: color-mix(in srgb, var(--accent-500) 4%, transparent);
+	color: color-mix(in srgb, #fff 2.5%, transparent);
 	-webkit-text-stroke: 0;
 }
 

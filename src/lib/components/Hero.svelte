@@ -86,7 +86,7 @@
 					<span class="tag">Creative AI tooling · Desktop apps · Open source</span>
 				</div>
 
-				<h1 use:reveal={{ delay: 60 }}>Kent <span class="grad">Vuong</span></h1>
+				<h1 use:reveal={{ delay: 60 }}>Kent Vuong</h1>
 
 				<p class="lead" use:reveal={{ delay: 120 }}>
 					I build generative AI art tools that artists actually enjoy using — desktop apps, ComfyUI
@@ -100,21 +100,14 @@
 					</Button>
 				</div>
 
-				<dl class="stats" use:reveal={{ delay: 240 }}>
+				<dl class="telemetry tnum" use:reveal={{ delay: 240 }}>
 					{#each stats as s (s.label)}
-						<div class="stat">
+						<div class="field">
 							<dt>{s.label}</dt>
-							<dd class="glow" use:countUp={{ n: s.n, suffix: s.suffix }}>0{s.suffix}</dd>
+							<dd use:countUp={{ n: s.n, suffix: s.suffix }}>0{s.suffix}</dd>
 						</div>
 					{/each}
 				</dl>
-
-				<div class="readout mono" use:reveal={{ delay: 300 }} aria-hidden="true">
-					<span class="ro prompt"><span class="ps1">[kv@arch ~]$</span> pacman -Qi mooshieui</span>
-					<span class="ro ok">installed 180★ · deps: comfyui, svelte, tauri</span>
-					<span class="ro">lat -31.95° lon 115.86°</span>
-					<span class="ro accent">uptime: since 2020</span>
-				</div>
 			</div>
 
 			<div class="right" use:reveal={{ delay: 200 }}>
@@ -151,8 +144,6 @@
 <style>
 	.hero {
 		position: relative;
-		min-height: 100vh;
-		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
@@ -162,9 +153,6 @@
 	}
 	.ok {
 		color: var(--success);
-	}
-	.accent {
-		color: var(--accent-400);
 	}
 
 	/* --- Backdrop ---------------------------------------------------------- */
@@ -180,19 +168,15 @@
 		background:
 			radial-gradient(
 				38% 44% at 26% 36%,
-				color-mix(in srgb, var(--accent-500) 30%, transparent),
+				color-mix(in srgb, var(--accent-500) 10%, transparent),
 				transparent 72%
 			),
 			radial-gradient(
 				34% 40% at 74% 58%,
-				color-mix(in srgb, #8caaff 16%, transparent),
+				color-mix(in srgb, #8caaff 15%, transparent),
 				transparent 70%
 			),
-			radial-gradient(
-				46% 54% at 54% 48%,
-				color-mix(in srgb, var(--accent-400) 14%, transparent),
-				transparent 76%
-			);
+			radial-gradient(46% 54% at 54% 48%, color-mix(in srgb, #fff 5%, transparent), transparent 76%);
 		animation: mb-aurora 24s var(--ease-standard) infinite;
 		will-change: transform;
 	}
@@ -209,7 +193,9 @@
 		flex: 1 1 auto;
 		display: flex;
 		align-items: center;
-		padding: 128px clamp(20px, 5vw, 48px) 40px;
+		/* --nav-h is published by Header; the fallback covers the pre-hydration
+		   render and the one-row desktop pill. */
+		padding: calc(var(--nav-h, 56px) + 40px) clamp(20px, 5vw, 48px) 24px;
 		max-width: 1400px;
 		margin: 0 auto;
 		width: 100%;
@@ -222,11 +208,12 @@
 		width: 100%;
 	}
 	.left {
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 		text-align: left;
-		gap: 22px;
+		gap: 18px;
 	}
 	.eyebrow {
 		display: inline-flex;
@@ -245,27 +232,21 @@
 		background: var(--border-700);
 	}
 	.tag {
-		white-space: nowrap;
+		min-width: 0;
 	}
 	h1 {
 		margin: 0;
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: clamp(3rem, 7.5vw, 7rem);
-		line-height: 0.98;
-		letter-spacing: -0.03em;
+		font-weight: 600;
+		font-size: clamp(2.5rem, 5.4vw, 4.25rem);
+		line-height: 1;
+		letter-spacing: -0.032em;
 		color: var(--text-strong);
-	}
-	.grad {
-		background-image: linear-gradient(to left, #cc9900, #ffcc00, #ffe680);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
 	}
 	.lead {
 		margin: 0;
-		max-width: 44ch;
-		font-size: var(--text-lg);
+		max-width: 50ch;
+		font-size: var(--text-base);
 		line-height: 1.6;
 		color: var(--text-muted);
 		opacity: 0.92;
@@ -283,59 +264,54 @@
 		padding-right: 24px;
 	}
 
-	/* --- Stats + readout ----------------------------------------------------- */
-	.stats {
+	/* --- Telemetry strip ------------------------------------------------------
+	   One hairline instrument panel: value over micro-label, fields divided by
+	   rules rather than whitespace so it reads as a readout, not a stat brag. */
+	.telemetry {
 		display: flex;
 		flex-wrap: wrap;
-		gap: clamp(20px, 3vw, 40px);
-		margin: 10px 0 0;
+		margin: 4px 0 0;
 		padding: 0;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-sm);
+		background: rgba(255, 255, 255, 0.02);
 	}
-	.stat {
+	.field {
 		display: flex;
 		flex-direction: column-reverse;
-		gap: 2px;
+		gap: 1px;
+		padding: 9px 16px;
+		min-width: 104px;
 	}
-	.stat dt {
-		font-size: var(--text-xs);
+	.field + .field {
+		border-left: 1px solid var(--line);
+	}
+	.field dt {
+		font-family: var(--font-mono);
+		font-size: var(--text-10);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
 		color: var(--text-subtle);
+		white-space: nowrap;
 	}
-	.stat dd {
+	.field dd {
 		margin: 0;
 		font-family: var(--font-mono);
-		font-size: var(--text-xl);
+		font-size: var(--text-lg);
 		font-weight: 600;
+		line-height: 1.2;
 		color: var(--text-strong);
-	}
-	.readout {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		margin-top: 6px;
-	}
-	.ro {
-		display: inline-flex;
-		align-items: center;
-		height: 22px;
-		padding: 0 10px;
-		border-radius: 3px;
-		font-size: 10px;
-		letter-spacing: 0.08em;
-		color: var(--text-subtle);
-		background: rgba(255, 255, 255, 0.03);
-		border: 1px solid color-mix(in srgb, #fff 7%, transparent);
-	}
-	.ps1 {
-		color: var(--accent-400);
-		margin-right: 6px;
 	}
 
 	/* --- Node graph column --------------------------------------------------- */
 	.right {
 		min-width: 0;
+		max-width: 520px;
+		justify-self: end;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
+		gap: 8px;
 	}
 	.graphwrap {
 		position: relative;
@@ -357,8 +333,8 @@
 		margin: 0 auto;
 		display: flex;
 		align-items: center;
-		gap: 2.5rem;
-		padding: 0 clamp(20px, 5vw, 48px) 40px;
+		gap: 2rem;
+		padding: 0 clamp(20px, 5vw, 48px) 26px;
 	}
 	.marquee-label {
 		display: flex;

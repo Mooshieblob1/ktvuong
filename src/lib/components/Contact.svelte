@@ -132,7 +132,7 @@
 	.contact {
 		max-width: 1100px;
 		margin: 0 auto;
-		padding: clamp(40px, 7vh, 80px) clamp(20px, 5vw, 48px) clamp(48px, 8vh, 90px);
+		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px) clamp(36px, 6vh, 64px);
 	}
 	.grid {
 		display: grid;
@@ -192,7 +192,7 @@
 		border-radius: var(--radius-md);
 		background: var(--surface-900);
 		border: 1px solid var(--border-700);
-		color: var(--accent-500);
+		color: var(--text-muted);
 		flex-shrink: 0;
 	}
 	.mono {

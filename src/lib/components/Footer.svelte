@@ -153,11 +153,7 @@
 		color: color-mix(in srgb, var(--text) 7%, transparent);
 	}
 	.wordmark span {
-		background-image: linear-gradient(to left, #cc9900, #ffcc00, #ffe680);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
-		opacity: 0.16;
+		color: color-mix(in srgb, var(--text) 12%, transparent);
 	}
 	.caret {
 		display: inline-block;

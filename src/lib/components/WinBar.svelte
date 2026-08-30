@@ -76,7 +76,7 @@
 		user-select: none;
 	}
 	.app-glyph {
-		color: var(--accent-500);
+		color: var(--text-subtle);
 		font-size: 10px;
 	}
 	.title {

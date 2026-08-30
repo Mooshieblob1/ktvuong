@@ -13,8 +13,14 @@
 ## Features
 
 - Responsive mobile-first design
-- Mooshie Yellow branding on near-black, lifted from the MooshieUI design system
+- Mooshie Yellow branding on near-black, lifted from the MooshieUI design system.
+  The accent is rationed: it marks things that are **interactive or live** (primary
+  buttons, links, hover and active states, the scroll beam, packets moving through
+  the node graph) and nothing else. Structural marks — HUD brackets, section
+  indices, hairlines — use the neutral `--line` / `--line-strong` tokens.
+- Compact hero with a hairline telemetry strip, so the work grid starts above the fold
 - Animated ComfyUI node-graph canvas in the hero, plus drifting gradient orbs
+- `ctrl+k` command palette (rofi) and a `ctrl+\`` terminal overlay
 - Smooth scrolling via [Lenis](https://github.com/darkroomengineering/lenis) on Chromium, native CSS smooth scroll on Firefox
 - Bento-style project showcase grid
 - Live "currently tinkering on" repo grid, pulled from the GitHub API

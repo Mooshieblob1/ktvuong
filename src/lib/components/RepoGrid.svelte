@@ -37,9 +37,9 @@
 		<div class="head-left">
 			<span class="sec-index"><b>02</b> live from GitHub</span>
 			<h2><ScrambleText text="Currently tinkering on" /></h2>
-			<div class="sub wt" use:wordReveal>
+			<div class="sub">
 				<StatusDot status={stale ? 'idle' : 'online'} pulse={!stale} />
-				<span>
+				<span class="wt" use:wordReveal>
 					{#if stale}
 						Showing a recent snapshot — live GitHub data is temporarily unavailable
 					{:else}
@@ -90,7 +90,7 @@
 								height="16"
 								viewBox="0 0 24 24"
 								fill="none"
-								stroke="var(--accent-500)"
+								stroke="var(--text-subtle)"
 								stroke-width="2"
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -188,7 +188,7 @@
 		position: relative;
 		max-width: 1320px;
 		margin: 0 auto;
-		padding: clamp(40px, 7vh, 80px) clamp(20px, 5vw, 48px);
+		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px);
 	}
 	header {
 		position: relative;
@@ -218,6 +218,10 @@
 		gap: 10px;
 		font-size: var(--text-sm);
 		color: var(--text-muted);
+	}
+	.sub .wt {
+		min-width: 0;
+		flex: 1 1 auto;
 	}
 	.sortbar {
 		display: flex;
@@ -256,8 +260,8 @@
 	.repo {
 		display: flex;
 		flex-direction: column;
-		gap: 11px;
-		padding: 18px;
+		gap: 9px;
+		padding: 15px;
 		text-decoration: none;
 		transform: translate3d(0, var(--vy, 0px), 0);
 		will-change: transform;
@@ -347,7 +351,7 @@
 	.more {
 		display: flex;
 		justify-content: center;
-		margin-top: 28px;
+		margin-top: 22px;
 	}
 	.more button {
 		display: inline-flex;

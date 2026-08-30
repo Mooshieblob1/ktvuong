@@ -10,6 +10,11 @@
 	];
 
 	let progress = $state(0);
+	let navH = $state(0);
+
+	$effect(() => {
+		document.documentElement.style.setProperty('--nav-h', `${navH}px`);
+	});
 
 	$effect(() => {
 		const onScroll = () => {
@@ -23,7 +28,7 @@
 	});
 </script>
 
-<nav class="glass-nav">
+<nav class="glass-nav" bind:clientHeight={navH}>
 	<div class="brand">
 		<span class="mono-tile">KV</span>
 		<span class="name">Kent Vuong</span>
@@ -130,7 +135,7 @@
 	.idx {
 		font-family: var(--font-mono);
 		font-size: 9px;
-		color: var(--accent-500);
+		color: var(--text-subtle);
 		letter-spacing: 0.08em;
 	}
 	.rofi-btn {

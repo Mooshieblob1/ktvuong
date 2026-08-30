@@ -7,7 +7,9 @@
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 		const ACC = '#ffcc00';
-		const ACC2 = '#ffe680';
+		/* Cycling node highlight is state, not signal — keep it neutral. */
+		const HI = 'rgba(255,255,255,0.85)';
+		const HI_TEXT = 'rgba(255,255,255,0.98)';
 
 		type Node = { id: string; nx: number; ny: number; label: string; sub: string; big?: boolean };
 		const nodes: Node[] = [
@@ -83,7 +85,7 @@
 			const y = p.cy - h / 2;
 			ctx.save();
 			if (active) {
-				ctx.shadowColor = 'rgba(255,204,0,0.45)';
+				ctx.shadowColor = 'rgba(255,255,255,0.28)';
 				ctx.shadowBlur = 16;
 			}
 			rr(x, y, w, h, 9);
@@ -92,7 +94,7 @@
 			ctx.restore();
 			rr(x, y, w, h, 9);
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = active ? ACC : 'rgba(255,255,255,0.14)';
+			ctx.strokeStyle = active ? HI : 'rgba(255,255,255,0.14)';
 			ctx.stroke();
 			[
 				[p.lx, p.cy],
@@ -100,11 +102,11 @@
 			].forEach((pt) => {
 				ctx.beginPath();
 				ctx.arc(pt[0], pt[1], 3, 0, 7);
-				ctx.fillStyle = active ? ACC : 'rgba(255,255,255,0.3)';
+				ctx.fillStyle = active ? HI : 'rgba(255,255,255,0.3)';
 				ctx.fill();
 			});
 			ctx.textAlign = 'center';
-			ctx.fillStyle = active ? ACC2 : 'rgba(245,245,245,0.92)';
+			ctx.fillStyle = active ? HI_TEXT : 'rgba(245,245,245,0.92)';
 			ctx.font = '600 10px ui-monospace, SFMono-Regular, Menlo, monospace';
 			ctx.fillText(n.label, p.cx, p.cy - 1);
 			ctx.fillStyle = 'rgba(163,163,163,0.7)';
@@ -199,7 +201,7 @@
 				height="12"
 				viewBox="0 0 24 24"
 				fill="none"
-				stroke="var(--accent-500)"
+				stroke="var(--text-subtle)"
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -275,7 +277,7 @@
 		aspect-ratio: 16 / 10;
 		background: radial-gradient(
 			120% 100% at 50% 0%,
-			color-mix(in srgb, var(--accent-500) 7%, transparent),
+			color-mix(in srgb, #fff 4%, transparent),
 			transparent 62%
 		);
 	}

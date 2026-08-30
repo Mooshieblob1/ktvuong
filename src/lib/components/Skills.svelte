@@ -41,7 +41,7 @@
 		position: relative;
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: clamp(40px, 7vh, 80px) clamp(20px, 5vw, 48px);
+		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px);
 	}
 	.head {
 		position: relative;
@@ -68,7 +68,7 @@
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 16px;
+		gap: 12px;
 	}
 	.toolwin {
 		display: flex;
@@ -81,8 +81,8 @@
 	.inner {
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
-		padding: 20px;
+		gap: 12px;
+		padding: 16px;
 		position: relative;
 		z-index: 3;
 	}
@@ -98,8 +98,8 @@
 		width: 30px;
 		height: 30px;
 		border-radius: var(--radius-md);
-		background: color-mix(in srgb, var(--accent-500) 14%, transparent);
-		color: var(--accent-500);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--text-muted);
 	}
 	.phead h3 {
 		margin: 0;

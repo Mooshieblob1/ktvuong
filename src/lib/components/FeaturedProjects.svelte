@@ -102,7 +102,7 @@
 		position: relative;
 		max-width: 1320px;
 		margin: 0 auto;
-		padding: clamp(40px, 7vh, 80px) clamp(20px, 5vw, 48px);
+		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px);
 	}
 	header {
 		position: relative;
@@ -121,7 +121,7 @@
 	}
 	h2 {
 		margin: 0;
-		font-size: clamp(1.8rem, 3.6vw, 2.5rem);
+		font-size: clamp(1.5rem, 2.8vw, 2rem);
 		font-weight: 700;
 		letter-spacing: -0.025em;
 		color: var(--text-strong);
@@ -138,7 +138,7 @@
 	.bento {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 14px;
+		gap: 10px;
 	}
 	.cell {
 		display: flex;
@@ -155,6 +155,11 @@
 		grid-column: span 2;
 		grid-row: span 2;
 	}
+	/* In the tall flagship cell, let the artwork absorb the spare height rather
+	   than stretching the copy block and stranding the tech chips at the base. */
+	.cell.wide .body {
+		flex: 0 0 auto;
+	}
 	.cell:hover {
 		border-color: color-mix(in srgb, #fff 18%, transparent);
 		box-shadow:
@@ -164,11 +169,11 @@
 	.media {
 		position: relative;
 		flex: 1 1 auto;
-		min-height: 240px;
+		min-height: 178px;
 		overflow: hidden;
 		background: linear-gradient(
 			135deg,
-			color-mix(in srgb, var(--accent-500) 13%, var(--surface-800)),
+			color-mix(in srgb, #fff 5%, var(--surface-800)),
 			var(--surface-950)
 		);
 		border-bottom: 1px solid color-mix(in srgb, #fff 6%, transparent);
@@ -179,10 +184,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 110px;
+		font-size: 92px;
 		font-weight: 700;
 		font-family: var(--font-mono);
-		color: color-mix(in srgb, var(--accent-500) 22%, transparent);
+		color: color-mix(in srgb, #fff 12%, transparent);
 		user-select: none;
 	}
 	.media img {
@@ -216,11 +221,11 @@
 		font-size: var(--text-10);
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		color: var(--accent-400);
+		color: var(--text-muted);
 		padding: 3px 9px;
 		border-radius: var(--radius-sm);
-		background: color-mix(in srgb, var(--accent-500) 14%, transparent);
-		border: 1px solid color-mix(in srgb, var(--accent-500) 32%, transparent);
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid var(--line);
 	}
 	.starbadge {
 		display: inline-flex;

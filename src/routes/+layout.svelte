@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import TmuxBar from '$lib/components/TmuxBar.svelte';
 	import Rofi from '$lib/components/Rofi.svelte';
 	import Terminal from '$lib/components/Terminal.svelte';
 	import Denoise from '$lib/components/Denoise.svelte';
@@ -60,17 +59,9 @@
 </main>
 
 <Footer />
-<TmuxBar />
 <Rofi />
 <Terminal />
 
 <div class="denoise-host" aria-hidden="true">
 	<Denoise />
 </div>
-
-<style>
-	main {
-		/* Keep content clear of the fixed tmux bar. */
-		padding-bottom: 34px;
-	}
-</style>
