@@ -1,59 +1,37 @@
 /**
- * Use this utility during development to encode your email addresses
- * Run this script with Node.js to encode your email
- */
-
-// The email to encode
-const emailToEncode = 'kent@ktvuong.com';
-
-// XOR key used in the decoder (must match the one in emailProtection.js)
-const XOR_KEY = 0x1a;
-
-/**
- * Encodes an email address using a Cloudflare-like encoding approach
+ * Dev utility: encode a contact detail for src/lib/data/contact.ts.
  *
- * @param {string} email - The email address to encode
- * @returns {string} - The encoded email
+ * Emits the Cloudflare-style token the site decodes: the first byte is the
+ * XOR key, the rest is the value, all hex. The key is random per run, so two
+ * details never share a pattern.
+ *
+ *   node encodeEmailForProtection.js "kent@ktvuong.com"
+ *   node encodeEmailForProtection.js "+61 400 565 822"
  */
-function encodeEmail(email) {
-	let result = '';
 
-	// Convert each character to its hex representation after XOR with key
-	for (let i = 0; i < email.length; i++) {
-		const charCode = email.charCodeAt(i) ^ XOR_KEY;
-		const hexChar = charCode.toString(16).padStart(2, '0');
-		result += hexChar;
+function encode(value, key = 1 + Math.floor(Math.random() * 254)) {
+	let out = key.toString(16).padStart(2, '0');
+	for (let i = 0; i < value.length; i++) {
+		out += (value.charCodeAt(i) ^ key).toString(16).padStart(2, '0');
 	}
-
-	return result;
+	return out;
 }
 
-const encodedEmail = encodeEmail(emailToEncode);
-console.log('Original email:', emailToEncode);
-console.log('Encoded email (use this in data-cfemail attribute):', encodedEmail);
-
-// Test decoding to confirm it works
-function decodeEmail(encoded) {
-	if (encoded.length % 2 !== 0) {
-		throw new Error('Encoded string must have an even length.');
+function decode(token) {
+	const key = parseInt(token.slice(0, 2), 16);
+	let out = '';
+	for (let i = 2; i < token.length; i += 2) {
+		out += String.fromCharCode(parseInt(token.slice(i, i + 2), 16) ^ key);
 	}
-
-	if (encoded === '') {
-		return '';
-	}
-
-	const chars = [];
-	for (let i = 0; i < encoded.length; i += 2) {
-		const hexPair = encoded.slice(i, i + 2);
-		const charCode = parseInt(hexPair, 16);
-
-		if (isNaN(charCode)) {
-			throw new Error(`Invalid hex character in input: ${hexPair}`);
-		}
-
-		chars.push(String.fromCharCode(charCode ^ XOR_KEY));
-	}
-	return chars.join('');
+	return out;
 }
 
-console.log('Decoded to verify:', decodeEmail(encodedEmail));
+const value = process.argv[2];
+if (!value) {
+	console.error('usage: node encodeEmailForProtection.js "<value to encode>"');
+	process.exit(1);
+}
+
+const token = encode(value);
+console.log('token:      ', token);
+console.log('decodes to: ', decode(token));

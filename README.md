@@ -74,13 +74,23 @@ ktvuong/
 └── package.json
 ```
 
-## Email Obfuscation
+## Contact Obfuscation
 
-The site uses a custom email obfuscation system to protect against harvesting bots:
+Email and phone are never published as text. `src/lib/data/contact.ts` holds them
+as Cloudflare-style tokens (first byte is a random XOR key, rest is the value, all
+hex) and decodes only on a user gesture:
 
-- XOR cipher encodes the email address in HTML
-- Client-side JavaScript decodes it only when needed
-- No plain text email addresses in source code or DOM
+- Nothing readable in the server-rendered HTML, so a crawler that reads markup
+  gets nothing
+- Nothing readable in the JS bundle either, so grepping it for an `@` or a phone
+  number also comes up empty
+- The résumé reveals both on `beforeprint`, so a printed or PDF copy still has a
+  way to reply
+- Window titles use `kv@arch:~/...` rather than a real address, so the decoration
+  does not hand back what the tokens hide
+
+Regenerate a token with `node encodeEmailForProtection.js "<value>"`. The unused
+`static/emailProtection.js` predates this module.
 
 ## License
 

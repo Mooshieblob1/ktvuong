@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { contact } from '$lib/data/contact';
 	import { reveal } from '$lib/actions/reveal';
 	import Input from './ui/Input.svelte';
 	import Textarea from './ui/Textarea.svelte';
@@ -9,10 +10,10 @@
 
 	let sent = $state(false);
 	let errMsg = $state('');
-	let emailRevealed = $state(false);
 
-	// Lightly obfuscated so scrapers don't lift it from source.
-	const email = ['kent', '@', 'ktvuong', '.com'].join('');
+	// Decoded from an obfuscated token on click, so the address is absent from
+	// both the markup and the bundle until someone asks for it.
+	let email = $state('');
 </script>
 
 <section id="contact" class="contact">
@@ -26,7 +27,7 @@
 				readout="open"
 			/>
 			<div class="rows">
-				{#if emailRevealed}
+				{#if email}
 					<a class="row" href="mailto:{email}">
 						<span class="ico"
 							><svg
@@ -44,7 +45,7 @@
 						<span class="mono">{email}</span>
 					</a>
 				{:else}
-					<button class="row" onclick={() => (emailRevealed = true)}>
+					<button class="row" onclick={() => (email = contact.email())}>
 						<span class="ico"
 							><svg
 								width="18"
@@ -91,7 +92,7 @@
 
 		<div class="toolwin hud compose" use:reveal={{ delay: 120 }}>
 			<span class="hud-c"></span>
-			<WinBar title="kent@ktvuong:~/contact/new-message.txt" live="smtp: ready">
+			<WinBar title="kv@arch:~/contact/new-message.txt" live="smtp: ready">
 				<form
 					method="POST"
 					action="?/contact"

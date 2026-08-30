@@ -4,6 +4,7 @@
 	import { goToSection } from '$lib/scroll';
 	import Button from '$lib/components/ui/Button.svelte';
 	import StatusDot from '$lib/components/ui/StatusDot.svelte';
+	import { contact } from '$lib/data/contact';
 	import {
 		role,
 		summary,
@@ -14,23 +15,25 @@
 		education
 	} from '$lib/data/resume';
 
-	/* Same treatment the contact section gives the address: assembled at runtime
-	   so scrapers do not lift it straight out of the markup. */
-	const email = ['kent', '@', 'ktvuong', '.com'].join('');
-	const phone = ['+61', '400', '565', '822'].join(' ');
-	let contactRevealed = $state(false);
+	/* Held as obfuscated tokens (see $lib/data/contact) and only decoded when
+	   someone asks, so neither the markup nor the bundle carries either value
+	   in readable form. */
+	let revealed = $state<{ email: string; phone: string } | null>(null);
+	const revealContact = () => {
+		revealed = { email: contact.email(), phone: contact.phone() };
+	};
 
 	/* A printed sheet with no way to reply is a dud, so reveal on the way to
 	   paper. The address is still absent from the server-rendered markup,
 	   which is what the scrapers read. */
 	$effect(() => {
-		const onBeforePrint = () => (contactRevealed = true);
+		const onBeforePrint = () => revealContact();
 		window.addEventListener('beforeprint', onBeforePrint);
 		return () => window.removeEventListener('beforeprint', onBeforePrint);
 	});
 
 	function print() {
-		contactRevealed = true;
+		revealContact();
 		window.print();
 	}
 
@@ -76,11 +79,11 @@
 						>
 							linkedin.com/in/kentvuong88
 						</a>
-						{#if contactRevealed}
-							<a class="crow" href="mailto:{email}">{email}</a>
-							<a class="crow" href="tel:{phone.replace(/\s/g, '')}">{phone}</a>
+						{#if revealed}
+							<a class="crow" href="mailto:{revealed.email}">{revealed.email}</a>
+							<a class="crow" href="tel:{contact.phoneHref()}">{revealed.phone}</a>
 						{:else}
-							<button class="crow reveal-btn" onclick={() => (contactRevealed = true)}>
+							<button class="crow reveal-btn" onclick={revealContact}>
 								click to reveal email and phone
 							</button>
 						{/if}
@@ -127,7 +130,7 @@
 					<div class="panel glass-panel hud" use:spotlight>
 						<span class="hud-c"></span>
 						<div class="bar toolwin-bar">
-							<span class="toolwin-title">kent@ktvuong:~/resume/experience</span>
+							<span class="toolwin-title">kv@arch:~/resume/experience</span>
 							<span class="toolwin-live"><span class="ldot"></span>current</span>
 						</div>
 						<ol class="entries">
