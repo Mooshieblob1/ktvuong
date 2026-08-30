@@ -4,7 +4,7 @@
 	import Input from './ui/Input.svelte';
 	import Textarea from './ui/Textarea.svelte';
 	import Button from './ui/Button.svelte';
-	import ScrambleText from './ScrambleText.svelte';
+	import SectionHead from './SectionHead.svelte';
 	import WinBar from './WinBar.svelte';
 
 	let sent = $state(false);
@@ -18,12 +18,13 @@
 <section id="contact" class="contact">
 	<div class="grid">
 		<div class="info" use:reveal>
-			<span class="sec-index"><b>04</b> say hello</span>
-			<h2><ScrambleText text="Let's build something" /></h2>
-			<p>
-				Open to roles in AI tooling, creative software and front-end engineering — or if you're
-				making something with generative image models and need a hand, my inbox is open.
-			</p>
+			<SectionHead
+				index="04"
+				label="say hello"
+				title="Let's build something"
+				note="Open to roles in AI tooling, creative software and front-end engineering. If you're making something with generative image models and need a hand, my inbox is open."
+				readout="open"
+			/>
 			<div class="rows">
 				{#if emailRevealed}
 					<a class="row" href="mailto:{email}">
@@ -90,7 +91,7 @@
 
 		<div class="toolwin hud compose" use:reveal={{ delay: 120 }}>
 			<span class="hud-c"></span>
-			<WinBar title="kent@ktvuong:~/contact — new-message.txt" live="smtp: ready">
+			<WinBar title="kent@ktvuong:~/contact/new-message.txt" live="smtp: ready">
 				<form
 					method="POST"
 					action="?/contact"
@@ -144,20 +145,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 22px;
-	}
-	h2 {
-		margin: 0;
-		font-size: clamp(1.8rem, 3.6vw, 2.5rem);
-		font-weight: 700;
-		letter-spacing: -0.025em;
-		color: var(--text-strong);
-	}
-	.info p {
-		margin: 0;
-		color: var(--text-muted);
-		font-size: var(--text-base);
-		line-height: 1.65;
-		max-width: 42ch;
 	}
 	.rows {
 		display: flex;

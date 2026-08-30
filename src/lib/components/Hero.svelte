@@ -67,7 +67,7 @@
 <section id="about" class="hero">
 	<!-- Backdrop layers: aurora + blueprint grid + scanline + grain. -->
 	<div class="backdrop" aria-hidden="true">
-		<div class="aurora"></div>
+		<div class="lightfield"></div>
 		<div class="gridlines tex"></div>
 		<div class="scan-sweep"></div>
 		<div class="noise"></div>
@@ -89,7 +89,7 @@
 				<h1 use:reveal={{ delay: 60 }}>Kent Vuong</h1>
 
 				<p class="lead" use:reveal={{ delay: 120 }}>
-					I build generative AI art tools that artists actually enjoy using — desktop apps, ComfyUI
+					I build generative AI art tools that artists actually enjoy using: desktop apps, ComfyUI
 					nodes and guides that hide the plumbing and put the fun back in.
 				</p>
 
@@ -116,7 +116,7 @@
 					<NodeGraph />
 				</div>
 				<div class="graph-meta mono" aria-hidden="true">
-					<span>LIVE RENDER PIPELINE — CANVAS / RAF</span>
+					<span>LIVE RENDER PIPELINE · CANVAS / RAF</span>
 					<span class="ok">● 60 FPS</span>
 				</div>
 			</div>
@@ -162,23 +162,21 @@
 		z-index: 0;
 		pointer-events: none;
 	}
-	.aurora {
+	/* Static light, sized to keep the glass panels refracting something. */
+	.lightfield {
 		position: absolute;
-		inset: -20%;
+		inset: 0;
 		background:
 			radial-gradient(
-				38% 44% at 26% 36%,
-				color-mix(in srgb, var(--accent-500) 10%, transparent),
-				transparent 72%
-			),
-			radial-gradient(
-				34% 40% at 74% 58%,
-				color-mix(in srgb, #8caaff 15%, transparent),
+				40% 48% at 22% 22%,
+				color-mix(in srgb, #8caaff 11%, transparent),
 				transparent 70%
 			),
-			radial-gradient(46% 54% at 54% 48%, color-mix(in srgb, #fff 5%, transparent), transparent 76%);
-		animation: mb-aurora 24s var(--ease-standard) infinite;
-		will-change: transform;
+			radial-gradient(
+				38% 46% at 82% 66%,
+				color-mix(in srgb, var(--accent-500) 7%, transparent),
+				transparent 72%
+			);
 	}
 	.tex {
 		position: absolute;
@@ -195,7 +193,9 @@
 		align-items: center;
 		/* --nav-h is published by Header; the fallback covers the pre-hydration
 		   render and the one-row desktop pill. */
-		padding: calc(var(--nav-h, 56px) + 40px) clamp(20px, 5vw, 48px) 24px;
+		/* Reuse the chrome offset so the hero clears the top bar in bar mode and
+		   simply breathes in rail mode, without repeating the breakpoint. */
+		padding: calc(var(--nav-offset) + 34px) clamp(20px, 4vw, 44px) 26px;
 		max-width: 1400px;
 		margin: 0 auto;
 		width: 100%;
@@ -329,12 +329,12 @@
 		position: relative;
 		z-index: 10;
 		width: 100%;
-		max-width: 64rem;
+		max-width: 1400px;
 		margin: 0 auto;
 		display: flex;
 		align-items: center;
 		gap: 2rem;
-		padding: 0 clamp(20px, 5vw, 48px) 26px;
+		padding: 0 clamp(20px, 4vw, 44px) 26px;
 	}
 	.marquee-label {
 		display: flex;

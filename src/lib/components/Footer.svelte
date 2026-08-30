@@ -140,11 +140,11 @@
 	/* Giant cropped wordmark bleeding off the bottom edge, terminal caret blinking. */
 	.wordmark {
 		position: relative;
-		height: clamp(70px, 11vw, 150px);
-		margin-top: clamp(18px, 3vw, 32px);
+		height: clamp(48px, 7vw, 96px);
+		margin-top: clamp(14px, 2.4vw, 26px);
 		font-family: var(--font-sans);
 		font-weight: 700;
-		font-size: clamp(88px, 16vw, 230px);
+		font-size: clamp(60px, 10.5vw, 148px);
 		line-height: 0.72;
 		letter-spacing: -0.04em;
 		text-align: center;
@@ -157,11 +157,11 @@
 	}
 	.caret {
 		display: inline-block;
-		width: 0.08em;
-		height: 0.62em;
-		margin-left: 0.06em;
+		width: 0.045em;
+		height: 0.58em;
+		margin-left: 0.07em;
 		background: var(--accent-500);
-		opacity: 0.5;
+		opacity: 0.32;
 		animation: mb-blink 1.1s steps(1) infinite;
 	}
 </style>

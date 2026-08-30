@@ -14,7 +14,7 @@
 	let venv = false;
 
 	const BANNER = [
-		'kv-sh v2.4.1 — portfolio shell (arch)',
+		'kv-sh v2.4.1 :: portfolio shell (arch)',
 		"type 'help' for commands · 'exit' to close"
 	];
 
@@ -48,7 +48,7 @@
 				HELP.forEach((l) => print(l));
 				break;
 			case 'whoami':
-				print('kent — creative AI toolmaker, Perth WA');
+				print('kent :: creative AI toolmaker, Perth WA');
 				break;
 			case 'ls':
 				print('about/  work/  repos/  skills/  contact/');
@@ -70,8 +70,8 @@
 				if (/^-Qi\s/.test(q + ' ') || args[0] === '-Qi') {
 					const pkg = args[1]?.toLowerCase() ?? '';
 					const pkgs: Record<string, string> = {
-						mooshieui: 'mooshieui 2.4.1 [installed] 180★ — beginner-friendly ComfyUI frontend',
-						koharu: 'koharu [installed] — ML manga translator in Rust',
+						mooshieui: 'mooshieui 2.4.1 [installed] 180★ :: beginner-friendly ComfyUI frontend',
+						koharu: 'koharu [installed] :: ML manga translator in Rust',
 						nixos: 'error: wrong distro, mate'
 					};
 					print(pkgs[pkg] ?? `error: package '${pkg}' was not found`);
@@ -110,7 +110,7 @@
 			case 'source': {
 				if (args[0]?.includes('venv')) {
 					venv = true;
-					print('(.venv) activated — happy diffusing', 'ok');
+					print('(.venv) activated. happy diffusing', 'ok');
 				} else {
 					print(`source: ${args[0] ?? ''}: no such file`);
 				}

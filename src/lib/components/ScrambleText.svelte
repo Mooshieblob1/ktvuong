@@ -5,7 +5,7 @@
 
 	let el: HTMLElement;
 	let visible = $state(false);
-	let display = $state('');
+	let display = $state(text);
 	let raf = 0;
 
 	onMount(() => {
@@ -33,6 +33,7 @@
 			return;
 		}
 		const target = text;
+		/* Reserve the final width before scrambling so the line never reflows. */
 		const n = target.length;
 		const start = performance.now();
 		const hold = 80;
@@ -44,9 +45,9 @@
 				const revealAt = i * perChar;
 				if (t >= revealAt + 120) out += target[i];
 				else if (t >= revealAt) out += chars[Math.floor(Math.random() * chars.length)] ?? target[i];
-				else out += ' ';
+				else out += '\u00a0';
 			}
-			display = out.replace(/\s+$/, '');
+			display = out;
 			if (t < n * perChar + 120) raf = requestAnimationFrame(loop);
 			else display = target;
 		};

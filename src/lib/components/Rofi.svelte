@@ -169,7 +169,7 @@
 						</button>
 					</li>
 				{:else}
-					<li class="empty mono">no results — try 'repo', 'ui', or 'contact'</li>
+					<li class="empty mono">no results. try 'repo', 'ui', or 'contact'</li>
 				{/each}
 			</ul>
 			<div class="foot mono">

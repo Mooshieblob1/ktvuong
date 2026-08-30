@@ -2,18 +2,18 @@
 	import { skillGroups } from '$lib/data/skills';
 	import { reveal } from '$lib/actions/reveal';
 	import { spotlight } from '$lib/actions/spotlight';
-	import { parallax } from '$lib/actions/scrollfx';
-	import ScrambleText from './ScrambleText.svelte';
+	import SectionHead from './SectionHead.svelte';
 	import WinBar from './WinBar.svelte';
 </script>
 
 <section id="skills" class="skills">
-	<span class="ghost-num" data-num="03" aria-hidden="true" use:parallax={{ speed: 0.08 }}>03</span>
-	<div class="head" use:reveal>
-		<span class="sec-index"><b>03</b> what I work with</span>
-		<h2><ScrambleText text="Tools of the trade" /></h2>
-		<p>The stack behind the tools above — not a wishlist, just what I actually ship with.</p>
-	</div>
+	<SectionHead
+		index="03"
+		label="what I work with"
+		title="Tools of the trade"
+		note="The stack behind the tools above. Not a wishlist, just what I actually ship with."
+		readout="{skillGroups.length} groups"
+	/>
 	<div class="grid">
 		{#each skillGroups as group, gi (group.title)}
 			<div class="toolwin hud" use:spotlight use:reveal={{ delay: gi * 80 }}>
@@ -43,32 +43,10 @@
 		margin: 0 auto;
 		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px);
 	}
-	.head {
-		position: relative;
-		z-index: 2;
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-		margin-bottom: clamp(28px, 5vw, 44px);
-	}
-	h2 {
-		margin: 0;
-		font-size: clamp(1.8rem, 3.6vw, 2.5rem);
-		font-weight: 700;
-		letter-spacing: -0.025em;
-		color: var(--text-strong);
-	}
-	.head p {
-		margin: 0;
-		max-width: 50ch;
-		color: var(--text-muted);
-		font-size: var(--text-sm);
-		line-height: 1.6;
-	}
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 12px;
+		grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+		gap: 10px;
 	}
 	.toolwin {
 		display: flex;
@@ -117,14 +95,16 @@
 	.tagchip {
 		display: inline-flex;
 		align-items: center;
-		height: 28px;
-		padding: 0 11px;
-		border-radius: var(--radius-sm);
-		background: rgba(255, 255, 255, 0.03);
-		border: 1px solid color-mix(in srgb, #fff 8%, transparent);
+		height: 24px;
+		padding: 0 9px;
+		border-radius: 3px;
+		background: rgba(255, 255, 255, 0.025);
+		border: 1px solid var(--line);
 		color: var(--text-muted);
-		font-size: var(--text-xs);
-		font-weight: 500;
+		font-family: var(--font-mono);
+		font-size: var(--text-10);
+		letter-spacing: 0.04em;
+		font-weight: 400;
 		transition:
 			color var(--dur-fast),
 			border-color var(--dur-fast),

@@ -2,9 +2,9 @@
 	import { projects } from '$lib/data/projects';
 	import { reveal } from '$lib/actions/reveal';
 	import { spotlight } from '$lib/actions/spotlight';
-	import { drift, parallax, wordReveal } from '$lib/actions/scrollfx';
+	import { drift } from '$lib/actions/scrollfx';
 	import { tilt } from '$lib/actions/tilt';
-	import ScrambleText from './ScrambleText.svelte';
+	import SectionHead from './SectionHead.svelte';
 
 	function imgError(e: Event) {
 		const img = e.currentTarget as HTMLImageElement;
@@ -13,17 +13,13 @@
 </script>
 
 <section id="work" class="work">
-	<span class="ghost-num" data-num="01" aria-hidden="true" use:parallax={{ speed: 0.08 }}>01</span>
-	<header use:reveal>
-		<div class="head-left">
-			<span class="sec-index"><b>01</b> selected tools</span>
-			<h2><ScrambleText text="Things I've built" /></h2>
-		</div>
-		<p class="head-note wt" use:wordReveal>
-			Apps, nodes and guides from the Mooshie workshop. Everything else is live below, straight from
-			GitHub.
-		</p>
-	</header>
+	<SectionHead
+		index="01"
+		label="selected tools"
+		title="Things I've built"
+		note="Apps, nodes and guides from the Mooshie workshop. Everything else is live below, straight from GitHub."
+		readout="{projects.length} entries"
+	/>
 
 	<div class="bento">
 		{#each projects as p, i (p.og)}
@@ -54,7 +50,7 @@
 					<div class="tagrow">
 						<span class="tag">{p.tag}</span>
 						{#if p.stars}
-							<span class="starbadge">
+							<span class="starbadge tnum">
 								<svg
 									width="12"
 									height="12"
@@ -74,11 +70,10 @@
 					</div>
 					<h3>{p.title}</h3>
 					<p>{p.description}</p>
-					<div class="tech">
-						{#each p.tech as t (t)}
-							<span class="chip">{t}</span>
-						{/each}
-					</div>
+					<dl class="spec">
+						<dt>stack</dt>
+						<dd>{p.tech.join(' · ')}</dd>
+					</dl>
 				</div>
 				<span class="go" aria-hidden="true">
 					<svg
@@ -104,36 +99,6 @@
 		margin: 0 auto;
 		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px);
 	}
-	header {
-		position: relative;
-		z-index: 2;
-		display: flex;
-		align-items: flex-end;
-		justify-content: space-between;
-		gap: 20px;
-		flex-wrap: wrap;
-		margin-bottom: clamp(28px, 5vw, 48px);
-	}
-	.head-left {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
-	h2 {
-		margin: 0;
-		font-size: clamp(1.5rem, 2.8vw, 2rem);
-		font-weight: 700;
-		letter-spacing: -0.025em;
-		color: var(--text-strong);
-	}
-	.head-note {
-		margin: 0;
-		max-width: 36ch;
-		color: var(--text-muted);
-		font-size: var(--text-sm);
-		line-height: 1.6;
-	}
-
 	/* --- Bento grid ---------------------------------------------------------- */
 	.bento {
 		display: grid;
@@ -257,23 +222,28 @@
 		line-height: 1.6;
 		flex: 1 1 auto;
 	}
-	.tech {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 7px;
-		margin-top: auto;
+	/* Spec row: a hairline label/value pair, the same shape every card uses. */
+	.spec {
+		display: grid;
+		grid-template-columns: 46px minmax(0, 1fr);
+		gap: 0 12px;
+		margin: auto 0 0;
+		padding-top: 11px;
+		border-top: 1px solid var(--line);
+		font-family: var(--font-mono);
 	}
-	.chip {
-		display: inline-flex;
-		align-items: center;
-		height: 25px;
-		padding: 0 10px;
-		border-radius: var(--radius-sm);
-		background: rgba(255, 255, 255, 0.03);
-		border: 1px solid color-mix(in srgb, #fff 8%, transparent);
-		color: var(--text-muted);
+	.spec dt {
+		font-size: var(--text-10);
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--text-disabled);
+		line-height: 1.5;
+	}
+	.spec dd {
+		margin: 0;
 		font-size: var(--text-xs);
-		font-weight: 500;
+		line-height: 1.5;
+		color: var(--text-muted);
 	}
 	.go {
 		position: absolute;

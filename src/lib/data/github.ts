@@ -55,7 +55,7 @@ export function relTime(iso: string): string {
 }
 
 /** Commits authored by `user` on a repo (forks/upstream count). null = couldn't tell.
- *  Used sparingly now — only for external contribution repos. */
+ *  Used sparingly now, only for external contribution repos. */
 async function commitCount(full: string, user: string): Promise<number | null> {
 	try {
 		const res = await fetch(
@@ -149,7 +149,7 @@ export async function fetchActiveRepos(user: string, featuredFullNames: string[]
 		cache = { at: now, data: fresh, stale: false };
 		return fresh;
 	}
-	// GitHub unreachable or returned nothing useful — serve the bundled snapshot
+	// GitHub unreachable or returned nothing useful, so serve the bundled snapshot
 	// (marked stale so the UI can label it) and cache it briefly to avoid hammering.
 	const stale = SNAPSHOT.map((r) => ({ ...r, rel: relTime(r.pushed) }));
 	if (!cache.data) cache = { at: now - GITHUB_CACHE_TTL_MS + 60_000, data: stale, stale: true };
@@ -195,7 +195,7 @@ async function fetchActiveReposUncached(
 		.slice(0, 12)
 		.map((r) => toCandidate(r, false));
 
-	// 2) External contributions — discovered from public push events + curated.
+	// 2) External contributions, discovered from public push events plus curated.
 	const discovered: string[] = [];
 	try {
 		const evRes = await fetch(`https://api.github.com/users/${user}/events/public?per_page=100`);
@@ -230,8 +230,8 @@ async function fetchActiveReposUncached(
 	);
 	const extCand = extMeta.filter((c): c is Candidate => c !== null);
 
-	// 3) Quality gate: external repos by authored commits (owned repos skip this —
-	//    the 31-day recency filter above already covers them).
+	// 3) Quality gate: external repos by authored commits (owned repos skip
+	//    this, since the 31-day recency filter above already covers them).
 	const candidates = [...ownedCand, ...extCand];
 	const counts = await Promise.all(extCand.map((c) => commitCount(c.full, user)));
 	const countFor = (c: Candidate): number | null =>
@@ -260,7 +260,7 @@ async function fetchActiveReposUncached(
 }
 
 /**
- * Bundled fallback snapshot — captured 2026-08-27 from the live API.
+ * Bundled fallback snapshot, captured 2026-08-27 from the live API.
  * Shown (labelled as cached) only when GitHub is unreachable or rate-limited,
  * so the section never renders an error state to visitors.
  */
@@ -296,7 +296,7 @@ const SNAPSHOT: Omit<Repo, 'rel'>[] = [
 		external: false,
 		displayName: 'mooshie-anima-styles',
 		description:
-			'A visual reference library of artist styles for the Anima image model — browse, compare and copy style recipes.',
+			'A visual reference library of artist styles for the Anima image model. Browse, compare and copy style recipes.',
 		url: 'https://github.com/Mooshieblob1/mooshie-anima-styles',
 		language: 'Svelte',
 		stars: 9,

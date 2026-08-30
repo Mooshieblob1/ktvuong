@@ -43,12 +43,12 @@
 </script>
 
 <svelte:head>
-	<title>Kent Vuong — Creative AI Toolmaker</title>
+	<title>Kent Vuong · Creative AI Toolmaker</title>
 	<meta
 		name="description"
-		content="Kent Vuong (a.k.a. Mooshieblob) builds generative AI tools people actually enjoy using — MooshieUI, ComfyUI nodes, style libraries and guides. Selected work and open source."
+		content="Kent Vuong (a.k.a. Mooshieblob) builds generative AI tools people actually enjoy using: MooshieUI, ComfyUI nodes, style libraries and guides. Selected work and open source."
 	/>
-	<!-- Keep the portfolio out of search results — only people you send the link to find it. -->
+	<!-- Keep the portfolio out of search results. Only people you send the link to find it. -->
 	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 

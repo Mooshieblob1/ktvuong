@@ -7,7 +7,7 @@
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 		const ACC = '#ffcc00';
-		/* Cycling node highlight is state, not signal — keep it neutral. */
+		/* Cycling node highlight is state, not signal, so keep it neutral. */
 		const HI = 'rgba(255,255,255,0.85)';
 		const HI_TEXT = 'rgba(255,255,255,0.98)';
 
@@ -187,7 +187,7 @@
 		<span class="d red"></span>
 		<span class="d yellow"></span>
 		<span class="d green"></span>
-		<span class="title">render — generation graph</span>
+		<span class="title">render · generation graph</span>
 		<span class="live"><span class="ldot"></span>live</span>
 	</div>
 	<div class="stage">

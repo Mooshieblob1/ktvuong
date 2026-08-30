@@ -4,7 +4,7 @@ export interface SkillGroup {
 	skills: string[];
 }
 
-/** Trimmed to what the repos actually demonstrate — not an aspirational list. */
+/** Trimmed to what the repos actually demonstrate, not an aspirational list. */
 export const skillGroups: SkillGroup[] = [
 	{
 		title: 'Generative AI',

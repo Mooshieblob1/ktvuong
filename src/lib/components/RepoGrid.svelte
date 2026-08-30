@@ -2,8 +2,8 @@
 	import type { Repo } from '$lib/data/github';
 	import { reveal } from '$lib/actions/reveal';
 	import { spotlight } from '$lib/actions/spotlight';
-	import { drift, parallax, wordReveal } from '$lib/actions/scrollfx';
-	import ScrambleText from './ScrambleText.svelte';
+	import { drift } from '$lib/actions/scrollfx';
+	import SectionHead from './SectionHead.svelte';
 	import SegmentedControl from './ui/SegmentedControl.svelte';
 	import StatusDot from './ui/StatusDot.svelte';
 
@@ -32,31 +32,34 @@
 </script>
 
 <section id="repos" class="repos">
-	<span class="ghost-num" data-num="02" aria-hidden="true" use:parallax={{ speed: 0.08 }}>02</span>
-	<header use:reveal>
-		<div class="head-left">
-			<span class="sec-index"><b>02</b> live from GitHub</span>
-			<h2><ScrambleText text="Currently tinkering on" /></h2>
-			<div class="sub">
-				<StatusDot status={stale ? 'idle' : 'online'} pulse={!stale} />
-				<span class="wt" use:wordReveal>
-					{#if stale}
-						Showing a recent snapshot — live GitHub data is temporarily unavailable
-					{:else}
-						Experiments &amp; open-source contributions, pulled live from GitHub
-					{/if}
-				</span>
+	<SectionHead
+		index="02"
+		label="live from GitHub"
+		title="Currently tinkering on"
+		readout={loading ? 'fetching' : `${sorted.length} repos`}
+	>
+		{#snippet aside()}
+			<div class="sortbar">
+				<span class="sortlabel">Sort</span>
+				<SegmentedControl
+					options={['Recent', 'Stars']}
+					value={sort === 'stars' ? 'Stars' : 'Recent'}
+					onChange={(v) => (sort = v.toLowerCase().includes('star') ? 'stars' : 'recent')}
+				/>
 			</div>
-		</div>
-		<div class="sortbar">
-			<span class="sortlabel">Sort</span>
-			<SegmentedControl
-				options={['Recent', 'Stars']}
-				value={sort === 'stars' ? 'Stars' : 'Recent'}
-				onChange={(v) => (sort = v.toLowerCase().includes('star') ? 'stars' : 'recent')}
-			/>
-		</div>
-	</header>
+		{/snippet}
+	</SectionHead>
+
+	<div class="sub" use:reveal>
+		<StatusDot status={stale ? 'idle' : 'online'} pulse={!stale} />
+		<span>
+			{#if stale}
+				Showing a recent snapshot. Live GitHub data is temporarily unavailable.
+			{:else}
+				Experiments and open-source contributions, pulled live from GitHub.
+			{/if}
+		</span>
+	</div>
 
 	{#if loading}
 		<div class="grid">
@@ -66,7 +69,7 @@
 		</div>
 	{:else if noRepos}
 		<div class="notice">
-			Nothing to show right now — see the featured work above, or
+			Nothing to show right now. See the featured work above, or
 			<a href="https://github.com/Mooshieblob1" target="_blank" rel="noopener"
 				>browse everything on GitHub →</a
 			>
@@ -139,27 +142,18 @@
 						{/if}
 					</div>
 					<p class="desc">{repo.description}</p>
-					<div class="meta">
-						{#if repo.language}
-							<span class="lang"
-								><span class="ldot" style="background:{repo.langColor}"></span>{repo.language}</span
-							>
-						{/if}
-						<span class="when">
-							<svg
-								width="11"
-								height="11"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2.2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg
-							>
-							{repo.rel}
-						</span>
-					</div>
+					<dl class="spec tnum">
+						<dt>lang</dt>
+						<dd>
+							{#if repo.language}
+								<span class="ldot" style="background:{repo.langColor}"></span>{repo.language}
+							{:else}
+								<span class="nil">not set</span>
+							{/if}
+						</dd>
+						<dt>pushed</dt>
+						<dd>{repo.rel}</dd>
+					</dl>
 				</a>
 			{/each}
 		</div>
@@ -190,38 +184,16 @@
 		margin: 0 auto;
 		padding: clamp(30px, 4.5vh, 56px) clamp(20px, 5vw, 48px);
 	}
-	header {
-		position: relative;
-		z-index: 2;
-		display: flex;
-		align-items: flex-end;
-		justify-content: space-between;
-		gap: 20px;
-		flex-wrap: wrap;
-		margin-bottom: clamp(24px, 4vw, 40px);
-	}
-	.head-left {
-		display: flex;
-		flex-direction: column;
-		gap: 14px;
-	}
-	h2 {
-		margin: 0;
-		font-size: clamp(1.8rem, 3.6vw, 2.5rem);
-		font-weight: 700;
-		letter-spacing: -0.025em;
-		color: var(--text-strong);
-	}
 	.sub {
 		display: flex;
 		align-items: center;
 		gap: 10px;
+		margin-bottom: 18px;
 		font-size: var(--text-sm);
 		color: var(--text-muted);
 	}
-	.sub .wt {
+	.sub span {
 		min-width: 0;
-		flex: 1 1 auto;
 	}
 	.sortbar {
 		display: flex;
@@ -234,8 +206,8 @@
 	}
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-		gap: 16px;
+		grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+		gap: 10px;
 	}
 	.skel {
 		height: 148px;
@@ -316,30 +288,41 @@
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
-	.meta {
-		display: flex;
-		align-items: center;
-		gap: 16px;
+	/* Same spec-row shape as the project cards, so both grids read alike. */
+	.spec {
+		display: grid;
+		grid-template-columns: 52px minmax(0, 1fr);
+		gap: 3px 10px;
+		margin: auto 0 0;
+		padding-top: 10px;
+		border-top: 1px solid var(--line);
 		font-family: var(--font-mono);
 		font-size: var(--text-10);
-		color: var(--text-subtle);
 	}
-	.lang {
-		display: inline-flex;
+	.spec dt {
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--text-disabled);
+		line-height: 1.5;
+	}
+	.spec dd {
+		margin: 0;
+		display: flex;
 		align-items: center;
 		gap: 6px;
+		line-height: 1.5;
+		color: var(--text-muted);
+		min-width: 0;
+	}
+	.spec .nil {
+		color: var(--text-disabled);
 	}
 	.ldot {
-		width: 9px;
-		height: 9px;
+		width: 8px;
+		height: 8px;
 		border-radius: 50%;
 		flex-shrink: 0;
 		display: inline-block;
-	}
-	.when {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
 	}
 	.contrib {
 		display: inline-flex;

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   MooshieUI design tokens — lifted from the MooshieUI design system.
+   MooshieUI design tokens, lifted from the MooshieUI design system.
    Dark is canonical; Mooshie Yellow (#ffcc00) is the one accent.
    Fonts are loaded via <link> in app.html.
    ========================================================================== */
@@ -22,7 +22,7 @@
 	--neutral-900: #171717;
 	--neutral-950: #0a0a0a;
 
-	/* Brand accent — Mooshie Yellow */
+	/* Brand accent: Mooshie Yellow */
 	--accent-50: #fffdf0;
 	--accent-100: #fff8d1;
 	--accent-200: #ffef9e;
@@ -38,7 +38,13 @@
 	--accent: var(--accent-500);
 	--accent-hover: var(--accent-400);
 
-	/* Structural marks — hairlines, brackets and section indices are neutral
+	/* Chrome geometry. --nav-offset is what scrollToId subtracts, so the
+	   breakpoint lives in CSS rather than being guessed in JavaScript. */
+	--rail-w: 0px;
+	--bar-h: 92px;
+	--nav-offset: calc(var(--bar-h) + 16px);
+
+	/* Structural marks. Hairlines, brackets and section indices are neutral
 	   so the accent can mean one thing only: interactive, or live. */
 	--line: color-mix(in srgb, #fff 11%, transparent);
 	--line-strong: color-mix(in srgb, #fff 20%, transparent);
@@ -112,6 +118,13 @@
 	--dur-slow: 0.45s;
 }
 
+@media (min-width: 1080px) {
+	:root {
+		--rail-w: 212px;
+		--nav-offset: 26px;
+	}
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -123,7 +136,7 @@ html.lenis-active {
 }
 body {
 	margin: 0;
-	/* Ambient light sources behind everything — glass panels refract these. */
+	/* Ambient light sources behind everything; glass panels refract these. */
 	background:
 		radial-gradient(1100px 700px at 12% -8%, rgba(255, 204, 0, 0.035), transparent 60%),
 		radial-gradient(900px 640px at 108% 12%, rgba(140, 170, 255, 0.05), transparent 62%),
@@ -134,6 +147,8 @@ body {
 	font-family: var(--font-sans);
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
+	/* Clear the fixed rail. Zero in bar mode, where the offset is vertical. */
+	padding-left: var(--rail-w);
 }
 
 @keyframes mb-blink {
@@ -166,7 +181,7 @@ body {
 	}
 }
 
-/* Hero marquee — track holds two copies of the list; -50% loops seamlessly. */
+/* Hero marquee: track holds two copies of the list; -50% loops seamlessly. */
 @keyframes mb-marquee {
 	from {
 		transform: translateX(0);
@@ -176,21 +191,8 @@ body {
 	}
 }
 
-/* Hero aurora — slow drift of the yellow glow behind the headline. */
-@keyframes mb-aurora {
-	0% {
-		transform: translate3d(-3%, -2%, 0) scale(1.05) rotate(0deg);
-	}
-	50% {
-		transform: translate3d(3%, 2%, 0) scale(1.12) rotate(8deg);
-	}
-	100% {
-		transform: translate3d(-3%, -2%, 0) scale(1.05) rotate(0deg);
-	}
-}
-
 /* ==========================================================================
-   Amber CRT theme — phosphor terminal look, toggled via [data-theme=amber]
+   Amber CRT theme: phosphor terminal look, toggled via [data-theme=amber]
    (rofi "Toggle theme", or theme.cycleTheme()).
    ========================================================================== */
 :root[data-theme='amber'] {
@@ -227,7 +229,7 @@ body {
 }
 
 /* ==========================================================================
-   Liquid-glass utilities — Apple-style frosted material: deep backdrop
+   Liquid-glass utilities. Apple-style frosted material: deep backdrop
    frost, gradient rim light, soft top sheen. `liquid-glass` for small
    tiles, `glass-panel` for cards/sections.
    ========================================================================== */
@@ -285,7 +287,7 @@ body {
 		0 20px 50px rgba(0, 0, 0, 0.4);
 	overflow: hidden;
 }
-/* Gradient rim light on glass panels — brighter where light would catch. */
+/* Gradient rim light on glass panels, brighter where light would catch. */
 .glass-panel::before {
 	content: '';
 	position: absolute;
@@ -319,7 +321,7 @@ body {
 }
 
 /* ==========================================================================
-   Tool-window chrome (glass edition) — shared by skills panels + contact
+   Tool-window chrome (glass edition), shared by skills panels and contact
    form: frosted bar, traffic lights, hairline borders.
    ========================================================================== */
 .toolwin {
@@ -360,7 +362,7 @@ body {
 	background: var(--success);
 }
 
-/* i3/sway-style window buttons — square mono glyphs, no traffic lights. */
+/* i3/sway-style window buttons: square mono glyphs, no traffic lights. */
 .wbtn {
 	display: inline-flex;
 	align-items: center;
@@ -426,64 +428,11 @@ body {
 	display: inline-block;
 }
 
-/* Floating glass nav pill (Header) — frosted capsule with rim light. */
-.glass-nav {
-	position: fixed;
-	top: 14px;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 50;
-	width: min(1120px, calc(100vw - 28px));
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 14px;
-	padding: 9px 16px;
-	border-radius: var(--radius-full);
-	background: color-mix(in srgb, var(--surface-950) 55%, transparent);
-	backdrop-filter: blur(18px) saturate(170%);
-	-webkit-backdrop-filter: blur(18px) saturate(170%);
-	border: 1px solid color-mix(in srgb, #fff 9%, transparent);
-	box-shadow:
-		inset 0 1px 0 rgba(255, 255, 255, 0.1),
-		0 14px 34px rgba(0, 0, 0, 0.42);
-}
-.glass-nav::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	padding: 1px;
-	background: linear-gradient(
-		180deg,
-		rgba(255, 255, 255, 0.3),
-		rgba(255, 255, 255, 0.04) 40%,
-		rgba(255, 255, 255, 0.02) 70%,
-		rgba(255, 255, 255, 0.16)
-	);
-	-webkit-mask:
-		linear-gradient(#fff 0 0) content-box,
-		linear-gradient(#fff 0 0);
-	-webkit-mask-composite: xor;
-	mask-composite: exclude;
-	pointer-events: none;
-}
-
-/* Faint dot-grid texture for hero/backdrop areas. */
-.dotgrid {
-	background-image: radial-gradient(
-		circle,
-		color-mix(in srgb, var(--text) 9%, transparent) 1px,
-		transparent 1px
-	);
-	background-size: 22px 22px;
-}
-
 /* ==========================================================================
    Hi-tech HUD primitives
    ========================================================================== */
 
-/* Scanline sweep — a slow light band that travels down the viewport once. */
+/* Scanline sweep: a slow light band that travels down the viewport once. */
 .scan-sweep {
 	pointer-events: none;
 	position: absolute;
@@ -541,7 +490,7 @@ body {
 		3px 3px;
 }
 
-/* HUD corner brackets — wrap any panel for sci-fi targeting corners. */
+/* HUD corner brackets: wrap any panel for sci-fi targeting corners. */
 .hud {
 	position: relative;
 }
@@ -591,39 +540,24 @@ body {
 	border-color: var(--accent-500);
 }
 
-/* Mono section index — "01 / WORK" style kicker. */
-.sec-index {
-	display: inline-flex;
-	align-items: center;
-	gap: 10px;
-	font-family: var(--font-mono);
-	font-size: var(--text-10);
-	letter-spacing: 0.22em;
-	text-transform: uppercase;
-	color: var(--text-subtle);
-}
-.sec-index b {
-	color: var(--text-strong);
-	font-weight: 600;
-}
-.sec-index::after {
-	content: '';
-	width: 34px;
-	height: 1px;
-	background: linear-gradient(to right, var(--line-strong), transparent);
-}
-
-/* Blueprint grid-lines backdrop (large cells, very faint). */
+/* Blueprint field: 96px major cells over 24px minor ticks, drawn like a
+   drafting sheet rather than a texture. */
 .gridlines {
 	background-image:
-		linear-gradient(color-mix(in srgb, #fff 3.5%, transparent) 1px, transparent 1px),
-		linear-gradient(90deg, color-mix(in srgb, #fff 3.5%, transparent) 1px, transparent 1px);
-	background-size: 56px 56px;
-	-webkit-mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent);
-	mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent);
+		linear-gradient(color-mix(in srgb, #fff 4.5%, transparent) 1px, transparent 1px),
+		linear-gradient(90deg, color-mix(in srgb, #fff 4.5%, transparent) 1px, transparent 1px),
+		linear-gradient(color-mix(in srgb, #fff 2%, transparent) 1px, transparent 1px),
+		linear-gradient(90deg, color-mix(in srgb, #fff 2%, transparent) 1px, transparent 1px);
+	background-size:
+		96px 96px,
+		96px 96px,
+		24px 24px,
+		24px 24px;
+	-webkit-mask-image: linear-gradient(180deg, #000 6%, rgba(0, 0, 0, 0.35) 62%, transparent);
+	mask-image: linear-gradient(180deg, #000 6%, rgba(0, 0, 0, 0.35) 62%, transparent);
 }
 
-/* Instrument numerals — readouts line up column-wise as values change. */
+/* Instrument numerals: readouts line up column-wise as values change. */
 .tnum {
 	font-variant-numeric: tabular-nums;
 	font-feature-settings: 'tnum' 1;
@@ -664,43 +598,6 @@ body {
 .reveal.in {
 	opacity: 1;
 	transform: none;
-}
-
-/* Word-by-word reveal (see actions/scrollfx.ts wordReveal). */
-.wt {
-	/* container: words are injected as .w spans */
-}
-.wt .w {
-	color: color-mix(in srgb, var(--text-muted) 34%, transparent);
-	transition: color 0.35s var(--ease-out);
-}
-.wt .w.on {
-	color: var(--text-strong);
-}
-
-/* Ghost section numeral — huge, faint, parallax-drifting index behind headings. */
-.ghost-num {
-	position: absolute;
-	top: -0.18em;
-	right: 0;
-	z-index: 0;
-	font-family: var(--font-mono);
-	font-weight: 700;
-	font-size: clamp(6rem, 16vw, 13rem);
-	line-height: 1;
-	letter-spacing: -0.05em;
-	color: transparent;
-	-webkit-text-stroke: 1px color-mix(in srgb, #fff 6%, transparent);
-	pointer-events: none;
-	user-select: none;
-	will-change: transform;
-}
-.ghost-num::after {
-	content: attr(data-num);
-	position: absolute;
-	inset: 0;
-	color: color-mix(in srgb, #fff 2.5%, transparent);
-	-webkit-text-stroke: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
