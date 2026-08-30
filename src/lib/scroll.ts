@@ -27,3 +27,17 @@ export function scrollToId(id: string) {
 		window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
 	}
 }
+
+/**
+ * Jump to a section from anywhere. On a sub-page (the resume) the section is
+ * not in the DOM, so navigate home first and scroll once it has rendered.
+ */
+export async function goToSection(id: string) {
+	if (!document.getElementById(id)) {
+		const { goto } = await import('$app/navigation');
+		const { tick } = await import('svelte');
+		await goto('/');
+		await tick();
+	}
+	scrollToId(id);
+}

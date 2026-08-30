@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { scrollToId } from '$lib/scroll';
+	import { goto } from '$app/navigation';
+	import { goToSection } from '$lib/scroll';
 
 	interface Line {
 		kind: 'in' | 'out' | 'ok' | 'err';
@@ -26,6 +27,7 @@
 		'pacman -Qi    query a project (try: mooshieui)',
 		'neofetch      system info',
 		'echo <text>   say it back',
+		'resume        open the resume',
 		'hire          send an offer',
 		'clear         wipe the terminal',
 		'exit          close terminal'
@@ -51,14 +53,18 @@
 				print('kent :: creative AI toolmaker, Perth WA');
 				break;
 			case 'ls':
-				print('about/  work/  repos/  skills/  contact/');
+				print('about/  work/  repos/  skills/  contact/  resume');
 				break;
 			case 'cd': {
 				const target = (args[0] ?? '').replace(/\/$/, '');
 				const valid = ['about', 'work', 'repos', 'skills', 'contact'];
-				if (valid.includes(target)) {
+				if (target === 'resume') {
+					print('→ ~/resume', 'ok');
+					goto('/resume');
+					open = false;
+				} else if (valid.includes(target)) {
 					print(`→ ~/work/${target}`, 'ok');
-					scrollToId(target);
+					goToSection(target);
 					open = false;
 				} else {
 					print(`cd: no such section: ${args[0] ?? ''}`);
@@ -96,9 +102,15 @@
 			case 'sudo':
 				print('kv is not in the sudoers file. This incident will be reported.');
 				break;
+			case 'resume':
+			case 'cv':
+				print('opening resume :: print for the A4 sheet', 'ok');
+				goto('/resume');
+				open = false;
+				break;
 			case 'hire':
 				print('→ opening contact…', 'ok');
-				scrollToId('contact');
+				goToSection('contact');
 				open = false;
 				break;
 			case 'clear':

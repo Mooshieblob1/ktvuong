@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { scrollToId } from '$lib/scroll';
+	import { tick } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { goToSection } from '$lib/scroll';
 	import { projects } from '$lib/data/projects';
 	import { cycleTheme } from '$lib/theme';
 
@@ -12,6 +14,7 @@
 	let open = $state(false);
 	let query = $state('');
 	let sel = $state(0);
+	let inputEl = $state<HTMLInputElement | null>(null);
 	/** Live repo entries fetched lazily the first time the palette opens. */
 	let liveRepos = $state<{ label: string; hint: string; url: string }[]>([]);
 
@@ -19,13 +22,28 @@
 		...['about', 'work', 'repos', 'skills', 'contact'].map((id) => ({
 			label: id[0].toUpperCase() + id.slice(1),
 			hint: 'section',
-			run: () => scrollToId(id)
+			run: () => goToSection(id)
 		})),
+		{
+			label: 'Résumé',
+			hint: 'page',
+			run: () => goto('/resume')
+		},
 		...projects.map((p) => ({
 			label: p.title,
 			hint: 'project',
 			run: () => window.open(p.github, '_blank', 'noopener')
 		})),
+		{
+			label: 'Print résumé',
+			hint: 'pdf',
+			run: async () => {
+				await goto('/resume');
+				await tick();
+				/* One frame of paint before the print dialog freezes the page. */
+				requestAnimationFrame(() => window.print());
+			}
+		},
 		{
 			label: 'GitHub profile',
 			hint: 'link',
@@ -50,11 +68,19 @@
 		}
 	]);
 
+	/** Fold accents, so typing 'resume' still finds 'Résumé'. */
+	function plain(s: string): string {
+		return s
+			.normalize('NFD')
+			.replace(/\p{Diacritic}/gu, '')
+			.toLowerCase();
+	}
+
 	// Simple subsequence fuzzy score: consecutive > scattered.
 	function score(q: string, s: string): number {
 		if (!q) return 1;
-		const lq = q.toLowerCase();
-		const ls = s.toLowerCase();
+		const lq = plain(q);
+		const ls = plain(s);
 		let qi = 0;
 		let run = 0;
 		let sc = 0;
@@ -92,7 +118,10 @@
 	});
 
 	$effect(() => {
-		if (open) sel = 0;
+		if (!open) return;
+		sel = 0;
+		/* The palette is keyboard-first: ctrl+k should land the caret in it. */
+		tick().then(() => inputEl?.focus());
 	});
 
 	// External open channel (tmux bar chip, etc.). Keeps toggle semantics.
@@ -148,6 +177,7 @@
 			<div class="promptrow">
 				<span class="chev">❯</span>
 				<input
+					bind:this={inputEl}
 					bind:value={query}
 					placeholder="search sections, projects, repos…"
 					spellcheck="false"

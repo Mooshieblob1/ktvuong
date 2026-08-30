@@ -1,12 +1,17 @@
 <script lang="ts">
-	import { scrollToId } from '$lib/scroll';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	import { goToSection } from '$lib/scroll';
 
+	/* Entries with a path are routes of their own; the rest are sections of
+	   the front page and drive the position readout. */
 	const links = [
 		{ id: 'about', ix: '00', label: 'Overview' },
 		{ id: 'work', ix: '01', label: 'Selected tools' },
 		{ id: 'repos', ix: '02', label: 'Repositories' },
 		{ id: 'skills', ix: '03', label: 'Stack' },
-		{ id: 'contact', ix: '04', label: 'Contact' }
+		{ id: 'contact', ix: '04', label: 'Contact' },
+		{ id: 'resume', ix: '05', label: 'Résumé', path: '/resume' }
 	];
 
 	let progress = $state(0);
@@ -30,8 +35,10 @@
 		return () => window.removeEventListener('scroll', onScroll);
 	});
 
-	/* Which section is under the reader, for the rail tick and the readout. */
+	/* Which section is under the reader, for the rail tick and the readout.
+	   Re-runs on navigation, since the sections only exist on the front page. */
 	$effect(() => {
+		void page.url.pathname;
 		const io = new IntersectionObserver(
 			(entries) => {
 				for (const e of entries) if (e.isIntersecting) active = e.target.id;
@@ -39,24 +46,32 @@
 			{ rootMargin: '-45% 0px -50% 0px' }
 		);
 		for (const l of links) {
+			if (l.path) continue;
 			const el = document.getElementById(l.id);
 			if (el) io.observe(el);
 		}
 		return () => io.disconnect();
 	});
 
-	const activeLabel = $derived(links.find((l) => l.id === active)?.label ?? '');
+	/* On a route of its own, that route is what the rail is pointing at. */
+	const routeLink = $derived(links.find((l) => l.path && l.path === page.url.pathname));
+	const activeId = $derived(routeLink?.id ?? active);
+	const activeLabel = $derived(links.find((l) => l.id === activeId)?.label ?? '');
 	const pct = $derived(Math.round(progress * 100));
 
-	function go(id: string) {
-		active = id;
-		scrollToId(id);
+	function go(l: (typeof links)[number]) {
+		if (l.path) {
+			goto(l.path);
+			return;
+		}
+		active = l.id;
+		goToSection(l.id);
 	}
 </script>
 
 <nav class="rail" bind:clientHeight={barH} aria-label="Primary">
 	<div class="top">
-		<button class="mark" onclick={() => go('about')} aria-label="Back to top">
+		<button class="mark" onclick={() => go(links[0])} aria-label="Back to top">
 			<span class="tile">KV</span>
 			<span class="who">
 				<b>Kent Vuong</b>
@@ -92,7 +107,7 @@
 	<ol class="nav">
 		{#each links as l (l.id)}
 			<li>
-				<button class:on={active === l.id} onclick={() => go(l.id)}>
+				<button class:on={activeId === l.id} onclick={() => go(l)}>
 					<span class="ix">{l.ix}</span>
 					<span class="lb">{l.label}</span>
 				</button>

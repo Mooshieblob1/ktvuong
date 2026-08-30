@@ -27,6 +27,10 @@
 - Cards are spec sheets: aligned label/value rows in mono with tabular numerals
 - Compact hero with a hairline telemetry strip, so the work grid starts above the fold
 - Animated ComfyUI node-graph canvas in the hero over a schematic blueprint field
+- Résumé at `/resume`, built from the same tokens as the rest of the site: instrument
+  stripes, hairline telemetry, glass panels and HUD brackets on screen, and a print
+  stylesheet that folds the same DOM into a one-page A4 sheet for `Print or save as PDF`.
+  Reachable from the rail (`05`), the palette, and `resume` in the terminal
 - `ctrl+k` command palette (rofi) and a `ctrl+\`` terminal overlay
 - Smooth scrolling via [Lenis](https://github.com/darkroomengineering/lenis) on Chromium, native CSS smooth scroll on Firefox
 - Bento-style project showcase grid
@@ -54,10 +58,11 @@
 ktvuong/
 ├── src/
 │   ├── lib/components/    # Header, Footer, Hero, NodeGraph
-│   ├── lib/data/          # Featured projects, skills, GitHub fetcher
+│   ├── lib/data/          # Featured projects, skills, résumé, GitHub fetcher
 │   ├── routes/
 │   │   ├── +layout.svelte # Lenis init, global layout
-│   │   └── +page.svelte   # Main page (about, tools, repos, skills, contact)
+│   │   ├── +page.svelte   # Main page (about, tools, repos, skills, contact)
+│   │   └── resume/        # Résumé page, screen and print
 │   ├── app.css            # Global styles, tool-window chrome, animations
 │   └── app.html           # HTML template
 ├── static/

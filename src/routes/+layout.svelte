@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { page } from '$app/state';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Rofi from '$lib/components/Rofi.svelte';
@@ -8,6 +9,16 @@
 	import '../app.css';
 
 	let { children } = $props();
+
+	/* One head for the whole site: a second <title> from a page would stack
+	   rather than replace, so the route picks the copy here instead. */
+	const onResume = $derived(page.url.pathname === '/resume');
+	const title = $derived(onResume ? 'Kent Vuong · Résumé' : 'Kent Vuong · Creative AI Toolmaker');
+	const description = $derived(
+		onResume
+			? 'Resume of Kent Vuong, frontend and desktop engineer: Rust, Tauri, TypeScript and Svelte 5, with a background in enterprise IT operations.'
+			: 'Kent Vuong (a.k.a. Mooshieblob) builds generative AI tools people actually enjoy using: MooshieUI, ComfyUI nodes, style libraries and guides. Selected work and open source.'
+	);
 
 	onMount(() => {
 		try {
@@ -43,11 +54,8 @@
 </script>
 
 <svelte:head>
-	<title>Kent Vuong · Creative AI Toolmaker</title>
-	<meta
-		name="description"
-		content="Kent Vuong (a.k.a. Mooshieblob) builds generative AI tools people actually enjoy using: MooshieUI, ComfyUI nodes, style libraries and guides. Selected work and open source."
-	/>
+	<title>{title}</title>
+	<meta name="description" content={description} />
 	<!-- Keep the portfolio out of search results. Only people you send the link to find it. -->
 	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
