@@ -301,7 +301,7 @@
 			inset: 0 auto 0 0;
 			width: var(--rail-w);
 			gap: 22px;
-			padding: 18px 16px 16px;
+			padding: 18px 16px 52px;
 			border-bottom: none;
 			border-right: 1px solid var(--line);
 		}
