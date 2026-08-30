@@ -67,7 +67,6 @@ ktvuong/
 │   └── app.html           # HTML template
 ├── static/
 │   ├── favicon.svg        # KV gradient logo
-│   ├── emailProtection.js # Email obfuscation script
 │   └── site*img/          # Project thumbnails
 ├── svelte.config.js
 ├── vite.config.ts
@@ -89,8 +88,7 @@ hex) and decodes only on a user gesture:
 - Window titles use `kv@arch:~/...` rather than a real address, so the decoration
   does not hand back what the tokens hide
 
-Regenerate a token with `node encodeEmailForProtection.js "<value>"`. The unused
-`static/emailProtection.js` predates this module.
+Regenerate a token with `node encodeEmailForProtection.js "<value>"`.
 
 ## License
 
