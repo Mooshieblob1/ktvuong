@@ -235,7 +235,6 @@
 		gap: 9px;
 		padding: 15px;
 		text-decoration: none;
-		transform: translate3d(0, var(--vy, 0px), 0);
 		will-change: transform;
 	}
 	.repo:hover {

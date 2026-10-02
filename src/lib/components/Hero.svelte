@@ -1,12 +1,21 @@
 <script lang="ts">
 	import { scrollToId } from '$lib/scroll';
 	import { reveal } from '$lib/actions/reveal';
-	import { spotlight } from '$lib/actions/spotlight';
 	import Button from './ui/Button.svelte';
 	import StatusDot from './ui/StatusDot.svelte';
 	import NodeGraph from './NodeGraph.svelte';
 
 	const openToWork = true;
+
+	/* The scan sweep and the marquee loop forever. Off screen they have no
+	   audience, so park them and let the compositor go idle. */
+	let heroEl: HTMLElement;
+	let offscreen = $state(false);
+	$effect(() => {
+		const io = new IntersectionObserver(([e]) => (offscreen = !e.isIntersecting));
+		io.observe(heroEl);
+		return () => io.disconnect();
+	});
 
 	// Accurate to what the repos demonstrate (see src/lib/data/skills.ts).
 	// Rendered twice in the template so the -50% marquee loop is seamless.
@@ -64,13 +73,12 @@
 	}
 </script>
 
-<section id="about" class="hero">
-	<!-- Backdrop layers: aurora + blueprint grid + scanline + grain. -->
+<section id="about" class="hero" class:offscreen bind:this={heroEl}>
+	<!-- Backdrop layers: aurora + blueprint grid + scanline. -->
 	<div class="backdrop" aria-hidden="true">
 		<div class="lightfield"></div>
 		<div class="gridlines tex"></div>
 		<div class="scan-sweep"></div>
-		<div class="noise"></div>
 	</div>
 
 	<div class="content">
@@ -111,7 +119,7 @@
 			</div>
 
 			<div class="right" use:reveal={{ delay: 200 }}>
-				<div class="graphwrap hud" use:spotlight>
+				<div class="graphwrap hud">
 					<span class="hud-c"></span>
 					<NodeGraph />
 				</div>
@@ -182,6 +190,10 @@
 		position: absolute;
 		inset: 0;
 		opacity: 0.55;
+	}
+	.hero.offscreen .scan-sweep::before,
+	.hero.offscreen .marquee-track {
+		animation-play-state: paused;
 	}
 
 	/* --- Two-column composition -------------------------------------------- */

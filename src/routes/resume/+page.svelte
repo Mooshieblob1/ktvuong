@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
-	import { spotlight } from '$lib/actions/spotlight';
 	import { goToSection } from '$lib/scroll';
 	import Button from '$lib/components/ui/Button.svelte';
 	import StatusDot from '$lib/components/ui/StatusDot.svelte';
@@ -44,7 +43,6 @@
 	<!-- Same backdrop stack as the hero, dialled down: this page is a document. -->
 	<div class="backdrop" aria-hidden="true">
 		<div class="gridlines tex"></div>
-		<div class="noise"></div>
 	</div>
 
 	<div class="sheet">
@@ -127,7 +125,7 @@
 						<span class="readout tnum">{experience.length} roles</span>
 					</div>
 
-					<div class="panel glass-panel hud" use:spotlight>
+					<div class="panel glass-panel hud">
 						<span class="hud-c"></span>
 						<div class="bar toolwin-bar">
 							<span class="toolwin-title">kv@arch:~/resume/experience</span>
@@ -161,7 +159,7 @@
 						<span class="rule"></span>
 						<span class="readout tnum">{skillGroups.length} groups</span>
 					</div>
-					<div class="panel glass-panel hud" use:spotlight>
+					<div class="panel glass-panel hud">
 						<span class="hud-c"></span>
 						<div class="bar toolwin-bar">
 							<span class="toolwin-title">skills.toml</span>
@@ -189,7 +187,7 @@
 						<span class="rule"></span>
 						<span class="readout tnum">{highlights.length} entries</span>
 					</div>
-					<div class="panel glass-panel hud" use:spotlight>
+					<div class="panel glass-panel hud">
 						<span class="hud-c"></span>
 						<div class="bar toolwin-bar">
 							<span class="toolwin-title">projects.lock</span>
@@ -219,7 +217,7 @@
 						<span class="label">education</span>
 						<span class="rule"></span>
 					</div>
-					<div class="panel glass-panel hud" use:spotlight>
+					<div class="panel glass-panel hud">
 						<span class="hud-c"></span>
 						<div class="bar toolwin-bar">
 							<span class="toolwin-title">education.log</span>

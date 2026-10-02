@@ -229,15 +229,20 @@ body {
 }
 
 /* ==========================================================================
-   Liquid-glass utilities. Apple-style frosted material: deep backdrop
-   frost, gradient rim light, soft top sheen. `liquid-glass` for small
-   tiles, `glass-panel` for cards/sections.
+   Liquid-glass utilities. Apple-style material: tinted fill, gradient rim
+   light, soft top sheen. `liquid-glass` for small tiles, `glass-panel` for
+   cards/sections.
+
+   No backdrop-filter here, on purpose. These sit over the flat ambient
+   background, where a blur has nothing to soften and no visible effect, yet
+   every blurred box costs the compositor its own render pass on every frame
+   something moves: scrolling, drift, the marquee. A page of them is what made
+   the site lag. Real frost belongs only to chrome that floats over moving
+   content: the top bar in bar mode, the palette and the terminal.
    ========================================================================== */
 .liquid-glass {
 	background: rgba(255, 255, 255, 0.04);
 	background-blend-mode: luminosity;
-	backdrop-filter: blur(12px) saturate(150%);
-	-webkit-backdrop-filter: blur(12px) saturate(150%);
 	border: none;
 	box-shadow:
 		inset 0 1px 1px rgba(255, 255, 255, 0.14),
@@ -278,8 +283,6 @@ body {
 .glass-panel {
 	position: relative;
 	background: color-mix(in srgb, var(--surface-900) 62%, transparent);
-	backdrop-filter: blur(20px) saturate(160%);
-	-webkit-backdrop-filter: blur(20px) saturate(160%);
 	border: 1px solid color-mix(in srgb, #fff 8%, transparent);
 	border-radius: var(--radius-xl);
 	box-shadow:
@@ -326,8 +329,6 @@ body {
    ========================================================================== */
 .toolwin {
 	background: color-mix(in srgb, var(--surface-900) 55%, transparent);
-	backdrop-filter: blur(18px) saturate(150%);
-	-webkit-backdrop-filter: blur(18px) saturate(150%);
 	border: 1px solid color-mix(in srgb, #fff 8%, transparent);
 	border-radius: var(--radius-lg);
 	box-shadow:
@@ -474,22 +475,6 @@ body {
 	}
 }
 
-/* Film-grain noise via layered repeating gradients (no asset needed). */
-.noise {
-	pointer-events: none;
-	position: absolute;
-	inset: 0;
-	z-index: 1;
-	opacity: 0.5;
-	mix-blend-mode: overlay;
-	background-image:
-		repeating-conic-gradient(rgba(255, 255, 255, 0.025) 0% 0.0001%, transparent 0.0002% 0.0003%),
-		radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-	background-size:
-		2px 2px,
-		3px 3px;
-}
-
 /* HUD corner brackets: wrap any panel for sci-fi targeting corners. */
 .hud {
 	position: relative;
@@ -561,6 +546,21 @@ body {
 .tnum {
 	font-variant-numeric: tabular-nums;
 	font-feature-settings: 'tnum' 1;
+}
+
+/* Tilt angles (see actions/tilt.ts) are read only by the card that sets them,
+   so they are registered as non-inherited: a change then does not cascade into
+   every descendant of the card. --mx/--my stay unregistered because
+   .spot::after inherits them from its card. */
+@property --rx {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+@property --ry {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
 }
 
 /* Spotlight glow driven by --mx/--my (see actions/spotlight.ts). */
@@ -636,8 +636,7 @@ body {
 	nav.rail,
 	footer,
 	.denoise-host,
-	.scan-sweep,
-	.noise {
+	.scan-sweep {
 		display: none !important;
 	}
 	.reveal {

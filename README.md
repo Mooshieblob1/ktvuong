@@ -33,6 +33,9 @@
   Reachable from the rail (`05`), the palette, and `resume` in the terminal
 - `ctrl+k` command palette (rofi) and a `ctrl+\`` terminal overlay
 - Smooth scrolling via [Lenis](https://github.com/darkroomengineering/lenis) on Chromium, native CSS smooth scroll on Firefox
+- Cheap to scroll: glass panels are tinted, not blurred. `backdrop-filter` is kept for chrome
+  that floats over moving content (the bar-mode top bar, the palette, the terminal), and the
+  hero's looping animations and node-graph canvas park whenever they are scrolled off screen
 - Bento-style project showcase grid
 - No em dashes anywhere in copy or comments
 - Live "currently tinkering on" repo grid, pulled from the GitHub API

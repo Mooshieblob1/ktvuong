@@ -31,6 +31,9 @@
 
 		let W = 0;
 		let H = 0;
+		/* The dot grid never moves, so it is drawn once per size into its own
+		   canvas and stamped each frame instead of re-filling every dot. */
+		const gridCv = document.createElement('canvas');
 		const dims = () => {
 			const r = canvas.getBoundingClientRect();
 			const dpr = window.devicePixelRatio || 1;
@@ -39,10 +42,22 @@
 			canvas.width = Math.max(1, Math.round(W * dpr));
 			canvas.height = Math.max(1, Math.round(H * dpr));
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			gridCv.width = canvas.width;
+			gridCv.height = canvas.height;
+			const g = gridCv.getContext('2d');
+			if (!g) return;
+			g.setTransform(dpr, 0, 0, dpr, 0, 0);
+			g.fillStyle = 'rgba(255,255,255,0.05)';
+			const step = 22;
+			g.beginPath();
+			for (let x = step; x < W; x += step)
+				for (let y = step; y < H; y += step) {
+					g.moveTo(x + 0.8, y);
+					g.arc(x, y, 0.8, 0, 7);
+				}
+			g.fill();
 		};
 		dims();
-		const onResize = () => dims();
-		window.addEventListener('resize', onResize);
 
 		const nodeW = () => Math.min(128, Math.max(92, W * 0.3));
 		const ports = (n: Node) => {
@@ -114,14 +129,10 @@
 			ctx.fillText(n.sub, p.cx, p.cy + 12);
 		};
 		const grid = () => {
-			ctx.fillStyle = 'rgba(255,255,255,0.05)';
-			const g = 22;
-			for (let x = g; x < W; x += g)
-				for (let y = g; y < H; y += g) {
-					ctx.beginPath();
-					ctx.arc(x, y, 0.8, 0, 7);
-					ctx.fill();
-				}
+			ctx.save();
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.drawImage(gridCv, 0, 0);
+			ctx.restore();
 		};
 
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -163,20 +174,36 @@
 		};
 
 		draw(0, performance.now());
+		const onResize = () => {
+			dims();
+			draw(0, performance.now());
+		};
+		window.addEventListener('resize', onResize);
+
+		/* Animate only while the graph is on screen; scrolled away, the loop
+		   parks and the last frame stays put until it comes back. */
 		let raf = 0;
-		if (!reduced) {
-			let last = performance.now();
-			const loop = (now: number) => {
-				const dt = Math.min(0.05, (now - last) / 1000);
-				last = now;
-				draw(dt, now);
-				raf = requestAnimationFrame(loop);
-			};
+		let last = 0;
+		const loop = (now: number) => {
+			const dt = Math.min(0.05, (now - last) / 1000);
+			last = now;
+			draw(dt, now);
 			raf = requestAnimationFrame(loop);
-		}
+		};
+		const io = new IntersectionObserver(([e]) => {
+			if (e.isIntersecting && !raf && !reduced) {
+				last = performance.now();
+				raf = requestAnimationFrame(loop);
+			} else if (!e.isIntersecting && raf) {
+				cancelAnimationFrame(raf);
+				raf = 0;
+			}
+		});
+		io.observe(canvas);
 
 		return () => {
 			window.removeEventListener('resize', onResize);
+			io.disconnect();
 			if (raf) cancelAnimationFrame(raf);
 		};
 	});
@@ -222,8 +249,6 @@
 		overflow: hidden;
 		border: 1px solid color-mix(in srgb, #fff 9%, transparent);
 		background: color-mix(in srgb, var(--surface-900) 55%, transparent);
-		backdrop-filter: blur(16px) saturate(150%);
-		-webkit-backdrop-filter: blur(16px) saturate(150%);
 		box-shadow:
 			inset 0 1px 0 rgba(255, 255, 255, 0.08),
 			0 24px 60px rgba(0, 0, 0, 0.45);

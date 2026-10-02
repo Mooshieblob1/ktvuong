@@ -319,6 +319,9 @@
 			padding: 18px 16px 52px;
 			border-bottom: none;
 			border-right: 1px solid var(--line);
+			/* Beside the page rather than over it, so there is nothing to frost. */
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
 		}
 		.top {
 			flex-direction: column;

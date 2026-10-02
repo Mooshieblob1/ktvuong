@@ -109,8 +109,8 @@
 		display: flex;
 		flex-direction: column;
 		text-decoration: none;
-		transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
-			translate3d(0, var(--vy, 0px), 0);
+		/* Drift arrives separately, as `translate` (see actions/scrollfx.ts). */
+		transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
 		transform-style: preserve-3d;
 		transition:
 			border-color var(--dur-base),

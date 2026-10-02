@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { skillGroups } from '$lib/data/skills';
 	import { reveal } from '$lib/actions/reveal';
-	import { spotlight } from '$lib/actions/spotlight';
 	import SectionHead from './SectionHead.svelte';
 	import WinBar from './WinBar.svelte';
 </script>
@@ -16,7 +15,7 @@
 	/>
 	<div class="grid">
 		{#each skillGroups as group, gi (group.title)}
-			<div class="toolwin hud" use:spotlight use:reveal={{ delay: gi * 80 }}>
+			<div class="toolwin hud" use:reveal={{ delay: gi * 80 }}>
 				<span class="hud-c"></span>
 				<WinBar title="{group.title.toLowerCase().replace(/\s+/g, '-')}.tool" live="loaded">
 					<div class="inner">

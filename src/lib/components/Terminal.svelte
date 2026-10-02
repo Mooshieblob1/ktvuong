@@ -210,6 +210,9 @@
 		height: 380px;
 		display: flex;
 		flex-direction: column;
+		/* It floats over the page, so unlike the in-flow glass it earns a real frost. */
+		backdrop-filter: blur(20px) saturate(160%);
+		-webkit-backdrop-filter: blur(20px) saturate(160%);
 		animation: term-in 0.18s var(--ease-spring);
 	}
 	@keyframes term-in {
