@@ -83,8 +83,6 @@
 		background: rgba(255, 255, 255, 0.06);
 		color: var(--text);
 		border-color: color-mix(in srgb, #fff 12%, transparent);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
 		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
 	}
 	.secondary:hover {

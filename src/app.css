@@ -363,6 +363,23 @@ body {
 	background: var(--success);
 }
 
+/* Firefox pays for every soft outer drop shadow on in-flow glass on every
+   scrolled frame; Chromium does not. On the near-black ground they darken the
+   surround by a few levels at most, so Firefox keeps the inset rim highlights
+   and skips the drop shadows. Hover shadows, and overlays outside <main> such
+   as the terminal, keep theirs. */
+@supports (-moz-appearance: none) {
+	main .liquid-glass {
+		box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.14);
+	}
+	main .glass-panel {
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	}
+	main .toolwin {
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+	}
+}
+
 /* i3/sway-style window buttons: square mono glyphs, no traffic lights. */
 .wbtn {
 	display: inline-flex;
@@ -526,18 +543,13 @@ body {
 }
 
 /* Blueprint field: 96px major cells over 24px minor ticks, drawn like a
-   drafting sheet rather than a texture. */
+   drafting sheet rather than a texture. One 96px SVG tile holds both scales,
+   each rule set its own path so crossings stack as separate layers would. An
+   image tile rasterizes once and is stamped; the four-gradient stack it
+   replaced was redrawn by Firefox on every frame anything animated above it. */
 .gridlines {
-	background-image:
-		linear-gradient(color-mix(in srgb, #fff 4.5%, transparent) 1px, transparent 1px),
-		linear-gradient(90deg, color-mix(in srgb, #fff 4.5%, transparent) 1px, transparent 1px),
-		linear-gradient(color-mix(in srgb, #fff 2%, transparent) 1px, transparent 1px),
-		linear-gradient(90deg, color-mix(in srgb, #fff 2%, transparent) 1px, transparent 1px);
-	background-size:
-		96px 96px,
-		96px 96px,
-		24px 24px,
-		24px 24px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' fill='none' stroke='%23fff'%3E%3Cpath stroke-opacity='.02' d='M.5 0V96M24.5 0V96M48.5 0V96M72.5 0V96'/%3E%3Cpath stroke-opacity='.02' d='M0 .5H96M0 24.5H96M0 48.5H96M0 72.5H96'/%3E%3Cpath stroke-opacity='.045' d='M.5 0V96'/%3E%3Cpath stroke-opacity='.045' d='M0 .5H96'/%3E%3C/svg%3E");
+	background-size: 96px 96px;
 	-webkit-mask-image: linear-gradient(180deg, #000 6%, rgba(0, 0, 0, 0.35) 62%, transparent);
 	mask-image: linear-gradient(180deg, #000 6%, rgba(0, 0, 0, 0.35) 62%, transparent);
 }
