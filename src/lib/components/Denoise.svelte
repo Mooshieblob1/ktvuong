@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	let { duration = 1500 }: { duration?: number } = $props();
 
@@ -11,22 +11,23 @@
 	function start() {
 		if (running || done) return;
 		const ctx = cv?.getContext('2d');
-		if (!ctx) {
+		const parent = cv?.parentElement;
+		if (!ctx || !parent) {
 			done = true;
 			return;
 		}
 		running = true;
-		const parent = cv.parentElement as HTMLElement;
 		let W = 0;
 		let H = 0;
+		/* Drawn at CSS-pixel resolution and upscaled pixelated: the blocks are
+		   never finer than a few CSS pixels, so a retina-sized buffer would only
+		   multiply the fill work during the page's busiest second. */
 		const resize = () => {
 			const r = parent.getBoundingClientRect();
-			const d = window.devicePixelRatio || 1;
 			W = r.width;
 			H = r.height;
-			cv.width = Math.max(1, Math.round(W * d));
-			cv.height = Math.max(1, Math.round(H * d));
-			ctx.setTransform(d, 0, 0, d, 0, 0);
+			cv.width = Math.max(1, Math.round(W));
+			cv.height = Math.max(1, Math.round(H));
 		};
 		resize();
 		window.addEventListener('resize', resize);
@@ -35,7 +36,8 @@
 			'#ffcc00';
 		const t0 = performance.now();
 		const loop = (now: number) => {
-			const p = Math.min(1, (now - t0) / duration);
+			/* The first frame's timestamp can predate t0, which read as -1%. */
+			const p = Math.max(0, Math.min(1, (now - t0) / duration));
 			const ease = 1 - Math.pow(1 - p, 3);
 			ctx.clearRect(0, 0, W, H);
 			if (p < 1) {
@@ -63,20 +65,21 @@
 		requestAnimationFrame(loop);
 	}
 
-	onMount(() => {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			done = true;
-			return;
-		}
+	/* The canvas only exists once {#if !done} has rendered, so flip the flag
+	   and wait a tick before drawing. Starting in the same tick found no
+	   canvas and quietly marked the intro done before it ever played. */
+	async function play() {
+		if (running) return;
 		done = false;
+		await tick();
 		start();
-		const replay = () => {
-			done = false;
-			// let the {#if} re-render the canvas before starting
-			requestAnimationFrame(() => start());
-		};
-		window.addEventListener('kv:denoise', replay);
-		return () => window.removeEventListener('kv:denoise', replay);
+	}
+
+	onMount(() => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		play();
+		window.addEventListener('kv:denoise', play);
+		return () => window.removeEventListener('kv:denoise', play);
 	});
 </script>
 
@@ -98,6 +101,7 @@
 		display: block;
 		width: 100%;
 		height: 100%;
+		image-rendering: pixelated;
 	}
 	.dl {
 		position: absolute;
